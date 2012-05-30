@@ -24,6 +24,7 @@
 		52C468CA0F6C718700E99EC4 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52C468C90F6C718700E99EC4 /* MainWindow.xib */; };
 		52C468CF0F6C71EE00E99EC4 /* MapViewAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 52C468CC0F6C71EE00E99EC4 /* MapViewAppDelegate.m */; };
 		52C468D00F6C71EE00E99EC4 /* MapViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52C468CE0F6C71EE00E99EC4 /* MapViewViewController.m */; };
+		83B363441576C99D007DB042 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 83B363431576C99D007DB042 /* libz.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		52C468CC0F6C71EE00E99EC4 /* MapViewAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapViewAppDelegate.m; path = Classes/MapViewAppDelegate.m; sourceTree = SOURCE_ROOT; };
 		52C468CD0F6C71EE00E99EC4 /* MapViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapViewViewController.h; path = Classes/MapViewViewController.h; sourceTree = SOURCE_ROOT; };
 		52C468CE0F6C71EE00E99EC4 /* MapViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapViewViewController.m; path = Classes/MapViewViewController.m; sourceTree = SOURCE_ROOT; };
+		83B363431576C99D007DB042 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -81,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83B363441576C99D007DB042 /* libz.dylib in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
@@ -116,6 +119,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				83B363431576C99D007DB042 /* libz.dylib */,
 				52C4685B0F6C68DC00E99EC4 /* MapView.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,

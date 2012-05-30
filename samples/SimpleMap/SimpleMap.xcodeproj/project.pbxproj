@@ -13,6 +13,7 @@
 		280E754E0DD40C5E005A515E /* MainView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 280E754B0DD40C5E005A515E /* MainView.xib */; };
 		280E754F0DD40C5E005A515E /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 280E754C0DD40C5E005A515E /* MainWindow.xib */; };
 		288765590DF743DE002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765580DF743DE002DB57D /* CoreGraphics.framework */; };
+		83B363311576C8B2007DB042 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 83B363301576C8B2007DB042 /* libz.dylib */; };
 		966504460F6867F50036562A /* MapViewAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 966504430F6867F50036562A /* MapViewAppDelegate.m */; };
 		966504470F6867F50036562A /* MapViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 966504450F6867F50036562A /* MapViewViewController.m */; };
 		9665044E0F6868000036562A /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = 966504480F6868000036562A /* loading.png */; };
@@ -59,6 +60,7 @@
 		288765580DF743DE002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* SimpleMap_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleMap_Prefix.pch; sourceTree = "<group>"; };
+		83B363301576C8B2007DB042 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		966504420F6867F50036562A /* MapViewAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapViewAppDelegate.h; path = Classes/MapViewAppDelegate.h; sourceTree = "<group>"; };
 		966504430F6867F50036562A /* MapViewAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapViewAppDelegate.m; path = Classes/MapViewAppDelegate.m; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83B363311576C8B2007DB042 /* libz.dylib in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765590DF743DE002DB57D /* CoreGraphics.framework in Frameworks */,
@@ -106,6 +109,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				83B363301576C8B2007DB042 /* libz.dylib */,
 				EBE3696D0F673B95003DC21C /* MapView.xcodeproj */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				966504400F6867E60036562A /* Classes */,
