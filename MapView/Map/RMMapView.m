@@ -1923,9 +1923,17 @@
         
         [self setUserTrackingMode:RMUserTrackingModeNone animated:YES];
         
-        for (RMAnnotation *annotation in annotations)
-            if ([[NSArray arrayWithObjects:kRMUserLocationAnnotationTypeName, kRMAccuracyCircleAnnotationTypeName, kRMTrackingHaloAnnotationTypeName, nil] containsObject:annotation.annotationType])
-                [self removeAnnotation:annotation];
+        NSMutableArray *annotationsToRemove = [[NSMutableArray alloc] init]; // without this  temp array you will get modify the collection while iterating on, causing a crash as it is not threadsafe
+        
+        for (RMAnnotation *annotation in annotations) { 
+            if ([[NSArray arrayWithObjects:kRMUserLocationAnnotationTypeName, kRMAccuracyCircleAnnotationTypeName, kRMTrackingHaloAnnotationTypeName, nil] containsObject:annotation.annotationType]){
+                [annotationsToRemove addObject: annotation];
+            }
+        }
+        
+        for (RMAnnotation *annotationToRemove in annotationsToRemove) {
+            [self removeAnnotation:annotationToRemove];
+        }
         
         self.userLocation = nil;
     }    
