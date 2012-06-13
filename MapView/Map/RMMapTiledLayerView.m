@@ -46,8 +46,10 @@
     self.useSnapshotRenderer = NO;
 
     CATiledLayer *tiledLayer = [self tiledLayer];
-    tiledLayer.levelsOfDetail = [[mapView tileSource] maxZoom];
-    tiledLayer.levelsOfDetailBias = [[mapView tileSource] maxZoom];
+    size_t levelsOf2xMagnification = [[mapView tileSource] maxZoom];
+    if (mapView.adjustTilesForRetinaDisplay) levelsOf2xMagnification += 1;
+    tiledLayer.levelsOfDetail = levelsOf2xMagnification;
+    tiledLayer.levelsOfDetailBias = levelsOf2xMagnification;
 
     UITapGestureRecognizer *doubleTapRecognizer = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)] autorelease];
     doubleTapRecognizer.numberOfTapsRequired = 2;
