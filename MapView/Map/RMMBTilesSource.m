@@ -112,9 +112,12 @@
         if ([db hadError])
             image = [RMTileImage errorTile];
 
-        [results next];
+        BOOL hasResults = [results next];
 
-        NSData *data = [results dataForColumn:@"tile_data"];
+        NSData* data = nil;
+        if ( hasResults ) {
+            data = [results dataForColumn:@"tile_data"];
+        }
 
         if ( ! data)
             image = [RMTileImage errorTile];
@@ -159,44 +162,52 @@
 
 - (float)minZoom
 {
-    __block double minZoom;
+    static double oneTimeMinZoom = -1;
+    if ( oneTimeMinZoom < 0 ) {
+        __block double minZoom;
+        
+        [queue inDatabase:^(FMDatabase *db)
+         {
+             FMResultSet *results = [db executeQuery:@"select min(zoom_level) from tiles"];
+             
+             if ([db hadError])
+                 minZoom = kMBTilesDefaultMinTileZoom;
+             
+             [results next];
+             
+             minZoom = [results doubleForColumnIndex:0];
+             
+             [results close];
+         }];
+        oneTimeMinZoom = minZoom;
+    }
 
-    [queue inDatabase:^(FMDatabase *db)
-    {
-        FMResultSet *results = [db executeQuery:@"select min(zoom_level) from tiles"];
-
-        if ([db hadError])
-            minZoom = kMBTilesDefaultMinTileZoom;
-
-        [results next];
-
-        minZoom = [results doubleForColumnIndex:0];
-
-        [results close];
-    }];
-
-    return minZoom;
+    return oneTimeMinZoom;
 }
 
 - (float)maxZoom
 {
-    __block double maxZoom;
+    static double oneTimeMaxZoom = -1;
+    if ( oneTimeMaxZoom < 0 ) {
+        __block double maxZoom;
+        
+        [queue inDatabase:^(FMDatabase *db)
+         {
+             FMResultSet *results = [db executeQuery:@"select max(zoom_level) from tiles"];
+             
+             if ([db hadError])
+                 maxZoom = kMBTilesDefaultMaxTileZoom;
+             
+             [results next];
+             
+             maxZoom = [results doubleForColumnIndex:0];
+             
+             [results close];
+         }];
+        oneTimeMaxZoom = maxZoom;
+    }
 
-    [queue inDatabase:^(FMDatabase *db)
-    {
-        FMResultSet *results = [db executeQuery:@"select max(zoom_level) from tiles"];
-
-        if ([db hadError])
-            maxZoom = kMBTilesDefaultMaxTileZoom;
-
-        [results next];
-
-        maxZoom = [results doubleForColumnIndex:0];
-
-        [results close];
-    }];
-
-    return maxZoom;
+    return oneTimeMaxZoom;
 }
 
 - (void)setMinZoom:(NSUInteger)aMinZoom
