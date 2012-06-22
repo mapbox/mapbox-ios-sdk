@@ -41,18 +41,8 @@ typedef enum {
 /// RMMarker inherits "position" and "anchorPoint" from CALayer.
 @interface RMMarker : RMMapLayer
 {
-    /// Text label, visible by default if it has content, but not required.
-    UIView  *label;
-    UIColor *textForegroundColor;
-    UIColor *textBackgroundColor;
+
 }
-
-@property (nonatomic, retain) UIView  *label;
-@property (nonatomic, retain) UIColor *textForegroundColor;
-@property (nonatomic, retain) UIColor *textBackgroundColor;
-
-/// the font used for labels when another font is not explicitly requested; currently [UIFont systemFontOfSize:15]
-+ (UIFont *)defaultFont;
 
 /// returns RMMarker initialized with #image, and the default anchor point (0.5, 0.5)
 - (id)initWithUIImage:(UIImage *)image;
@@ -70,24 +60,5 @@ typedef enum {
 - (id)initWithMapBoxMarkerImage:(NSString *)symbolName tintColor:(UIColor *)color size:(RMMarkerMapBoxImageSize)size;
 - (id)initWithMapBoxMarkerImage:(NSString *)symbolName tintColorHex:(NSString *)colorHex;
 - (id)initWithMapBoxMarkerImage:(NSString *)symbolName tintColorHex:(NSString *)colorHex sizeString:(NSString *)sizeString;
-
-/// changes the labelView to a UILabel with supplied #text and default marker font, using existing text foreground/background color.
-- (void)changeLabelUsingText:(NSString *)text;
-
-/// changes the labelView to a UILabel with supplied #text and default marker font, positioning the text some weird way i don't understand yet. Uses existing text color/background color.
-- (void)changeLabelUsingText:(NSString *)text position:(CGPoint)position;
-
-/// changes the labelView to a UILabel with supplied #text and default marker font, changing this marker's text foreground/background colors for this and future text strings.
-- (void)changeLabelUsingText:(NSString *)text font:(UIFont *)font foregroundColor:(UIColor *)textColor backgroundColor:(UIColor *)backgroundColor;
-
-/// changes the labelView to a UILabel with supplied #text and default marker font, changing this marker's text foreground/background colors for this and future text strings; modifies position as in #changeLabelUsingText:position.
-- (void)changeLabelUsingText:(NSString *)text position:(CGPoint)position font:(UIFont *)font foregroundColor:(UIColor *)textColor backgroundColor:(UIColor *)backgroundColor;
-
-- (void)toggleLabel;
-- (void)showLabel;
-- (void)hideLabel;
-
-- (void)replaceUIImage:(UIImage *)image;
-- (void)replaceUIImage:(UIImage *)image anchorPoint:(CGPoint)anchorPoint;
 
 @end

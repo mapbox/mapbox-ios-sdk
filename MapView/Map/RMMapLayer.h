@@ -43,11 +43,39 @@
 
     /// provided for storage of arbitrary user data
     id userInfo;
+    
+    /// Text label, visible by default if it has content, but not required.
+    UIView  *label;
+    UIColor *textForegroundColor;
+    UIColor *textBackgroundColor;
 }
 
 @property (nonatomic, assign) RMAnnotation *annotation;
 @property (nonatomic, assign) RMProjectedPoint projectedLocation;
 @property (nonatomic, assign) BOOL enableDragging;
 @property (nonatomic, retain) id userInfo;
+
+@property (nonatomic, retain) UIView  *label;
+@property (nonatomic, retain) UIColor *textForegroundColor;
+@property (nonatomic, retain) UIColor *textBackgroundColor;
+
+/// the font used for labels when another font is not explicitly requested; currently [UIFont systemFontOfSize:15]
++ (UIFont *)defaultFont;
+
+/// changes the labelView to a UILabel with supplied #text and default marker font, using existing text foreground/background color.
+- (void)changeLabelUsingText:(NSString *)text;
+
+/// changes the labelView to a UILabel with supplied #text and default marker font, positioning the text some weird way i don't understand yet. Uses existing text color/background color.
+- (void)changeLabelUsingText:(NSString *)text position:(CGPoint)position;
+
+/// changes the labelView to a UILabel with supplied #text and default marker font, changing this marker's text foreground/background colors for this and future text strings.
+- (void)changeLabelUsingText:(NSString *)text font:(UIFont *)font foregroundColor:(UIColor *)textColor backgroundColor:(UIColor *)backgroundColor;
+
+/// changes the labelView to a UILabel with supplied #text and default marker font, changing this marker's text foreground/background colors for this and future text strings; modifies position as in #changeLabelUsingText:position.
+- (void)changeLabelUsingText:(NSString *)text position:(CGPoint)position font:(UIFont *)font foregroundColor:(UIColor *)textColor backgroundColor:(UIColor *)backgroundColor;
+
+- (void)toggleLabel;
+- (void)showLabel;
+- (void)hideLabel;
 
 @end
