@@ -48,7 +48,7 @@
 
 - (void)setLocation:(CLLocation *)newLocation
 {
-    if ([newLocation distanceFromLocation:location])
+    if ([newLocation distanceFromLocation:location] && newLocation.coordinate.latitude != 0 && newLocation.coordinate.longitude != 0)
     {
         [self willChangeValueForKey:@"location"];
         [location release];
@@ -67,6 +67,11 @@
         heading = [newHeading retain];
         [self didChangeValueForKey:@"heading"];
     }
+}
+
+- (BOOL)isUserLocationAnnotation
+{
+    return YES;
 }
 
 @end

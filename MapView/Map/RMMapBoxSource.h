@@ -72,11 +72,17 @@
 - (id)initWithTileJSON:(NSString *)tileJSON enablingDataOnMapView:(RMMapView *)mapView;
 - (id)initWithReferenceURL:(NSURL *)referenceURL enablingDataOnMapView:(RMMapView *)mapView;
 
-// Initialize source with properly list (deprecated).
-- (id)initWithInfo:(NSDictionary *)info;          
+// Initialize source with properly list (deprecated; use TileJSON).
+- (id)initWithInfo:(NSDictionary *)info __attribute__ ((deprecated));
 
 // HTML-formatted legend for this source, if any
 - (NSString *)legend;
+
+// Suggested starting center coordinate
+- (CLLocationCoordinate2D)centerCoordinate;
+
+// Suggested starting center zoom
+- (float)centerZoom;
 
 // Regional or global coverage?
 - (BOOL)coversFullWorld;

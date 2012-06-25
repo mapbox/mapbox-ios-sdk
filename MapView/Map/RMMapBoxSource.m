@@ -65,36 +65,48 @@
         
         if (mapView && (dataObject = [infoDictionary objectForKey:@"data"]) && dataObject)
         {
-            if ([dataObject isKindOfClass:[NSArray class]] && [[dataObject objectAtIndex:0] isKindOfClass:[NSString class]])
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void)
             {
-                NSURL *dataURL = [NSURL URLWithString:[dataObject objectAtIndex:0]];
-                
-                NSData *jsonData;
-                
-                if (dataURL && (jsonData = [NSData dataWithContentsOfURL:dataURL]) && jsonData)
+                if ([dataObject isKindOfClass:[NSArray class]] && [[dataObject objectAtIndex:0] isKindOfClass:[NSString class]])
                 {
-                    id jsonObject;
+                    NSURL *dataURL = [NSURL URLWithString:[dataObject objectAtIndex:0]];
                     
-                    if ((jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:nil]) && [jsonObject isKindOfClass:[NSDictionary class]])
+                    NSMutableString *jsonString;
+                    
+                    if (dataURL && (jsonString = [NSMutableString stringWithContentsOfURL:dataURL encoding:NSUTF8StringEncoding error:nil]) && jsonString)
                     {
-                        for (NSDictionary *feature in [jsonObject objectForKey:@"features"])
+                        if ([jsonString hasPrefix:@"grid("])
                         {
-                            NSDictionary *properties = [feature objectForKey:@"properties"];
-                            
-                            CLLocationCoordinate2D coordinate = {
-                                .longitude = [[[[feature objectForKey:@"geometry"] objectForKey:@"coordinates"] objectAtIndex:0] floatValue],
-                                .latitude  = [[[[feature objectForKey:@"geometry"] objectForKey:@"coordinates"] objectAtIndex:1] floatValue]
-                            };
-                            
-                            RMAnnotation *pointAnnotation = [RMAnnotation annotationWithMapView:mapView coordinate:coordinate andTitle:[properties objectForKey:@"title"]];
-                            
-                            pointAnnotation.userInfo = properties;
-                            
-                            [mapView addAnnotation:pointAnnotation];
+                            [jsonString replaceCharactersInRange:NSMakeRange(0, 5)                       withString:@""];
+                            [jsonString replaceCharactersInRange:NSMakeRange([jsonString length] - 2, 2) withString:@""];
+                        }
+                        
+                        id jsonObject;
+                        
+                        if ((jsonObject = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil]) && [jsonObject isKindOfClass:[NSDictionary class]])
+                        {
+                            for (NSDictionary *feature in [jsonObject objectForKey:@"features"])
+                            {
+                                NSDictionary *properties = [feature objectForKey:@"properties"];
+                                
+                                CLLocationCoordinate2D coordinate = {
+                                    .longitude = [[[[feature objectForKey:@"geometry"] objectForKey:@"coordinates"] objectAtIndex:0] floatValue],
+                                    .latitude  = [[[[feature objectForKey:@"geometry"] objectForKey:@"coordinates"] objectAtIndex:1] floatValue]
+                                };
+                                
+                                RMAnnotation *pointAnnotation = [RMAnnotation annotationWithMapView:mapView coordinate:coordinate andTitle:[properties objectForKey:@"title"]];
+                                
+                                pointAnnotation.userInfo = properties;
+                                
+                                dispatch_async(dispatch_get_main_queue(), ^(void)
+                                {
+                                    [mapView addAnnotation:pointAnnotation];
+                                });                                
+                            }
                         }
                     }
                 }
-            }
+            });            
         }
     }
     
@@ -103,8 +115,6 @@
 
 - (id)initWithInfo:(NSDictionary *)info
 {
-    WarnDeprecated();
-
     if ( ! (self = [super init]))
         return nil;
 
@@ -235,6 +245,27 @@
 - (NSString *)legend
 {
     return [self.infoDictionary objectForKey:@"legend"];
+}
+
+- (CLLocationCoordinate2D)centerCoordinate
+{
+    if ([self.infoDictionary objectForKey:@"center"])
+    {
+        return CLLocationCoordinate2DMake([[[self.infoDictionary objectForKey:@"center"] objectAtIndex:1] doubleValue], 
+                                          [[[self.infoDictionary objectForKey:@"center"] objectAtIndex:0] doubleValue]);
+    }
+    
+    return CLLocationCoordinate2DMake(0, 0);
+}
+
+- (float)centerZoom
+{
+    if ([self.infoDictionary objectForKey:@"center"])
+    {
+        return [[[self.infoDictionary objectForKey:@"center"] objectAtIndex:2] floatValue];
+    }
+    
+    return roundf(([self maxZoom] + [self minZoom]) / 2);
 }
 
 - (NSString *)uniqueTilecacheKey

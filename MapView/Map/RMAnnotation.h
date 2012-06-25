@@ -73,6 +73,9 @@
 // This is for the QuadTree. Don't mess this up.
 @property (nonatomic, assign) RMQuadTreeNode *quadTreeNode;
 
+// This is for filtering non-user annotations.
+@property (nonatomic, assign) BOOL isUserLocationAnnotation;
+
 + (id)annotationWithMapView:(RMMapView *)aMapView coordinate:(CLLocationCoordinate2D)aCoordinate andTitle:(NSString *)aTitle;
 - (id)initWithMapView:(RMMapView *)aMapView coordinate:(CLLocationCoordinate2D)aCoordinate andTitle:(NSString *)aTitle;
 

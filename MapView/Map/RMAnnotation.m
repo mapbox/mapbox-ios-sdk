@@ -50,6 +50,7 @@
 @synthesize enabled, clusteringEnabled;
 @synthesize position;
 @synthesize quadTreeNode;
+@synthesize isUserLocationAnnotation;
 
 + (id)annotationWithMapView:(RMMapView *)aMapView coordinate:(CLLocationCoordinate2D)aCoordinate andTitle:(NSString *)aTitle
 {

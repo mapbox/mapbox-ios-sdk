@@ -48,6 +48,8 @@
 
 #import "RMUserLocation.h"
 
+#import "RMAttributionViewController.h"
+
 #pragma mark --- begin constants ----
 
 #define kiPhoneMilimeteresPerPixel .1543
@@ -304,6 +306,7 @@
     [userLocation release]; userLocation = nil;
     [userLocationTrackingView release]; userLocationTrackingView = nil;
     [userHeadingTrackingView release]; userHeadingTrackingView = nil;
+    [attributionButton release]; attributionButton = nil;
     [super dealloc];
 }
 
@@ -1717,7 +1720,7 @@
 
         for (RMAnnotation *annotation in previousVisibleAnnotations)
         {
-            if ( ! [[NSArray arrayWithObjects:kRMUserLocationAnnotationTypeName, kRMAccuracyCircleAnnotationTypeName, kRMTrackingHaloAnnotationTypeName, nil] containsObject:annotation.annotationType])
+            if ( ! annotation.isUserLocationAnnotation)
             {
                 if (_delegateHasWillHideLayerForAnnotation)
                     [delegate mapView:self willHideLayerForAnnotation:annotation];
@@ -1768,7 +1771,7 @@
                     }
                     else
                     {
-                        if ( ! [[NSArray arrayWithObjects:kRMUserLocationAnnotationTypeName, kRMAccuracyCircleAnnotationTypeName, kRMTrackingHaloAnnotationTypeName, nil] containsObject:annotation.annotationType])
+                        if ( ! annotation.isUserLocationAnnotation)
                         {
                             if (_delegateHasWillHideLayerForAnnotation)
                                 [delegate mapView:self willHideLayerForAnnotation:annotation];
@@ -1864,7 +1867,7 @@
     {
         for (RMAnnotation *annotation in annotationsToRemove)
         {
-            if ( ! [[NSArray arrayWithObjects:kRMUserLocationAnnotationTypeName, kRMAccuracyCircleAnnotationTypeName, kRMTrackingHaloAnnotationTypeName, nil] containsObject:annotation.annotationType])
+            if ( ! annotation.isUserLocationAnnotation)
             {
                 [annotations removeObject:annotation];
                 [visibleAnnotations removeObject:annotation];
@@ -1924,7 +1927,7 @@
         [self setUserTrackingMode:RMUserTrackingModeNone animated:YES];
         
         for (RMAnnotation *annotation in annotations)
-            if ([[NSArray arrayWithObjects:kRMUserLocationAnnotationTypeName, kRMAccuracyCircleAnnotationTypeName, kRMTrackingHaloAnnotationTypeName, nil] containsObject:annotation.annotationType])
+            if ( ! annotation.isUserLocationAnnotation)
                 [self removeAnnotation:annotation];
         
         self.userLocation = nil;
@@ -1979,7 +1982,15 @@
             [UIView animateWithDuration:(animated ? 0.5 : 0.0)
                                   delay:0.0
                                 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut
-                             animations:^(void) { mapScrollView.transform = CGAffineTransformIdentity; }
+                             animations:^(void)
+                             {
+                                 mapScrollView.transform = CGAffineTransformIdentity;
+                                 overlayView.transform   = CGAffineTransformIdentity;
+                                 
+                                 for (RMAnnotation *annotation in annotations)
+                                     if ( ! annotation.isUserLocationAnnotation)
+                                         annotation.layer.transform = CATransform3DIdentity;
+                             }
                              completion:nil];
 
             if (userLocationTrackingView || userHeadingTrackingView)
@@ -2014,7 +2025,15 @@
             [UIView animateWithDuration:(animated ? 0.5 : 0.0)
                                   delay:0.0
                                 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut
-                             animations:^(void) { mapScrollView.transform = CGAffineTransformIdentity; }
+                             animations:^(void)
+                             {
+                                 mapScrollView.transform = CGAffineTransformIdentity;
+                                 overlayView.transform   = CGAffineTransformIdentity;
+                                 
+                                 for (RMAnnotation *annotation in annotations)
+                                     if ( ! annotation.isUserLocationAnnotation)
+                                         annotation.layer.transform = CATransform3DIdentity;
+                             }
                              completion:nil];
             
             userLocation.layer.hidden = NO;
@@ -2115,6 +2134,8 @@
         
         accuracyCircleAnnotation.layer = [[RMCircle alloc] initWithView:self radiusInMeters:newLocation.horizontalAccuracy];
         
+        accuracyCircleAnnotation.isUserLocationAnnotation = YES;
+        
         ((RMCircle *)accuracyCircleAnnotation.layer).lineColor = [UIColor colorWithRed:0.378 green:0.552 blue:0.827 alpha:0.7];
         ((RMCircle *)accuracyCircleAnnotation.layer).fillColor = [UIColor colorWithRed:0.378 green:0.552 blue:0.827 alpha:0.15];
         
@@ -2146,6 +2167,8 @@
         // create image marker
         //
         trackingHaloAnnotation.layer = [[RMMarker alloc] initWithUIImage:[UIImage imageNamed:@"TrackingDotHalo.png"]];
+        
+        trackingHaloAnnotation.isUserLocationAnnotation = YES;
         
         [CATransaction begin];
         [CATransaction setAnimationDuration:2.5];
@@ -2216,11 +2239,27 @@
 
     if (newHeading.trueHeading != 0 && self.userTrackingMode == RMUserTrackingModeFollowWithHeading)
     {
+        [CATransaction begin];
+        [CATransaction setAnimationDuration:1.0];
+        [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        
         [UIView animateWithDuration:1.0
                               delay:0.0
                             options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut
-                         animations:^(void) { mapScrollView.transform = CGAffineTransformMakeRotation((M_PI / -180) * newHeading.trueHeading); }
+                         animations:^(void)
+                         {
+                             CGFloat angle = (M_PI / -180) * newHeading.trueHeading;
+                             
+                             mapScrollView.transform = CGAffineTransformMakeRotation(angle);
+                             overlayView.transform   = CGAffineTransformMakeRotation(angle);
+                             
+                             for (RMAnnotation *annotation in annotations)
+                                 if ( ! annotation.isUserLocationAnnotation)
+                                     annotation.layer.transform = CATransform3DMakeAffineTransform(CGAffineTransformMakeRotation(-angle));
+                         }
                          completion:nil];
+        
+        [CATransaction commit];
     }
 }
 
@@ -2232,6 +2271,47 @@
         
         if (_delegateHasDidFailToLocateUserWithError)
             [delegate mapView:self didFailToLocateUserWithError:error];
+    }
+}
+
+#pragma mark -
+#pragma mark Attribution
+
+- (UIViewController *)viewControllerPresentingAttribution
+{
+    return viewControllerPresentingAttribution;
+}
+
+- (void)setViewControllerPresentingAttribution:(UIViewController *)viewController
+{
+    viewControllerPresentingAttribution = viewController;
+    
+    if (self.viewControllerPresentingAttribution && ! attributionButton)
+    {
+        attributionButton = [[UIButton buttonWithType:UIButtonTypeInfoLight] retain];
+        
+        attributionButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
+        
+        [attributionButton addTarget:self action:@selector(showAttribution:) forControlEvents:UIControlEventTouchUpInside];
+        
+        attributionButton.frame = CGRectMake(self.bounds.size.width  - 30, 
+                                             self.bounds.size.height - 30, 
+                                             attributionButton.bounds.size.width, 
+                                             attributionButton.bounds.size.height);
+
+        [self addSubview:attributionButton];
+    }
+}
+
+- (void)showAttribution:(id)sender
+{
+    if (self.viewControllerPresentingAttribution)
+    {
+        RMAttributionViewController *attributionViewController = [[RMAttributionViewController alloc] initWithMapView:self];
+        
+        attributionViewController.modalTransitionStyle = UIModalTransitionStylePartialCurl;
+        
+        [self.viewControllerPresentingAttribution presentModalViewController:attributionViewController animated:YES];
     }
 }
 

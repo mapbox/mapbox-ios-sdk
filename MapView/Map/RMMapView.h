@@ -107,6 +107,9 @@ typedef enum {
     
     UIImageView *userLocationTrackingView;
     UIImageView *userHeadingTrackingView;
+    
+    UIViewController *viewControllerPresentingAttribution;
+    UIButton *attributionButton;
 }
 
 @property (nonatomic, assign) id <RMMapViewDelegate> delegate;
@@ -153,6 +156,8 @@ typedef enum {
 @property (nonatomic, readonly, retain) RMUserLocation *userLocation;
 @property (nonatomic, readonly, getter=isUserLocationVisible) BOOL userLocationVisible;
 @property (nonatomic) RMUserTrackingMode userTrackingMode;
+
+@property (weak) UIViewController *viewControllerPresentingAttribution;
 
 #pragma mark -
 #pragma mark Initializers

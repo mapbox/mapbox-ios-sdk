@@ -37,7 +37,7 @@
     if (!(self = [super initWithFrame:frame]))
         return nil;
 
-    self.layer.masksToBounds = YES;
+    self.layer.masksToBounds = NO;
 
     _trackPanGesture = NO;
     _lastTranslation = CGPointZero;
