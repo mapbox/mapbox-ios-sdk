@@ -169,6 +169,11 @@
     return [self isAnnotationWithinBounds:screenBounds];
 }
 
+- (void)setIsUserLocationAnnotation:(BOOL)flag
+{
+    isUserLocationAnnotation = flag;
+}
+
 #pragma mark -
 
 - (void)setBoundingBoxCoordinatesSouthWest:(CLLocationCoordinate2D)southWest northEast:(CLLocationCoordinate2D)northEast

@@ -90,6 +90,14 @@
 
 #pragma mark -
 
+@interface RMAnnotation (PrivateMethods)
+
+@property (nonatomic, assign) BOOL isUserLocationAnnotation;
+
+@end
+
+#pragma mark -
+
 @implementation RMMapView
 {
     BOOL _delegateHasBeforeMapMove;
@@ -1926,9 +1934,14 @@
         
         [self setUserTrackingMode:RMUserTrackingModeNone animated:YES];
         
+        NSMutableArray *annotationsToRemove = [NSMutableArray array];
+        
         for (RMAnnotation *annotation in annotations)
-            if ( ! annotation.isUserLocationAnnotation)
-                [self removeAnnotation:annotation];
+            if (annotation.isUserLocationAnnotation)
+                [annotationsToRemove addObject:annotation];
+        
+        for (RMAnnotation *annotationToRemove in annotationsToRemove)
+            [self removeAnnotation:annotationToRemove];
         
         self.userLocation = nil;
     }    
