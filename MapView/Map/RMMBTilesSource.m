@@ -51,7 +51,7 @@
                                                                  maxZoom:kMBTilesDefaultMaxTileZoom 
                                                                  minZoom:kMBTilesDefaultMinTileZoom];
 
-    queue = [[FMDatabaseQueue databaseQueueWithPath:[tileSetURL relativePath]] retain];
+    queue = [[FMDatabaseQueue databaseQueueWithPath:[tileSetURL path]] retain];
 
     if ( ! queue)
         return nil;
