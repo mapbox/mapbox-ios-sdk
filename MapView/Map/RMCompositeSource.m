@@ -39,6 +39,12 @@
     
     for (id <RMTileSource>tileSource in self.compositeSources)
     {
+        float minZoom = [tileSource minZoom];
+        float maxZoom = [tileSource maxZoom];
+        if ( tile.zoom < minZoom || tile.zoom > maxZoom ) {
+            continue;
+        }
+        
         UIImage *sourceImage = [tileSource imageForTile:tile inCache:tileCache];
         
         if (sourceImage)
@@ -59,6 +65,7 @@
             {
                 image = sourceImage;
             }
+            break;
         }
     }
     
