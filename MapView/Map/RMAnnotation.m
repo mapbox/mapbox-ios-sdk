@@ -48,6 +48,7 @@
 @synthesize projectedBoundingBox;
 @synthesize hasBoundingBox;
 @synthesize enabled, clusteringEnabled;
+@synthesize shouldReceiveTap;
 @synthesize position;
 @synthesize quadTreeNode;
 @synthesize isUserLocationAnnotation;
@@ -74,6 +75,7 @@
     self.anchorPoint       = CGPointZero;
     self.hasBoundingBox    = NO;
     self.enabled           = YES;
+    self.shouldReceiveTap  = YES;
     self.clusteringEnabled = YES;
 
     layer = nil;

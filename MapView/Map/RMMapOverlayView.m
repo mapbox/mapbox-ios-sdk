@@ -108,7 +108,7 @@
 
     RMAnnotation *hitAnnotation = [self findAnnotationInLayer:hit];
     
-    if (!hit || !hitAnnotation || ![hitAnnotation.layer isKindOfClass:[RMMarker class]])
+    if (!hit || !hitAnnotation || !hitAnnotation.shouldReceiveTap)
         return NO;
 
     return hitAnnotation.enabled;
@@ -117,14 +117,14 @@
 - (RMAnnotation *)findAnnotationInLayer:(CALayer *)layer
 {
     if ([layer respondsToSelector:@selector(annotation)])
-        return [((RMMarker *)layer) annotation];
+        return [((RMMapLayer *)layer) annotation];
 
     CALayer *superlayer = [layer superlayer];
 
     if (superlayer != nil && [superlayer respondsToSelector:@selector(annotation)])
-        return [((RMMarker *)superlayer) annotation];
+        return [((RMMapLayer *)superlayer) annotation];
     else if ([superlayer superlayer] != nil && [[superlayer superlayer] respondsToSelector:@selector(annotation)])
-        return [((RMMarker *)[superlayer superlayer]) annotation];
+        return [((RMMapLayer *)[superlayer superlayer]) annotation];
 
     return nil;
 }
@@ -139,10 +139,10 @@
     CALayer *superlayer = [hit superlayer];
 
     // See if tap was on a marker or marker label and send delegate protocol method
-    if ([hit isKindOfClass:[RMMarker class]])
+    if ([hit isKindOfClass:[RMMapLayer class]])
     {
         if ([delegate respondsToSelector:@selector(mapOverlayView:tapOnAnnotation:atPoint:)])
-            [delegate mapOverlayView:self tapOnAnnotation:[((RMMarker *)hit) annotation] atPoint:[recognizer locationInView:self]];
+            [delegate mapOverlayView:self tapOnAnnotation:[((RMMapLayer *)hit) annotation] atPoint:[recognizer locationInView:self]];
     }
     else if (superlayer != nil && [superlayer isKindOfClass:[RMMarker class]])
     {

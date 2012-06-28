@@ -66,6 +66,7 @@
 @property (nonatomic, assign) BOOL hasBoundingBox;
 @property (nonatomic, assign) BOOL enabled;
 @property (nonatomic, assign) BOOL clusteringEnabled;
+@property (nonatomic, assign) BOOL shouldReceiveTap; // Default value is YES
 
 // RMMarker, RMPath, whatever you return in your delegate method mapView:layerForAnnotation:
 @property (nonatomic, retain) RMMapLayer *layer;
