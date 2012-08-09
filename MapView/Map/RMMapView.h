@@ -71,7 +71,7 @@ typedef enum : NSUInteger {
 
 @interface RMMapView : UIView <UIScrollViewDelegate, UIGestureRecognizerDelegate, RMMapScrollViewDelegate, CLLocationManagerDelegate>
 
-@property (nonatomic, assign) id <RMMapViewDelegate> delegate;
+@property (nonatomic, assign) IBOutlet id <RMMapViewDelegate> delegate;
 
 #pragma mark - View properties
 
