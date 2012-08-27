@@ -10,25 +10,22 @@ class: box
     <h2>{{site.title}}</h2>
     <p>{{site.description}}</p>
   </div>
-  <div class='cell5 doc-subnav clearfix'>
-    <a href='{{site.baseurl}}/' class='active'>Guide</a>
-    <a href='{{site.baseurl}}/api/'>API</a>
-    <a href='{{site.baseurl}}/examples/'>Examples</a>
-  </div>
+  <ul class='cell5 doc-subnav clearfix'>
+    <li><a href='{{site.baseurl}}/' class='active'>Guide</a></li>
+    <li><a href='{{site.baseurl}}/api/'>API</a></li>
+    <li><a href='{{site.baseurl}}/examples/'>Examples</a></li>
+  </ul>
 </div>
 
 <div class='doc-page pad3c fillM clearfix'>
 <div class='fillW clearfix'>
-  <div class='cell9 doc-content doc float-right pad2 prose'>
-    <h1 id='{{page.title|downcase|replace:' ','_'}}'>{{page.title}}</h1>
-    {{content}}
-  </div>
-  <div class='cell3 float-right'>
+  <div class='cell3'>
+    <div class='clearfix'>&nbsp;</div>
     <div class='doc-nav'>
       {% if page.navigation %}
       {% for section in page.navigation %}
-        <h3><a href='#{{section.title|downcase|replace:' ','_'}}'>{{section.title}}</a></h3>
-        <ul class='anchors'>
+        <ul class='nav anchors'>
+          <li class='heading'><a href='#{{section.title|downcase|replace:' ','_'}}'>{{section.title}}</a></li>
         {% for item in section.items %}
         {% if item.hash %}
           <li><a href='#{{item.hash}}'>{{item.text}}</a></li>
@@ -41,11 +38,15 @@ class: box
       {% endif %}
     </div>
   </div>
+  <div class='cell9 doc-content prose'>
+    <div class='doc pad2'>
+      <h1 id='{{page.title|downcase|replace:' ','_'}}'>{{page.title}}</h1>
+      {{content}}
+    </div>
+  </div>
 </div>
 </div>
 
-<script type='text/javascript'>
-$('h1[id], h2[id], h3[id], h4[id]').click(function(ev) {
-  window.location.hash = $(ev.currentTarget).attr('id');
-});
+<script>
+  $(mapbox.docs);
 </script>
