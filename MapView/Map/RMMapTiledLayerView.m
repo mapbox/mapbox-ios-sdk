@@ -45,7 +45,7 @@
     self.useSnapshotRenderer = NO;
 
     CATiledLayer *tiledLayer = [self tiledLayer];
-    size_t levelsOf2xMagnification = _mapView.tileSourcesContainer.maxZoom;
+    size_t levelsOf2xMagnification = _mapView.tileSourcesContainer.maxZoom + 1;
     if (_mapView.adjustTilesForRetinaDisplay) levelsOf2xMagnification += 1;
     tiledLayer.levelsOfDetail = levelsOf2xMagnification;
     tiledLayer.levelsOfDetailBias = levelsOf2xMagnification;

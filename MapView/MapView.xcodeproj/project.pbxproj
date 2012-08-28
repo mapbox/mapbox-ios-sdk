@@ -101,10 +101,9 @@
 		DD3BEF7A15913C55007892D8 /* RMAttributionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3BEF7815913C55007892D8 /* RMAttributionViewController.m */; };
 		DD5A200915CAD03700FE4157 /* libGRMustache4-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5A200815CAD03700FE4157 /* libGRMustache4-iOS.a */; };
 		DD5A200B15CAD09400FE4157 /* GRMustache.h in Headers */ = {isa = PBXBuildFile; fileRef = DD5A200A15CAD09400FE4157 /* GRMustache.h */; };
-		DD6380DD152E72880074E66E /* RMMapBoxSource.h in Headers */ = {isa = PBXBuildFile; fileRef = DD6380DB152E72880074E66E /* RMMapBoxSource.h */; };
-		DD6380DE152E72880074E66E /* RMMapBoxSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DD6380DC152E72880074E66E /* RMMapBoxSource.m */; };
 		DD5FA1EB15E2B020004EB6C5 /* RMLoadingTileView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD5FA1E915E2B020004EB6C5 /* RMLoadingTileView.h */; };
 		DD5FA1EC15E2B020004EB6C5 /* RMLoadingTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD5FA1EA15E2B020004EB6C5 /* RMLoadingTileView.m */; };
+		DD6380DD152E72880074E66E /* (null) in Headers */ = {isa = PBXBuildFile; };
 		DD8CDB4A14E0507100B73EB9 /* RMMapQuestOSMSource.h in Headers */ = {isa = PBXBuildFile; fileRef = DD8CDB4814E0507100B73EB9 /* RMMapQuestOSMSource.h */; };
 		DD8CDB4B14E0507100B73EB9 /* RMMapQuestOSMSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DD8CDB4914E0507100B73EB9 /* RMMapQuestOSMSource.m */; };
 		DD8FD7541559E4A40044D96F /* RMUserLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = DD8FD7521559E4A40044D96F /* RMUserLocation.h */; };
@@ -600,7 +599,7 @@
 				1607499514E120A100D535F5 /* RMGenericMapSource.h in Headers */,
 				16FFF2CB14E3DBF700A170EC /* RMMapQuestOpenAerialSource.h in Headers */,
 				DDC4BED5152E3BD700089409 /* RMInteractiveSource.h in Headers */,
-				DD6380DD152E72880074E66E /* RMMapBoxSource.h in Headers */,
+				DD6380DD152E72880074E66E /* (null) in Headers */,
 				DD3BEF7915913C55007892D8 /* RMAttributionViewController.h in Headers */,
 				DD8FD7541559E4A40044D96F /* RMUserLocation.h in Headers */,
 				DDA6B8BD155CAB67003DB5D8 /* RMUserTrackingBarButtonItem.h in Headers */,
