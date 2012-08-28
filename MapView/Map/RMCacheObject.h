@@ -33,10 +33,10 @@
 /** @name Managing Cache Objects */
 
 /** The object to be cached, typically a UIImage. */
-@property (nonatomic, readonly) id cachedObject;
+@property (weak, nonatomic, readonly) id cachedObject;
 
 /** The unique identifier for the cache. */
-@property (nonatomic, readonly) NSString *cacheKey;
+@property (weak, nonatomic, readonly) NSString *cacheKey;
 
 /** The tile key for the cache object. */
 @property (nonatomic, readonly) RMTile tile;

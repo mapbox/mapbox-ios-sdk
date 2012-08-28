@@ -405,7 +405,7 @@ RMTilePoint RMInteractiveSourceNormalizedTilePointForMapView(CGPoint point, RMMa
     if (gridData)
     {
         NSData *inflatedData = [gridData gzipInflate];
-        NSString *gridString = [[[NSString alloc] initWithData:inflatedData encoding:NSUTF8StringEncoding] autorelease];
+        NSString *gridString = [[NSString alloc] initWithData:inflatedData encoding:NSUTF8StringEncoding];
         
         id grid = [NSJSONSerialization JSONObjectWithData:[gridString dataUsingEncoding:NSUTF8StringEncoding]
                                                   options:0
@@ -546,7 +546,7 @@ RMTilePoint RMInteractiveSourceNormalizedTilePointForMapView(CGPoint point, RMMa
         
         if (gridData)
         {
-            NSMutableString *gridString = [[[NSMutableString alloc] initWithData:gridData encoding:NSUTF8StringEncoding] autorelease];
+            NSMutableString *gridString = [[NSMutableString alloc] initWithData:gridData encoding:NSUTF8StringEncoding];
             
             // remove JSONP 'grid(' and ');' bits
             //
@@ -571,7 +571,7 @@ RMTilePoint RMInteractiveSourceNormalizedTilePointForMapView(CGPoint point, RMMa
                     if (data && [data objectForKey:keyName])
                     {
                         NSData   *jsonData   = [NSJSONSerialization dataWithJSONObject:[data objectForKey:keyName] options:0 error:nil];
-                        NSString *jsonString = [[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding] autorelease];
+                        NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
                         
                         return [NSDictionary dictionaryWithObjectsAndKeys:keyName,    @"keyName",
                                                                           jsonString, @"keyJSON",

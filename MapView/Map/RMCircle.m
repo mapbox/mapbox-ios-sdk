@@ -76,11 +76,9 @@
 - (void)dealloc
 {
     mapView = nil;
-    [shapeLayer release]; shapeLayer = nil;
     CGPathRelease(circlePath); circlePath = NULL;
-    [lineColor release]; lineColor = nil;
-    [fillColor release]; fillColor = nil;
-    [super dealloc];
+     lineColor = nil;
+     fillColor = nil;
 }
 
 #pragma mark -
@@ -136,8 +134,7 @@
 {
     if (lineColor != newLineColor)
     {
-        [lineColor release];
-        lineColor = [newLineColor retain];
+        lineColor = newLineColor;
         [self updateCirclePathAnimated:NO];
     }
 }
@@ -146,8 +143,7 @@
 {
     if (fillColor != newFillColor)
     {
-        [fillColor release];
-        fillColor = [newFillColor retain];
+        fillColor = newFillColor;
         [self updateCirclePathAnimated:NO];
     }
 }

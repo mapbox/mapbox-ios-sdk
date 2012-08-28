@@ -88,9 +88,8 @@
     mapView = nil;
     CGPathRelease(path); path = NULL;
     [self setLineDashLengths:nil];
-    [lineColor release]; lineColor = nil;
-    [fillColor release]; fillColor = nil;
-    [super dealloc];
+     lineColor = nil;
+     fillColor = nil;
 }
 
 //- (id <CAAction>)actionForKey:(NSString *)key
@@ -351,8 +350,7 @@
 {
     if (lineColor != aLineColor)
     {
-        [lineColor release];
-        lineColor = [aLineColor retain];
+        lineColor = aLineColor;
         [self setNeedsDisplay];
     }
 }
@@ -366,8 +364,7 @@
 {
     if (fillColor != aFillColor)
     {
-        [fillColor release];
-        fillColor = [aFillColor retain];
+        fillColor = aFillColor;
         [self setNeedsDisplay];
     }
 }

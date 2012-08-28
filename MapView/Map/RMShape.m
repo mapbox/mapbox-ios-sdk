@@ -97,9 +97,8 @@
 - (void)dealloc
 {
     mapView = nil;
-    [bezierPath release]; bezierPath = nil;
-    [shapeLayer release]; shapeLayer = nil;
-    [super dealloc];
+     bezierPath = nil;
+     shapeLayer = nil;
 }
 
 - (id <CAAction>)actionForKey:(NSString *)key
@@ -174,7 +173,6 @@
         CGRect boundsInMercators = scaledPath.bounds;
         nonClippedBounds = CGRectInset(boundsInMercators, -scaledLineWidth - (2 * shapeLayer.shadowRadius), -scaledLineWidth - (2 * shapeLayer.shadowRadius));
 
-        [scaledPath release];
     }
 
     // if the path is not scaled, nonClippedBounds stay the same as in the previous invokation

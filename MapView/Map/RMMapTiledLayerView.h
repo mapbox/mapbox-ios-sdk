@@ -14,7 +14,7 @@
 
 @property (nonatomic, assign) BOOL useSnapshotRenderer;
 
-@property (nonatomic, readonly) id <RMTileSource> tileSource;
+@property (weak, nonatomic, readonly) id <RMTileSource> tileSource;
 
 - (id)initWithFrame:(CGRect)frame mapView:(RMMapView *)aMapView forTileSource:(id <RMTileSource>)aTileSource;
 

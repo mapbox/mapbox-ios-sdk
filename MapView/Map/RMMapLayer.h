@@ -35,7 +35,7 @@
 /** RMMapLayer is a generic class for displaying scrollable vector layers on a map view. Generally, a more specialized subclass such as RMMarker will be used for a specific purpose, but RMMapLayer can also be used directly for special purposes. */
 @interface RMMapLayer : CAScrollLayer
 {
-    RMAnnotation *annotation;
+    RMAnnotation *__weak annotation;
 
     // expressed in projected meters. The anchorPoint of the image/path/etc. is plotted here.
     RMProjectedPoint projectedLocation;
@@ -49,7 +49,7 @@
 /** @name Configuring Map Layer Properties */
 
 /** The annotation associated with the layer. This can be useful to inspect the annotation's userInfo in order to customize the visual representation. */
-@property (nonatomic, assign) RMAnnotation *annotation;
+@property (nonatomic, weak) RMAnnotation *annotation;
 
 /** The current projected location of the layer on the map. */
 @property (nonatomic, assign) RMProjectedPoint projectedLocation;
@@ -58,7 +58,7 @@
 @property (nonatomic, assign) BOOL enableDragging;
 
 /** Storage for arbitrary data. */
-@property (nonatomic, retain) id userInfo;
+@property (nonatomic, strong) id userInfo;
 
 /** Set the screen position of the layer.
 *   @param position The desired screen position.

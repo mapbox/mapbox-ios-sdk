@@ -53,8 +53,7 @@
 
 - (void)dealloc
 {
-    [_tileProjection release]; _tileProjection = nil;
-    [super dealloc];
+     _tileProjection = nil;
 }
 
 - (RMSphericalTrapezium)latitudeLongitudeBoundingBox
@@ -88,7 +87,7 @@
                                                                       minZoom:self.minZoom];
     }
 
-    return [[_tileProjection retain] autorelease];
+    return _tileProjection;
 }
 
 - (void)didReceiveMemoryWarning

@@ -41,7 +41,7 @@ typedef enum : short {
 
 @interface RMQuadTreeNode : NSObject
 
-@property (nonatomic, readonly) NSArray *annotations;
+@property (weak, nonatomic, readonly) NSArray *annotations;
 @property (nonatomic, readonly) RMQuadTreeNodeType nodeType;
 
 @property (nonatomic, readonly) RMProjectedRect boundingBox;
@@ -50,18 +50,18 @@ typedef enum : short {
 @property (nonatomic, readonly) RMProjectedRect southWestBoundingBox;
 @property (nonatomic, readonly) RMProjectedRect southEastBoundingBox;
 
-@property (nonatomic, readonly) RMQuadTreeNode *parentNode;
+@property (weak, nonatomic, readonly) RMQuadTreeNode *parentNode;
 @property (nonatomic, readonly) RMQuadTreeNode *northWest;
 @property (nonatomic, readonly) RMQuadTreeNode *northEast;
 @property (nonatomic, readonly) RMQuadTreeNode *southWest;
 @property (nonatomic, readonly) RMQuadTreeNode *southEast;
 
-@property (nonatomic, readonly) RMAnnotation *clusterAnnotation;
-@property (nonatomic, readonly) NSArray *clusteredAnnotations;
+@property (weak, nonatomic, readonly) RMAnnotation *clusterAnnotation;
+@property (weak, nonatomic, readonly) NSArray *clusteredAnnotations;
 
 // Operations on this node and all subnodes
-@property (nonatomic, readonly) NSArray *enclosedAnnotations;
-@property (nonatomic, readonly) NSArray *unclusteredAnnotations;
+@property (weak, nonatomic, readonly) NSArray *enclosedAnnotations;
+@property (weak, nonatomic, readonly) NSArray *unclusteredAnnotations;
 
 @end
 

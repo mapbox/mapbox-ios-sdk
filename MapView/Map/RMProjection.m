@@ -94,7 +94,6 @@ static RMProjection *_latitudeLongitudeProjection = nil;
     if (_internalProjection == NULL)
     {
         RMLog(@"Unhandled error creating projection. String is %@", proj4String);
-        [self release];
         return nil;
     }
 
@@ -122,7 +121,6 @@ static RMProjection *_latitudeLongitudeProjection = nil;
     if (_internalProjection)
         pj_free(_internalProjection);
 
-    [super dealloc];
 }
 
 - (RMProjectedPoint)wrapPointHorizontally:(RMProjectedPoint)aPoint

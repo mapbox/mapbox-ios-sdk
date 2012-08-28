@@ -82,7 +82,7 @@
 
             if ([@"memory-cache" isEqualToString:type])
             {
-                _memoryCache = [[self memoryCacheWithConfig:cfg] retain];
+                _memoryCache = [self memoryCacheWithConfig:cfg];
                 continue;
             }
 
@@ -114,11 +114,10 @@
 - (void)dealloc
 {
     dispatch_barrier_sync(_tileCacheQueue, ^{
-        [_memoryCache release]; _memoryCache = nil;
-        [_tileCaches release]; _tileCaches = nil;
+         _memoryCache = nil;
+         _tileCaches = nil;
     });
 
-	[super dealloc];
 }
 
 - (void)addCache:(id <RMTileCache>)cache
@@ -145,7 +144,7 @@
 
         for (id <RMTileCache> cache in _tileCaches)
         {
-            image = [[cache cachedImage:tile withCacheKey:aCacheKey] retain];
+            image = [cache cachedImage:tile withCacheKey:aCacheKey];
 
             if (image != nil)
             {
@@ -156,7 +155,7 @@
 
     });
 
-	return [image autorelease];
+	return image;
 }
 
 - (void)addImage:(UIImage *)image forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey
@@ -288,7 +287,7 @@ static NSMutableDictionary *predicateValues = nil;
 
     RMLog(@"Memory cache configuration: {capacity : %d}", capacity);
 
-	return [[[RMMemoryCache alloc] initWithCapacity:capacity] autorelease];
+	return [[RMMemoryCache alloc] initWithCapacity:capacity];
 }
 
 - (id <RMTileCache>)databaseCacheWithConfig:(NSDictionary *)cfg
@@ -388,7 +387,7 @@ static NSMutableDictionary *predicateValues = nil;
 
     RMLog(@"Database cache configuration: {capacity : %d, strategy : %@, minimalPurge : %d, expiryPeriod: %.0f, useCacheDir : %@}", capacity, strategyStr, minimalPurge, _expiryPeriod, useCacheDir ? @"YES" : @"NO");
 
-    RMDatabaseCache *dbCache = [[[RMDatabaseCache alloc] initUsingCacheDir:useCacheDir] autorelease];
+    RMDatabaseCache *dbCache = [[RMDatabaseCache alloc] initUsingCacheDir:useCacheDir];
     [dbCache setCapacity:capacity];
     [dbCache setPurgeStrategy:strategy];
     [dbCache setMinimalPurge:minimalPurge];

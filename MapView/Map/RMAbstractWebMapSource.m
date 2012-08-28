@@ -72,7 +72,6 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:RMTileRequested object:[NSNumber numberWithUnsignedLongLong:RMTileKey(tile)]];
     });
 
-    [tileCache retain];
 
     NSArray *URLs = [self URLsForTile:tile];
 
@@ -158,7 +157,6 @@
     if (image)
         [tileCache addImage:image forTile:tile withCacheKey:[self uniqueTilecacheKey]];
 
-    [tileCache release];
 
     dispatch_async(dispatch_get_main_queue(), ^(void)
     {

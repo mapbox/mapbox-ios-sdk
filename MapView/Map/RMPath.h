@@ -85,7 +85,7 @@
 @property (nonatomic, assign) CGPathDrawingMode drawingMode;
 @property (nonatomic, assign) CGLineCap lineCap;
 @property (nonatomic, assign) CGLineJoin lineJoin;
-@property (nonatomic, assign) NSArray *lineDashLengths;
+@property (nonatomic, weak) NSArray *lineDashLengths;
 @property (nonatomic, assign) CGFloat lineDashPhase;
 @property (nonatomic, assign) BOOL scaleLineDash;
 @property (nonatomic, assign) float lineWidth;
@@ -93,8 +93,8 @@
 @property (nonatomic, assign) CGFloat shadowBlur;
 @property (nonatomic, assign) CGSize shadowOffset;
 @property (nonatomic, assign) BOOL enableShadow;
-@property (nonatomic, retain) UIColor *lineColor;
-@property (nonatomic, retain) UIColor *fillColor;
+@property (nonatomic, strong) UIColor *lineColor;
+@property (nonatomic, strong) UIColor *fillColor;
 @property (nonatomic, readonly) CGRect pathBoundingBox;
 
 - (void)moveToProjectedPoint:(RMProjectedPoint)projectedPoint;

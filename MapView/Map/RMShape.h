@@ -41,7 +41,7 @@
     float lineWidth;
 
     // Line dash style
-    NSArray *lineDashLengths;
+    NSArray *__weak lineDashLengths;
     CGFloat lineDashPhase;
 
     BOOL scaleLineWidth;
@@ -56,17 +56,17 @@
 
 /** @name Accessing the Drawing Properties */
 
-@property (nonatomic, retain) NSString *fillRule;
-@property (nonatomic, retain) NSString *lineCap;
-@property (nonatomic, retain) NSString *lineJoin;
+@property (nonatomic, strong) NSString *fillRule;
+@property (nonatomic, strong) NSString *lineCap;
+@property (nonatomic, strong) NSString *lineJoin;
 
 /** The line color of the shape. Defaults to black. */
-@property (nonatomic, retain) UIColor *lineColor;
+@property (nonatomic, strong) UIColor *lineColor;
 
 /** The fill color of the shape. Defaults to clear. */
-@property (nonatomic, retain) UIColor *fillColor;
+@property (nonatomic, strong) UIColor *fillColor;
 
-@property (nonatomic, assign) NSArray *lineDashLengths;
+@property (nonatomic, weak) NSArray *lineDashLengths;
 @property (nonatomic, assign) CGFloat lineDashPhase;
 @property (nonatomic, assign) BOOL scaleLineDash;
 

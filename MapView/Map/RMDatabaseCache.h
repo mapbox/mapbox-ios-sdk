@@ -36,7 +36,7 @@
 /** @name Getting the Database Path */
 
 /** The path to the SQLite database on disk that backs the cache. */
-@property (nonatomic, retain) NSString *databasePath;
+@property (nonatomic, strong) NSString *databasePath;
 
 + (NSString *)dbPathUsingCacheDir:(BOOL)useCacheDir;
 
