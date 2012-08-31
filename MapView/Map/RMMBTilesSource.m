@@ -100,6 +100,8 @@
     
     __block UIImage *image;
 
+    [tileCache retain];
+
     [queue inDatabase:^(FMDatabase *db)
     {
         FMResultSet *results = [db executeQuery:@"select tile_data from tiles where zoom_level = ? and tile_column = ? and tile_row = ?", 
@@ -122,6 +124,11 @@
         [results close];
     }];
 
+    if (image)
+        [tileCache addImage:image forTile:tile withCacheKey:[self uniqueTilecacheKey]];
+
+    [tileCache release];
+    
     dispatch_async(dispatch_get_main_queue(), ^(void)
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:RMTileRetrieved object:[NSNumber numberWithUnsignedLongLong:RMTileKey(tile)]];
