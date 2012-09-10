@@ -141,6 +141,10 @@
 
 #pragma mark -
 
+- (void) refreshLayer;
+
+#pragma mark -
+
 // Used internally
 @property (nonatomic, retain) RMMapView *mapView;
 

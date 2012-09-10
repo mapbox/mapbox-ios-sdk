@@ -140,6 +140,8 @@
 
 - (void)setLayer:(RMMapLayer *)aLayer
 {
+    CALayer *superLayer = [layer superlayer];
+
     if (layer != aLayer)
     {
         if (layer.superlayer)
@@ -153,8 +155,14 @@
         layer = aLayer;
         [layer retain];
         layer.annotation = self;
+        [superLayer addSublayer:layer];
         [layer setPosition:self.position animated:NO];
     }
+}
+
+- (void) refreshLayer
+{
+    [self setLayer:[mapView.delegate mapView:mapView layerForAnnotation:self]];
 }
 
 - (BOOL)isAnnotationWithinBounds:(CGRect)bounds
