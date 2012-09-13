@@ -98,6 +98,7 @@ typedef enum : short {
 *
 *   @param cache A memory-based or disk-based cache. */
 - (void)addCache:(id <RMTileCache>)cache;
+- (void)insertCache:(id <RMTileCache>)cache atIndex:(NSUInteger)index;
 
 - (void)didReceiveMemoryWarning;
 

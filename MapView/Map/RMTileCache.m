@@ -128,6 +128,16 @@
     });
 }
 
+- (void)insertCache:(id <RMTileCache>)cache atIndex:(NSUInteger)index
+{
+    dispatch_barrier_async(_tileCacheQueue, ^{
+        if (index >= [_tileCaches count])
+            [_tileCaches addObject:cache];
+        else
+            [_tileCaches insertObject:cache atIndex:index];
+    });
+}
+
 + (NSNumber *)tileHash:(RMTile)tile
 {
 	return [NSNumber numberWithUnsignedLongLong:RMTileKey(tile)];

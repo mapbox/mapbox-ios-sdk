@@ -254,6 +254,8 @@
 		DDA6B8C1155CAB9A003DB5D8 /* TrackingLocation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TrackingLocation@2x.png"; path = "Resources/TrackingLocation@2x.png"; sourceTree = "<group>"; };
 		DDA6B8C2155CAB9A003DB5D8 /* TrackingHeading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TrackingHeading.png; path = Resources/TrackingHeading.png; sourceTree = "<group>"; };
 		DDA6B8C3155CAB9A003DB5D8 /* TrackingHeading@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TrackingHeading@2x.png"; path = "Resources/TrackingHeading@2x.png"; sourceTree = "<group>"; };
+		DDC006CF1601580F00E42892 /* mapbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mapbox.png; path = Resources/mapbox.png; sourceTree = "<group>"; };
+		DDC006D01601580F00E42892 /* mapbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "mapbox@2x.png"; path = "Resources/mapbox@2x.png"; sourceTree = "<group>"; };
 		DDC4BED3152E3BD700089409 /* RMInteractiveSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMInteractiveSource.h; sourceTree = "<group>"; };
 		DDC4BED4152E3BD700089409 /* RMInteractiveSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMInteractiveSource.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -516,6 +518,8 @@
 		DD8FD7581559EDA80044D96F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DDC006CF1601580F00E42892 /* mapbox.png */,
+				DDC006D01601580F00E42892 /* mapbox@2x.png */,
 				DD8FD7631559EE120044D96F /* HeadingAngleSmall.png */,
 				DD8FD7641559EE120044D96F /* HeadingAngleSmall@2x.png */,
 				DD49B8A915E2CE4E0055CCEE /* LoadingTile.png */,
