@@ -84,6 +84,9 @@
 /** Whether the annotation should be clustered when map view clustering is enabled. Defaults to `YES`. */
 @property (nonatomic, assign) BOOL clusteringEnabled;
 
+/** Whether the annotation generate tap events.  Defaults to 'YES' */
+@property (nonatomic, assign) BOOL tapEnabled;
+
 /** @name Representing an Annotation Visually */
 
 /** An object representing the annotation's visual appearance.

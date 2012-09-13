@@ -47,7 +47,7 @@
 @synthesize projectedLocation;
 @synthesize projectedBoundingBox;
 @synthesize hasBoundingBox;
-@synthesize enabled, clusteringEnabled;
+@synthesize enabled, clusteringEnabled, tapEnabled;
 @synthesize position;
 @synthesize quadTreeNode;
 @synthesize isUserLocationAnnotation;
@@ -75,6 +75,7 @@
     self.hasBoundingBox    = NO;
     self.enabled           = YES;
     self.clusteringEnabled = YES;
+    self.tapEnabled        = YES;
 
     self.isUserLocationAnnotation = NO;
 

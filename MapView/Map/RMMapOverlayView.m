@@ -104,6 +104,17 @@
         trackingHaloFlag = trackingHaloAnnotation.layer.isHidden;
         trackingHaloAnnotation.layer.hidden = YES;
     }
+    
+    NSMutableArray *hiddenAnnotationArray = [NSMutableArray array];
+    
+    for (RMAnnotation *annotation in mapView.annotations)
+    {
+        if(annotation.tapEnabled == FALSE)
+        {
+            [hiddenAnnotationArray addObject:annotation];
+            annotation.layer.hidden = YES;
+        }
+    }
 
     CALayer *hit = [self.layer hitTest:point];
 
@@ -115,6 +126,11 @@
 
     if (trackingHaloAnnotation)
         trackingHaloAnnotation.layer.hidden = trackingHaloFlag;
+    
+    for (RMAnnotation *annotation in hiddenAnnotationArray)
+    {
+        annotation.layer.hidden = NO;
+    }
 
     return hit;
 }
