@@ -110,9 +110,12 @@
         if ([db hadError])
             image = [RMTileImage errorTile];
 
-        [results next];
+        NSData *data = nil;
 
-        NSData *data = [results dataForColumn:@"tile_data"];
+        if([results next])
+            data = [results dataForColumn:@"tile_data"];
+        else
+          RMLog(@"RMMBTile missing tile for %d/%d/%d", x, y, zoom);
 
         if ( ! data)
             image = [RMTileImage errorTile];
