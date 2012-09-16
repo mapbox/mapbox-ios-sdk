@@ -141,6 +141,9 @@ typedef enum : NSUInteger {
 /** A Boolean value indicating whether to draw tile borders and z/x/y numbers on tile images for debugging purposes. Defaults to `NO`. */
 @property (nonatomic, assign) BOOL debugTiles;
 
+/** A Boolean value indicating whether to show a small logo in the corner of the map view. Defaults to `YES`. */
+@property (nonatomic, assign) BOOL showLogoBug;
+
 #pragma mark - Initializers
 
 /** @name Initializing a Map View */
