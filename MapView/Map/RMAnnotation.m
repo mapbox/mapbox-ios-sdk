@@ -47,7 +47,7 @@
 @synthesize projectedLocation;
 @synthesize projectedBoundingBox;
 @synthesize hasBoundingBox;
-@synthesize enabled, clusteringEnabled;
+@synthesize enabled, clusteringEnabled, tapEnabled;
 @synthesize position;
 @synthesize quadTreeNode;
 @synthesize isUserLocationAnnotation;
@@ -75,6 +75,7 @@
     self.hasBoundingBox    = NO;
     self.enabled           = YES;
     self.clusteringEnabled = YES;
+    self.tapEnabled        = YES;
 
     self.isUserLocationAnnotation = NO;
 
@@ -140,6 +141,8 @@
 
 - (void)setLayer:(RMMapLayer *)aLayer
 {
+    CALayer *superLayer = [layer superlayer];
+
     if (layer != aLayer)
     {
         if (layer.superlayer)
@@ -153,8 +156,14 @@
         layer = aLayer;
         [layer retain];
         layer.annotation = self;
+        [superLayer addSublayer:layer];
         [layer setPosition:self.position animated:NO];
     }
+}
+
+- (void) refreshLayer
+{
+    [self setLayer:[mapView.delegate mapView:mapView layerForAnnotation:self]];
 }
 
 - (BOOL)isAnnotationWithinBounds:(CGRect)bounds
