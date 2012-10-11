@@ -114,7 +114,7 @@
 
 	RMLog(@"Opening database at %@", path);
 
-    _queue = [[FMDatabaseQueue databaseQueueWithPath:path] retain];
+    _queue = [FMDatabaseQueue databaseQueueWithPath:path];
 
 	if (!_queue)
 	{
@@ -122,7 +122,6 @@
 
         [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
 
-        [self release];
         return nil;
 	}
 
@@ -145,13 +144,11 @@
 
 - (void)dealloc
 {
-    self.databasePath = nil;
     [_writeQueueLock lock];
-    [_writeQueue release]; _writeQueue = nil;
+     _writeQueue = nil;
     [_writeQueueLock unlock];
-    [_writeQueueLock release]; _writeQueueLock = nil;
-    [_queue release]; _queue = nil;
-	[super dealloc];
+     _writeQueueLock = nil;
+     _queue = nil;
 }
 
 - (void)setPurgeStrategy:(RMCachePurgeStrategy)theStrategy

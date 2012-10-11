@@ -39,8 +39,7 @@
 
 - (void)dealloc
 {
-    [_contentView release]; _contentView = nil;
-    [super dealloc];
+     _contentView = nil;
 }
 
 - (void)setMapZooming:(BOOL)zooming

@@ -60,8 +60,6 @@
 - (void)dealloc
 {
     self.annotation = nil;
-    self.userInfo = nil;
-    [super dealloc];
 }
 
 - (void)setPosition:(CGPoint)position animated:(BOOL)animated

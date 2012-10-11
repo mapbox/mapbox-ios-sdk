@@ -19,9 +19,9 @@ typedef enum {
 
 @interface RMUserTrackingBarButtonItem ()
 
-@property (nonatomic, retain) UISegmentedControl *segmentedControl;
-@property (nonatomic, retain) UIImageView *buttonImageView;
-@property (nonatomic, retain) UIActivityIndicatorView *activityView;
+@property (nonatomic, strong) UISegmentedControl *segmentedControl;
+@property (nonatomic, strong) UIImageView *buttonImageView;
+@property (nonatomic, strong) UIActivityIndicatorView *activityView;
 @property (nonatomic, assign) RMUserTrackingButtonState state;
 
 - (void)updateAppearance;
@@ -44,7 +44,7 @@ typedef enum {
     if ( ! (self = [super initWithCustomView:[[UIControl alloc] initWithFrame:CGRectMake(0, 0, 32, 32)]]))
         return nil;
 
-    segmentedControl = [[[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObject:@""]] retain];
+    segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObject:@""]];
     segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
     [segmentedControl setWidth:32.0 forSegmentAtIndex:0];
     segmentedControl.userInteractionEnabled = NO;
@@ -53,7 +53,7 @@ typedef enum {
 
     [self.customView addSubview:segmentedControl];
 
-    buttonImageView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"TrackingLocation.png"]] retain];
+    buttonImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"TrackingLocation.png"]];
     buttonImageView.contentMode = UIViewContentModeCenter;
     buttonImageView.frame = CGRectMake(0, 0, 32, 32);
     buttonImageView.center = self.customView.center;
@@ -61,7 +61,7 @@ typedef enum {
 
     [self.customView addSubview:buttonImageView];
 
-    activityView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] retain];
+    activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     activityView.hidesWhenStopped = YES;
     activityView.center = self.customView.center;
     activityView.userInteractionEnabled = NO;
@@ -70,7 +70,7 @@ typedef enum {
 
     [((UIControl *)self.customView) addTarget:self action:@selector(changeMode:) forControlEvents:UIControlEventTouchUpInside];
 
-    _mapView = [mapView retain];
+    _mapView = mapView;
 
     [_mapView addObserver:self forKeyPath:@"userTrackingMode"      options:NSKeyValueObservingOptionNew context:nil];
     [_mapView addObserver:self forKeyPath:@"userLocation.location" options:NSKeyValueObservingOptionNew context:nil];
@@ -84,14 +84,9 @@ typedef enum {
 
 - (void)dealloc
 {
-    [segmentedControl release]; segmentedControl = nil;
-    [buttonImageView release]; buttonImageView = nil;
-    [activityView release]; activityView = nil;
     [_mapView removeObserver:self forKeyPath:@"userTrackingMode"];
     [_mapView removeObserver:self forKeyPath:@"userLocation.location"];
-    [_mapView release]; _mapView = nil;
     
-    [super dealloc];
 }
 
 #pragma mark -
@@ -102,9 +97,8 @@ typedef enum {
     {
         [_mapView removeObserver:self forKeyPath:@"userTrackingMode"];
         [_mapView removeObserver:self forKeyPath:@"userLocation.location"];
-        [_mapView release];
 
-        _mapView = [newMapView retain];
+        _mapView = newMapView;
         [_mapView addObserver:self forKeyPath:@"userTrackingMode"      options:NSKeyValueObservingOptionNew context:nil];
         [_mapView addObserver:self forKeyPath:@"userLocation.location" options:NSKeyValueObservingOptionNew context:nil];
 

@@ -19,6 +19,6 @@
 
 @interface RMMapScrollView : UIScrollView
 
-@property (nonatomic, assign) id <RMMapScrollViewDelegate> mapScrollViewDelegate;
+@property (nonatomic, weak) id <RMMapScrollViewDelegate> mapScrollViewDelegate;
 
 @end

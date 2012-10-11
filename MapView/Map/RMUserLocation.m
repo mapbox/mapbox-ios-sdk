@@ -21,7 +21,7 @@
     if ( ! (self = [super initWithMapView:aMapView coordinate:aCoordinate andTitle:aTitle]))
         return nil;
 
-    self.layer = [[[RMMarker alloc] initWithUIImage:[UIImage imageNamed:@"TrackingDot.png"]] autorelease];
+    self.layer = [[RMMarker alloc] initWithUIImage:[UIImage imageNamed:@"TrackingDot.png"]];
 
     self.layer.zPosition = -MAXFLOAT + 2;
 
@@ -32,12 +32,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [location release]; location = nil;
-    [heading release]; heading = nil;
-    [super dealloc];
-}
 
 - (BOOL)isUpdating
 {
@@ -49,8 +43,7 @@
     if ([newLocation distanceFromLocation:location] && newLocation.coordinate.latitude != 0 && newLocation.coordinate.longitude != 0)
     {
         [self willChangeValueForKey:@"location"];
-        [location release];
-        location = [newLocation retain];
+        location = newLocation;
         self.coordinate = location.coordinate;
         [self didChangeValueForKey:@"location"];
     }
@@ -61,8 +54,7 @@
     if (newHeading.trueHeading != heading.trueHeading)
     {
         [self willChangeValueForKey:@"heading"];
-        [heading release];
-        heading = [newHeading retain];
+        heading = newHeading;
         [self didChangeValueForKey:@"heading"];
     }
 }

@@ -54,7 +54,7 @@
                                                                  maxZoom:kMBTilesDefaultMaxTileZoom 
                                                                  minZoom:kMBTilesDefaultMinTileZoom];
 
-    queue = [[FMDatabaseQueue databaseQueueWithPath:[tileSetURL path]] retain];
+    queue = [FMDatabaseQueue databaseQueueWithPath:[tileSetURL path]];
 
     if ( ! queue)
         return nil;
@@ -73,9 +73,8 @@
 
 - (void)dealloc
 {
-	[tileProjection release]; tileProjection = nil;
-    [queue release]; queue = nil;
-	[super dealloc];
+	 tileProjection = nil;
+     queue = nil;
 }
 
 - (NSUInteger)tileSideLength
@@ -147,7 +146,7 @@
 
 - (RMFractalTileProjection *)mercatorToTileProjection
 {
-	return [[tileProjection retain] autorelease];
+	return tileProjection;
 }
 
 - (RMProjection *)projection

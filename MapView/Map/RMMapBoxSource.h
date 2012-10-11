@@ -84,6 +84,6 @@
 - (BOOL)coversFullWorld;
 
 /** Info about the TileJSON in a Cocoa-native format. */
-@property (nonatomic, readonly, retain) NSDictionary *infoDictionary;
+@property (nonatomic, readonly, strong) NSDictionary *infoDictionary;
 
 @end

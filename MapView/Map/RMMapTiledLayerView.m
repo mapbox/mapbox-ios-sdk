@@ -18,7 +18,7 @@
 @implementation RMMapTiledLayerView
 {
     RMMapView *_mapView;
-    id <RMTileSource> _tileSource;
+    id <RMTileSource> __weak _tileSource;
 }
 
 @synthesize useSnapshotRenderer = _useSnapshotRenderer;
@@ -41,8 +41,8 @@
 
     self.opaque = NO;
 
-    _mapView = [aMapView retain];
-    _tileSource = [aTileSource retain];
+    _mapView = aMapView;
+    _tileSource = aTileSource;
 
     self.useSnapshotRenderer = NO;
 
@@ -59,9 +59,7 @@
 {
     [_tileSource cancelAllDownloads];
     self.layer.contents = nil;
-    [_tileSource release]; _tileSource = nil;
-    [_mapView release]; _mapView = nil;
-    [super dealloc];
+     _mapView = nil;
 }
 
 - (void)didMoveToWindow
@@ -77,8 +75,7 @@
 
 //    NSLog(@"drawLayer: {{%f,%f},{%f,%f}}", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
 
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
+    
     if (self.useSnapshotRenderer)
     {
         zoom = (short)ceilf(_mapView.adjustedZoomForRetinaDisplay);
@@ -229,7 +226,7 @@
         UIGraphicsPopContext();
     }
 
-    [pool release]; pool = nil;
+    
 }
 
 @end

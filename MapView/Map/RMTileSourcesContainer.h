@@ -33,7 +33,7 @@
 
 @interface RMTileSourcesContainer : NSObject
 
-@property (nonatomic, readonly) NSArray *tileSources;
+@property (weak, nonatomic, readonly) NSArray *tileSources;
 
 // These are the minimum and maximum zoom levels across all tile sources.
 @property (nonatomic, assign) float minZoom;
@@ -42,8 +42,8 @@
 // These properties are (and have to be) equal across all tile sources
 @property (nonatomic, readonly) NSUInteger tileSideLength;
 
-@property (nonatomic, readonly) RMFractalTileProjection *mercatorToTileProjection;
-@property (nonatomic, readonly) RMProjection *projection;
+@property (weak, nonatomic, readonly) RMFractalTileProjection *mercatorToTileProjection;
+@property (weak, nonatomic, readonly) RMProjection *projection;
 
 @property (nonatomic, readonly) RMSphericalTrapezium latitudeLongitudeBoundingBox;
 

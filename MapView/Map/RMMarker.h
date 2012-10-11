@@ -49,13 +49,13 @@ typedef enum {
 /** @name Setting Label Properties */
 
 /** A custom label for the marker. The label is shown when first set. */
-@property (nonatomic, retain) UIView  *label;
+@property (nonatomic, strong) UIView  *label;
 
 /** The marker object's label text foreground color. */
-@property (nonatomic, retain) UIColor *textForegroundColor;
+@property (nonatomic, strong) UIColor *textForegroundColor;
 
 /** The marker object's label text background color. */
-@property (nonatomic, retain) UIColor *textBackgroundColor;
+@property (nonatomic, strong) UIColor *textBackgroundColor;
 
 /** The font used for labels when another font is not explicitly requested. The default is the system font with size `15`. */
 + (UIFont *)defaultFont;

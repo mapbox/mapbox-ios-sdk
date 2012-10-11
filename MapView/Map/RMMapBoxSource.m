@@ -38,7 +38,7 @@
 
 @interface RMMapBoxSource ()
 
-@property (nonatomic, retain) NSDictionary *infoDictionary;
+@property (nonatomic, strong) NSDictionary *infoDictionary;
 
 - (id)initWithInfo:(NSDictionary *)info;
 
@@ -59,9 +59,9 @@
 {
     if (self = [super init])
     {
-        infoDictionary = (NSDictionary *)[[NSJSONSerialization JSONObjectWithData:[tileJSON dataUsingEncoding:NSUTF8StringEncoding]
+        infoDictionary = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:[tileJSON dataUsingEncoding:NSUTF8StringEncoding]
                                                                           options:0
-                                                                            error:nil] retain];
+                                                                            error:nil];
         
         id dataObject;
         
@@ -122,7 +122,7 @@
     if ( ! (self = [super init]))
         return nil;
 
-    infoDictionary = [[NSDictionary dictionaryWithDictionary:info] retain];
+    infoDictionary = [NSDictionary dictionaryWithDictionary:info];
 
 	return self;
 }
@@ -161,11 +161,6 @@
     return nil;
 }
 
-- (void)dealloc
-{
-    [infoDictionary release];
-    [super dealloc];
-}
 
 #pragma mark 
 
