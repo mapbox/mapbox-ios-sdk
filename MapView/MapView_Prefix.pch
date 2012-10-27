@@ -8,7 +8,7 @@
     #import <CoreLocation/CoreLocation.h>
     #import <QuartzCore/QuartzCore.h>
 
-    #import "RouteMe.h"
+    #import "MapBox.h"
 #endif
 
 #if DEBUG

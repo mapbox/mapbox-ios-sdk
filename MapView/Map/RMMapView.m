@@ -63,6 +63,8 @@
 #define kDefaultMaximumZoomLevel 25.0
 #define kDefaultInitialZoomLevel 11.0
 
+#define kDefaultAnnotationMarker [[[RMMarker alloc] initWithMapBoxMarkerImage:@"star" tintColor:[UIColor redColor]] autorelease]
+
 #pragma mark --- end constants ----
 
 @interface RMMapView (PrivateMethods) <UIScrollViewDelegate, UIGestureRecognizerDelegate, RMMapScrollViewDelegate, CLLocationManagerDelegate>
@@ -2422,6 +2424,8 @@
         {
             if (annotation.layer == nil && _delegateHasLayerForAnnotation)
                 annotation.layer = [_delegate mapView:self layerForAnnotation:annotation];
+            if (annotation.layer == nil && [annotation.annotationType isEqualToString:kRMPointAnnotationTypeName])
+                annotation.layer = kDefaultAnnotationMarker;
             if (annotation.layer == nil)
                 continue;
 
@@ -2476,6 +2480,8 @@
                     {
                         if (annotation.layer == nil && _delegateHasLayerForAnnotation)
                             annotation.layer = [_delegate mapView:self layerForAnnotation:annotation];
+                        if (annotation.layer == nil && [annotation.annotationType isEqualToString:kRMPointAnnotationTypeName])
+                            annotation.layer = kDefaultAnnotationMarker;
                         if (annotation.layer == nil)
                             continue;
 
@@ -2587,6 +2593,9 @@
 
         if (annotation.layer == nil && [annotation isAnnotationOnScreen] && _delegateHasLayerForAnnotation)
             annotation.layer = [_delegate mapView:self layerForAnnotation:annotation];
+
+        if ( ! annotation.layer && [annotation.annotationType isEqualToString:kRMPointAnnotationTypeName])
+            annotation.layer = kDefaultAnnotationMarker;
 
         if (annotation.layer)
         {

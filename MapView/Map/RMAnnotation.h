@@ -63,7 +63,7 @@
 /** Storage for arbitrary data. */
 @property (nonatomic, retain) id userInfo;
 
-/** An arbitrary string representing the type of annotation. Useful for determining which layer to draw for the annotation when requested. */
+/** An arbitrary string representing the type of annotation. Useful for determining which layer to draw for the annotation when requested. Setting an annotationType of `kRMPointAnnotationTypeName` will provide a default marker layer for the annotation. */
 @property (nonatomic, retain) NSString *annotationType;
 
 /** An arbitrary icon image for the annotation. Useful to pass an image at annotation creation time for use in the layer at a later time. */
