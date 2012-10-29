@@ -46,10 +46,17 @@
 @synthesize shapeLayer;
 @synthesize lineColor;
 @synthesize fillColor;
-@synthesize radiusInMeters;
+@synthesize innerRadiusInMeters, radiusInMeters;
+@synthesize arcStart, arcEnd;
 @synthesize lineWidthInPixels;
+@synthesize fullCircle;
 
-- (id)initWithView:(RMMapView *)aMapView radiusInMeters:(CGFloat)newRadiusInMeters
+- (id)initWithView:(RMMapView *)aMapView radiusInMeters:(CGFloat)_radiusInMeters
+{
+    return [self initWithView:aMapView innerRadiusInMeters:0 radiusInMeters:_radiusInMeters arcStart:0 arcEnd:2*M_PI fullCircle:TRUE];
+}
+
+- (id)initWithView:(RMMapView *)aMapView innerRadiusInMeters:(CGFloat)_innerRadiusInMeters radiusInMeters:(CGFloat)_radiusInMeters arcStart:(CGFloat) _arcStart arcEnd:(CGFloat)_arcEnd fullCircle:(BOOL)_fullCircle
 {
     if (!(self = [super init]))
         return nil;
@@ -58,7 +65,12 @@
     [self addSublayer:shapeLayer];
 
     mapView = aMapView;
-    radiusInMeters = newRadiusInMeters;
+    innerRadiusInMeters = _innerRadiusInMeters;
+    radiusInMeters = _radiusInMeters;
+    arcStart = _arcStart;
+    arcEnd = _arcEnd;
+    
+    fullCircle = _fullCircle;
 
     lineWidthInPixels = kDefaultLineWidth;
     lineColor = kDefaultLineColor;
@@ -90,7 +102,7 @@
     CGPathRelease(circlePath); circlePath = NULL;
 
     CGMutablePathRef newPath = CGPathCreateMutable();
-
+    
     CGFloat latRadians = [[mapView projection] projectedPointToCoordinate:projectedLocation].latitude * M_PI / 180.0f;
     CGFloat pixelRadius = radiusInMeters / cos(latRadians) / [mapView metersPerPixel];
     //	DLog(@"Pixel Radius: %f", pixelRadius);
@@ -108,7 +120,30 @@
     //	DLog(@"Circle Rectangle: %f, %f, %f, %f", rectangle.origin.x, rectangle.origin.y, rectangle.size.width, rectangle.size.height);
     //	DLog(@"Bounds Rectangle: %f, %f, %f, %f", self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, self.bounds.size.height);
 
-    CGPathAddEllipseInRect(newPath, NULL, rectangle);
+    if(fullCircle)
+    {
+        arcStart = 0.0;
+        arcEnd = 2.0*M_PI;
+    }
+    
+    CGFloat outerRadius = radiusInMeters / [mapView metersPerPixel];
+    CGFloat innerRadius = innerRadiusInMeters / [mapView metersPerPixel];
+    
+    CGPoint outerStart = CGPointMake(outerRadius*cos(arcStart)+self.position.x, outerRadius*sin(arcStart)+self.position.y);
+    CGPoint innerEnd = CGPointMake(innerRadius*cos(arcEnd)+self.position.x, innerRadius*sin(arcEnd)+self.position.y);
+        
+    CGPathAddArc(newPath, NULL, self.position.x, self.position.y, outerRadius, arcStart, arcEnd, FALSE);
+    
+    if(fullCircle)
+        CGPathMoveToPoint(newPath, NULL, innerEnd.x, innerEnd.y);
+    else
+        CGPathAddLineToPoint(newPath, NULL, innerEnd.x, innerEnd.y);
+    
+    CGPathAddArc(newPath, NULL, self.position.x, self.position.y, innerRadius, arcEnd, arcStart, TRUE);
+    
+    if(!fullCircle)
+        CGPathAddLineToPoint(newPath, NULL, outerStart.x, outerStart.y);
+
     circlePath = newPath;
 
     // animate the path change if we're in an animation block
@@ -123,7 +158,7 @@
 
         [self.shapeLayer addAnimation:pathAnimation forKey:@"animatePath"];
     }
-
+    
     [self.shapeLayer setPath:newPath];
     [self.shapeLayer setFillColor:[fillColor CGColor]];
     [self.shapeLayer setStrokeColor:[lineColor CGColor]];

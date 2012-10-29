@@ -58,7 +58,13 @@
 @property (nonatomic, retain) UIColor *fillColor;
 
 /** The radius of the circle in projected meters. Regardless of map zoom, the circle will change visible size to continously represent this radius on the map. */
+@property (nonatomic, assign) CGFloat innerRadiusInMeters;
 @property (nonatomic, assign) CGFloat radiusInMeters;
+@property (nonatomic, assign) CGFloat arcStart;
+@property (nonatomic, assign) CGFloat arcEnd;
+@property (nonatomic, assign) BOOL fullCircle;
+
+
 
 /** The circle's line width. Defaults to 10.0. */
 @property (nonatomic, assign) CGFloat lineWidthInPixels;
@@ -69,5 +75,8 @@
 *   @param aMapView The map view the shape should be drawn on.
 *   @param newRadiusInMeters The radius of the circle object in projected meters. Regardless of map zoom, the circle will change visible size to continously represent this radius on the map. */
 - (id)initWithView:(RMMapView *)aMapView radiusInMeters:(CGFloat)newRadiusInMeters;
+
+- (id)initWithView:(RMMapView *)aMapView innerRadiusInMeters:(CGFloat)_innerRadiusInMeters radiusInMeters:(CGFloat)_radiusInMeters arcStart:(CGFloat) _arcStart arcEnd:(CGFloat)_arcEnd fullCircle:(BOOL)_fullCircle;
+
 
 @end
