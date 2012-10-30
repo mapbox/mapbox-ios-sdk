@@ -39,8 +39,11 @@
     CGRect nonClippedBounds;
     CGRect previousBounds;
 
-    CAShapeLayer *shapeLayer;
-    UIBezierPath *bezierPath;
+    NSMutableArray *layers;
+    CAShapeLayer *currentLayer;
+    
+    NSMutableArray *paths;
+    UIBezierPath *currentPath;
 
     RMMapView *mapView;
 }
@@ -61,23 +64,16 @@
         return nil;
 
     mapView = aMapView;
-
-    bezierPath = [[UIBezierPath alloc] init];
+    
+    paths = [[NSMutableArray alloc] init];
+       
     lineWidth = kDefaultLineWidth;
     ignorePathUpdates = NO;
-
-    shapeLayer = [[CAShapeLayer alloc] init];
-    shapeLayer.rasterizationScale = [[UIScreen mainScreen] scale];
-    shapeLayer.lineWidth = lineWidth;
-    shapeLayer.lineCap = kCALineCapButt;
-    shapeLayer.lineJoin = kCALineJoinMiter;
-    shapeLayer.strokeColor = [UIColor blackColor].CGColor;
-    shapeLayer.fillColor = [UIColor clearColor].CGColor;
-    shapeLayer.shadowRadius = 0.0;
-    shapeLayer.shadowOpacity = 0.0;
-    shapeLayer.shadowOffset = CGSizeMake(0, 0);
-    [self addSublayer:shapeLayer];
-
+    
+    layers = [[NSMutableArray alloc] init];
+    
+    [self newSegment];
+    
     pathBoundingBox = CGRectZero;
     nonClippedBounds = CGRectZero;
     previousBounds = CGRectZero;
@@ -94,11 +90,46 @@
     return self;
 }
 
+- (void) newSegment
+{
+    currentPath = [[UIBezierPath alloc] init];
+    [paths addObject:currentPath];
+    
+    currentLayer = [[CAShapeLayer alloc] init];
+    [layers addObject:currentLayer];
+    
+    currentLayer.rasterizationScale = [[UIScreen mainScreen] scale];
+    currentLayer.lineWidth = lineWidth;
+    currentLayer.lineCap = kCALineCapButt;
+    currentLayer.lineJoin = kCALineJoinMiter;
+    currentLayer.strokeColor = [UIColor blackColor].CGColor;
+    currentLayer.fillColor = [UIColor clearColor].CGColor;
+    currentLayer.shadowRadius = 0.0;
+    currentLayer.shadowOpacity = 0.0;
+    currentLayer.shadowOffset = CGSizeMake(0, 0);
+    [self addSublayer:currentLayer];
+}
+
 - (void)dealloc
 {
     mapView = nil;
-    [bezierPath release]; bezierPath = nil;
-    [shapeLayer release]; shapeLayer = nil;
+    
+    for(UIBezierPath *path in paths)
+    {
+        [path release];
+    }
+    [paths removeAllObjects]; [paths release]; paths = nil;
+    
+    currentPath = nil;
+    
+    for(CAShapeLayer *layer in layers)
+    {
+        [layer release];
+    }
+    [layers removeAllObjects]; [layers release]; layers = nil;
+    
+    currentLayer = nil;
+    
     [super dealloc];
 }
 
@@ -113,87 +144,99 @@
 {
     if (ignorePathUpdates)
         return;
-
+    
+    NSUInteger index = 0;
+    
+    CGRect previousNonClippedBounds = CGRectZero;
+    
     float scale = 1.0f / [mapView metersPerPixel];
-
-    // we have to calculate the scaledLineWidth even if scalling did not change
-    // as the lineWidth might have changed
-    float scaledLineWidth;
-
-    if (scaleLineWidth)
-        scaledLineWidth = lineWidth * scale;
-    else
-        scaledLineWidth = lineWidth;
-
-    shapeLayer.lineWidth = scaledLineWidth;
-
-    if (lineDashLengths)
+    
+    for(UIBezierPath *thisPath in paths)
     {
-        if (scaleLineDash)
-        {
-            NSMutableArray *scaledLineDashLengths = [NSMutableArray array];
-
-            for (NSNumber *lineDashLength in lineDashLengths)
-            {
-                [scaledLineDashLengths addObject:[NSNumber numberWithFloat:lineDashLength.floatValue * scale]];
-            }
-
-            shapeLayer.lineDashPattern = scaledLineDashLengths;
-        }
+        CAShapeLayer *thisLayer = [layers objectAtIndex:index];
+        index++;
+        
+        // we have to calculate the scaledLineWidth even if scalling did not change
+        // as the lineWidth might have changed
+        float scaledLineWidth;
+        
+        if (scaleLineWidth)
+            scaledLineWidth = lineWidth * scale;
         else
+            scaledLineWidth = lineWidth;
+        
+        thisLayer.lineWidth = scaledLineWidth;
+        
+        if (lineDashLengths)
         {
-            shapeLayer.lineDashPattern = lineDashLengths;
+            if (scaleLineDash)
+            {
+                NSMutableArray *scaledLineDashLengths = [NSMutableArray array];
+                
+                for (NSNumber *lineDashLength in lineDashLengths)
+                {
+                    [scaledLineDashLengths addObject:[NSNumber numberWithFloat:lineDashLength.floatValue * scale]];
+                }
+                
+                thisLayer.lineDashPattern = scaledLineDashLengths;
+            }
+            else
+            {
+                thisLayer.lineDashPattern = lineDashLengths;
+            }
+        }
+        
+        // we are about to overwrite nonClippedBounds, therefore we save the old value
+        previousNonClippedBounds = nonClippedBounds;
+        
+        if (scale != lastScale)
+        {
+            CGAffineTransform scaling = CGAffineTransformMakeScale(scale, scale);
+            UIBezierPath *scaledPath = [thisPath copy];
+            [scaledPath applyTransform:scaling];
+            
+            if (animated)
+            {
+                CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"path"];
+                animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+                animation.repeatCount = 0;
+                animation.autoreverses = NO;
+                animation.fromValue = (id) thisLayer.path;
+                animation.toValue = (id) scaledPath.CGPath;
+                [thisLayer addAnimation:animation forKey:@"animatePath"];
+            }
+            
+            thisLayer.path = scaledPath.CGPath;
+            
+            // calculate the bounds of the scaled path
+            CGRect boundsInMercators = scaledPath.bounds;
+            CGRect bounds = CGRectInset(boundsInMercators, -scaledLineWidth - (2 * thisLayer.shadowRadius), -scaledLineWidth - (2 * thisLayer.shadowRadius));
+
+            nonClippedBounds = CGRectUnion(nonClippedBounds, bounds);
+            
+            [scaledPath release];
         }
     }
-
-    // we are about to overwrite nonClippedBounds, therefore we save the old value
-    CGRect previousNonClippedBounds = nonClippedBounds;
-
-    if (scale != lastScale)
-    {
-        lastScale = scale;
-
-        CGAffineTransform scaling = CGAffineTransformMakeScale(scale, scale);
-        UIBezierPath *scaledPath = [bezierPath copy];
-        [scaledPath applyTransform:scaling];
-
-        if (animated)
-        {
-            CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"path"];
-            animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-            animation.repeatCount = 0;
-            animation.autoreverses = NO;
-            animation.fromValue = (id) shapeLayer.path;
-            animation.toValue = (id) scaledPath.CGPath;
-            [shapeLayer addAnimation:animation forKey:@"animatePath"];
-        }
-
-        shapeLayer.path = scaledPath.CGPath;
-
-        // calculate the bounds of the scaled path
-        CGRect boundsInMercators = scaledPath.bounds;
-        nonClippedBounds = CGRectInset(boundsInMercators, -scaledLineWidth - (2 * shapeLayer.shadowRadius), -scaledLineWidth - (2 * shapeLayer.shadowRadius));
-
-        [scaledPath release];
-    }
-
+    
+    lastScale = scale;
+    
     // if the path is not scaled, nonClippedBounds stay the same as in the previous invokation
-
+    
     // Clip bound rect to screen bounds.
     // If bounds are not clipped, they won't display when you zoom in too much.
-
+    
     CGRect screenBounds = [mapView frame];
-
+    
     // we start with the non-clipped bounds and clip them
     CGRect clippedBounds = nonClippedBounds;
-
+    
     float offset;
     const float outset = 150.0f; // provides a buffer off screen edges for when path is scaled or moved
-
+    
     CGPoint newPosition = self.annotation.position;
-
-//    RMLog(@"x:%f y:%f screen bounds: %f %f %f %f", newPosition.x, newPosition.y,  screenBounds.origin.x, screenBounds.origin.y, screenBounds.size.width, screenBounds.size.height);
-
+    
+    //    RMLog(@"x:%f y:%f screen bounds: %f %f %f %f", newPosition.x, newPosition.y,  screenBounds.origin.x, screenBounds.origin.y, screenBounds.size.width, screenBounds.size.height);
+    
     // Clip top
     offset = newPosition.y + clippedBounds.origin.y - screenBounds.origin.y + outset;
     if (offset < 0.0f)
@@ -201,7 +244,7 @@
         clippedBounds.origin.y -= offset;
         clippedBounds.size.height += offset;
     }
-
+    
     // Clip left
     offset = newPosition.x + clippedBounds.origin.x - screenBounds.origin.x + outset;
     if (offset < 0.0f)
@@ -209,21 +252,21 @@
         clippedBounds.origin.x -= offset;
         clippedBounds.size.width += offset;
     }
-
+    
     // Clip bottom
     offset = newPosition.y + clippedBounds.origin.y + clippedBounds.size.height - screenBounds.origin.y - screenBounds.size.height - outset;
     if (offset > 0.0f)
     {
         clippedBounds.size.height -= offset;
     }
-
+    
     // Clip right
     offset = newPosition.x + clippedBounds.origin.x + clippedBounds.size.width - screenBounds.origin.x - screenBounds.size.width - outset;
     if (offset > 0.0f)
     {
         clippedBounds.size.width -= offset;
     }
-
+    
     if (animated)
     {
         CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
@@ -234,18 +277,18 @@
         positionAnimation.toValue = [NSValue valueWithCGPoint:newPosition];
         [self addAnimation:positionAnimation forKey:@"animatePosition"];
     }
-
+    
     super.position = newPosition;
-
+    
     // bounds are animated non-clipped but set with clipping
-
+    
     CGPoint previousNonClippedAnchorPoint = CGPointMake(-previousNonClippedBounds.origin.x / previousNonClippedBounds.size.width,
                                                         -previousNonClippedBounds.origin.y / previousNonClippedBounds.size.height);
     CGPoint nonClippedAnchorPoint = CGPointMake(-nonClippedBounds.origin.x / nonClippedBounds.size.width,
                                                 -nonClippedBounds.origin.y / nonClippedBounds.size.height);
     CGPoint clippedAnchorPoint = CGPointMake(-clippedBounds.origin.x / clippedBounds.size.width,
                                              -clippedBounds.origin.y / clippedBounds.size.height);
-
+    
     if (animated)
     {
         CABasicAnimation *boundsAnimation = [CABasicAnimation animationWithKeyPath:@"bounds"];
@@ -256,10 +299,10 @@
         boundsAnimation.toValue = [NSValue valueWithCGRect:nonClippedBounds];
         [self addAnimation:boundsAnimation forKey:@"animateBounds"];
     }
-
+    
     self.bounds = clippedBounds;
     previousBounds = clippedBounds;
-
+    
     // anchorPoint is animated non-clipped but set with clipping
     if (animated)
     {
@@ -271,7 +314,7 @@
         anchorPointAnimation.toValue = [NSValue valueWithCGPoint:nonClippedAnchorPoint];
         [self addAnimation:anchorPointAnimation forKey:@"animateAnchorPoint"];
     }
-
+    
     self.anchorPoint = clippedAnchorPoint;
 }
 
@@ -286,7 +329,7 @@
 
         self.position = [mapView projectedPointToPixel:projectedLocation];
 
-        [bezierPath moveToPoint:CGPointMake(0.0f, 0.0f)];
+        [currentPath moveToPoint:CGPointMake(0.0f, 0.0f)];
     }
     else
     {
@@ -294,9 +337,9 @@
         point.y = point.y - projectedLocation.y;
 
         if (isDrawing)
-            [bezierPath addLineToPoint:CGPointMake(point.x, -point.y)];
+            [currentPath addLineToPoint:CGPointMake(point.x, -point.y)];
         else
-            [bezierPath moveToPoint:CGPointMake(point.x, -point.y)];
+            [currentPath moveToPoint:CGPointMake(point.x, -point.y)];
 
         lastScale = 0.0;
         [self recalculateGeometryAnimated:NO];
@@ -353,7 +396,7 @@
 
 - (void)closePath
 {
-    [bezierPath closePath];
+    [currentPath closePath];
 }
 
 - (float)lineWidth
@@ -371,112 +414,112 @@
 
 - (NSString *)lineCap
 {
-    return shapeLayer.lineCap;
+    return currentLayer.lineCap;
 }
 
 - (void)setLineCap:(NSString *)newLineCap
 {
-    shapeLayer.lineCap = newLineCap;
+    currentLayer.lineCap = newLineCap;
     [self setNeedsDisplay];
 }
 
 - (NSString *)lineJoin
 {
-    return shapeLayer.lineJoin;
+    return currentLayer.lineJoin;
 }
 
 - (void)setLineJoin:(NSString *)newLineJoin
 {
-    shapeLayer.lineJoin = newLineJoin;
+    currentLayer.lineJoin = newLineJoin;
     [self setNeedsDisplay];
 }
 
 - (UIColor *)lineColor
 {
-    return [UIColor colorWithCGColor:shapeLayer.strokeColor];
+    return [UIColor colorWithCGColor:currentLayer.strokeColor];
 }
 
 - (void)setLineColor:(UIColor *)aLineColor
 {
-    if (shapeLayer.strokeColor != aLineColor.CGColor)
+    if (currentLayer.strokeColor != aLineColor.CGColor)
     {
-        shapeLayer.strokeColor = aLineColor.CGColor;
+        currentLayer.strokeColor = aLineColor.CGColor;
         [self setNeedsDisplay];
     }
 }
 
 - (UIColor *)fillColor
 {
-    return [UIColor colorWithCGColor:shapeLayer.fillColor];
+    return [UIColor colorWithCGColor:currentLayer.fillColor];
 }
 
 - (void)setFillColor:(UIColor *)aFillColor
 {
-    if (shapeLayer.fillColor != aFillColor.CGColor)
+    if (currentLayer.fillColor != aFillColor.CGColor)
     {
-        shapeLayer.fillColor = aFillColor.CGColor;
+        currentLayer.fillColor = aFillColor.CGColor;
         [self setNeedsDisplay];
     }
 }
 
 - (CGFloat)shadowBlur
 {
-    return shapeLayer.shadowRadius;
+    return currentLayer.shadowRadius;
 }
 
 - (void)setShadowBlur:(CGFloat)blur
 {
-    shapeLayer.shadowRadius = blur;
+    currentLayer.shadowRadius = blur;
     [self setNeedsDisplay];
 }
 
 - (CGSize)shadowOffset
 {
-    return shapeLayer.shadowOffset;
+    return currentLayer.shadowOffset;
 }
 
 - (void)setShadowOffset:(CGSize)offset
 {
-    shapeLayer.shadowOffset = offset;
+    currentLayer.shadowOffset = offset;
     [self setNeedsDisplay];
 }
 
 - (BOOL)enableShadow
 {
-    return (shapeLayer.shadowOpacity > 0);
+    return (currentLayer.shadowOpacity > 0);
 }
 
 - (void)setEnableShadow:(BOOL)flag
 {
-    shapeLayer.shadowOpacity   = (flag ? 1.0 : 0.0);
-    shapeLayer.shouldRasterize = ! flag;
+    currentLayer.shadowOpacity   = (flag ? 1.0 : 0.0);
+    currentLayer.shouldRasterize = ! flag;
     [self setNeedsDisplay];
 }
 
 - (NSString *)fillRule
 {
-    return shapeLayer.fillRule;
+    return currentLayer.fillRule;
 }
 
 - (void)setFillRule:(NSString *)fillRule
 {
-    shapeLayer.fillRule = fillRule;
+    currentLayer.fillRule = fillRule;
 }
 
 - (CGFloat)lineDashPhase
 {
-    return shapeLayer.lineDashPhase;
+    return currentLayer.lineDashPhase;
 }
 
 - (void)setLineDashPhase:(CGFloat)dashPhase
 {
-    shapeLayer.lineDashPhase = dashPhase;
+    currentLayer.lineDashPhase = dashPhase;
 }
 
 - (void)setPosition:(CGPoint)newPosition animated:(BOOL)animated
 {
-    if (CGPointEqualToPoint(newPosition, super.position) && CGRectEqualToRect(self.bounds, previousBounds))
-        return;
+    //if (CGPointEqualToPoint(newPosition, super.position) && CGRectEqualToRect(self.bounds, previousBounds))
+        //return;
 
     [self recalculateGeometryAnimated:animated];
 }

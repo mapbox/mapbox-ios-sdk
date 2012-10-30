@@ -116,4 +116,7 @@
 * There is no requirement that a path be closed. */
 - (void)closePath;
 
+/* Creates a new segment which can have its own unique line properties and colors */
+- (void) newSegment;
+
 @end
