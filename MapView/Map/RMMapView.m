@@ -1131,6 +1131,9 @@
     int tileSideLength = [_tileSourcesContainer tileSideLength];
     CGSize contentSize = CGSizeMake(tileSideLength, tileSideLength); // zoom level 1
 
+    float retinaCorrectedMaxZoom = _adjustTilesForRetinaDisplay ? [self maxZoom] : [self maxZoom] + 0.99;
+    float retinaCorrectedMinZoom = _adjustTilesForRetinaDisplay ? [self minZoom] -0.99 : [self minZoom];
+    
     _mapScrollView = [[RMMapScrollView alloc] initWithFrame:[self bounds]];
     _mapScrollView.delegate = self;
     _mapScrollView.opaque = NO;
@@ -1142,8 +1145,8 @@
     _mapScrollView.bounces = _enableBouncing;
     _mapScrollView.bouncesZoom = _enableBouncing;
     _mapScrollView.contentSize = contentSize;
-    _mapScrollView.minimumZoomScale = exp2f([self minZoom]);
-    _mapScrollView.maximumZoomScale = exp2f([self maxZoom]);
+    _mapScrollView.minimumZoomScale = exp2f(retinaCorrectedMinZoom);
+    _mapScrollView.maximumZoomScale = exp2f(retinaCorrectedMaxZoom);
     _mapScrollView.contentOffset = CGPointMake(0.0, 0.0);
     _mapScrollView.clipsToBounds = NO;
 
