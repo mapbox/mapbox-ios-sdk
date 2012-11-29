@@ -288,7 +288,11 @@
 
 #pragma mark -
 
-- (void)addPointToProjectedPoint:(RMProjectedPoint)point withDrawing:(BOOL)isDrawing
+
+- (void)addCurveToProjectedPoint:(RMProjectedPoint)point
+                   controlPoint1:(RMProjectedPoint)controlPoint1
+                   controlPoint2:(RMProjectedPoint)controlPoint2
+                     withDrawing:(BOOL)isDrawing
 {
     [points addObject:[[[CLLocation alloc] initWithLatitude:[mapView projectedPointToCoordinate:point].latitude longitude:[mapView projectedPointToCoordinate:point].longitude] autorelease]];
 
@@ -306,10 +310,29 @@
         point.x = point.x - projectedLocation.x;
         point.y = point.y - projectedLocation.y;
 
-        if (isDrawing)
-            [bezierPath addLineToPoint:CGPointMake(point.x, -point.y)];
-        else
+        if (isDrawing) {
+            if (isnan(controlPoint1.x) && isnan(controlPoint2.x)) {
+                [bezierPath addLineToPoint:CGPointMake(point.x, -point.y)];
+                
+            } else if (isnan(controlPoint2.x)) {
+                controlPoint1.x = controlPoint1.x - projectedLocation.x;
+                controlPoint1.y = controlPoint1.y - projectedLocation.y;
+                
+                [bezierPath addQuadCurveToPoint:CGPointMake(point.x, -point.y)
+                                   controlPoint:CGPointMake(controlPoint1.x, -controlPoint1.y)];
+            } else {
+                controlPoint1.x = controlPoint1.x - projectedLocation.x;
+                controlPoint1.y = controlPoint1.y - projectedLocation.y;
+                controlPoint2.x = controlPoint2.x - projectedLocation.x;
+                controlPoint2.y = controlPoint2.y - projectedLocation.y;
+                
+                [bezierPath addCurveToPoint:CGPointMake(point.x, -point.y)
+                              controlPoint1:CGPointMake(controlPoint1.x, -controlPoint1.y)
+                              controlPoint2:CGPointMake(controlPoint2.x, -controlPoint2.y)];
+            }
+        } else {
             [bezierPath moveToPoint:CGPointMake(point.x, -point.y)];
+        }
 
         lastScale = 0.0;
         [self recalculateGeometryAnimated:NO];
@@ -320,7 +343,10 @@
 
 - (void)moveToProjectedPoint:(RMProjectedPoint)projectedPoint
 {
-    [self addPointToProjectedPoint:projectedPoint withDrawing:NO];
+    [self addCurveToProjectedPoint:projectedPoint
+                     controlPoint1:RMProjectedPointMake((double)NAN, (double)NAN)
+                     controlPoint2:RMProjectedPointMake((double)NAN, (double)NAN)
+                       withDrawing:NO];
 }
 
 - (void)moveToScreenPoint:(CGPoint)point
@@ -337,7 +363,10 @@
 
 - (void)addLineToProjectedPoint:(RMProjectedPoint)projectedPoint
 {
-    [self addPointToProjectedPoint:projectedPoint withDrawing:YES];
+    [self addCurveToProjectedPoint:projectedPoint
+                     controlPoint1:RMProjectedPointMake((double)NAN, (double)NAN)
+                     controlPoint2:RMProjectedPointMake((double)NAN, (double)NAN)
+                       withDrawing:YES];
 }
 
 - (void)addLineToScreenPoint:(CGPoint)point
@@ -350,6 +379,52 @@
 {
     RMProjectedPoint mercator = [[mapView projection] coordinateToProjectedPoint:coordinate];
     [self addLineToProjectedPoint:mercator];
+}
+
+- (void)addCurveToCoordinate:(CLLocationCoordinate2D)coordinate
+          controlCoordinate1:(CLLocationCoordinate2D)controlCoordinate1
+          controlCoordinate2:(CLLocationCoordinate2D)controlCoordinate2
+{
+    RMProjectedPoint projectedPoint = [[mapView projection]
+                                       coordinateToProjectedPoint:coordinate];
+    RMProjectedPoint controlProjectedPoint1 = [[mapView projection]
+                                               coordinateToProjectedPoint:controlCoordinate1];
+    RMProjectedPoint controlProjectedPoint2 = [[mapView projection]
+                                               coordinateToProjectedPoint:controlCoordinate2];
+    [self addCurveToProjectedPoint:projectedPoint
+            controlProjectedPoint1:controlProjectedPoint1
+            controlProjectedPoint2:controlProjectedPoint2];
+}
+
+- (void)addQuadCurveToCoordinate:(CLLocationCoordinate2D)coordinate
+               controlCoordinate:(CLLocationCoordinate2D)controlCoordinate
+{
+    RMProjectedPoint projectedPoint = [[mapView projection]
+                                       coordinateToProjectedPoint:coordinate];
+    RMProjectedPoint controlProjectedPoint = [[mapView projection]
+                                              coordinateToProjectedPoint:controlCoordinate];
+    [self addQuadCurveToProjectedPoint:projectedPoint
+                 controlProjectedPoint:controlProjectedPoint];
+    
+}
+
+- (void)addCurveToProjectedPoint:(RMProjectedPoint)projectedPoint
+          controlProjectedPoint1:(RMProjectedPoint)controlProjectedPoint1
+          controlProjectedPoint2:(RMProjectedPoint)controlProjectedPoint2
+{
+    [self addCurveToProjectedPoint:projectedPoint
+                     controlPoint1:controlProjectedPoint1
+                     controlPoint2:controlProjectedPoint2
+                       withDrawing:YES];
+}
+
+- (void)addQuadCurveToProjectedPoint:(RMProjectedPoint)projectedPoint
+               controlProjectedPoint:(RMProjectedPoint)controlProjectedPoint
+{
+    [self addCurveToProjectedPoint:projectedPoint
+                     controlPoint1:controlProjectedPoint
+                     controlPoint2:RMProjectedPointMake((double)NAN, (double)NAN)
+                       withDrawing:YES];
 }
 
 - (void)performBatchOperations:(void (^)(RMShape *aShape))block

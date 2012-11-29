@@ -107,6 +107,34 @@
 *   @param coordinate The coordinate to draw to. */
 - (void)addLineToCoordinate:(CLLocationCoordinate2D)coordinate;
 
+/** Draw a curve from the current pen location to a coordinate.
+ *  @param coordinate The coordinate to draw to.
+ *  @param controlCoordinate1 The first control coordinate.
+ *  @param controlCoordinate2 The second control coordinate. */
+- (void)addCurveToCoordinate:(CLLocationCoordinate2D)coordinate
+          controlCoordinate1:(CLLocationCoordinate2D)controlCoordinate1
+          controlCoordinate2:(CLLocationCoordinate2D)controlCoordinate2;
+
+/** Draw a quad curve from the current pen location to a coordinate.
+ *  @param coordinate The coordinate to draw to.
+ *  @param controlCoordinate The control coordinate. */
+- (void)addQuadCurveToCoordinate:(CLLocationCoordinate2D)coordinate
+               controlCoordinate:(CLLocationCoordinate2D)controlCoordinate;
+
+/** Draw a curve from the current pen location to a projected point.
+ *  @param projectedPoint The projected point to draw to.
+ *  @param controlProjectedPoint1 The first control projected point.
+ *  @param controlProjectedPoint2 The second control projected point. */
+- (void)addCurveToProjectedPoint:(RMProjectedPoint)projectedPoint
+          controlProjectedPoint1:(RMProjectedPoint)controlProjectedPoint1
+          controlProjectedPoint2:(RMProjectedPoint)controlProjectedPoint2;
+
+/** Draw a quad curve from the current pen location to a projected point.
+ *  @param projectedPoint The projected point to draw to.
+ *  @param controlProjectedPoint The control projected point. */
+- (void)addQuadCurveToProjectedPoint:(RMProjectedPoint)projectedPoint
+               controlProjectedPoint:(RMProjectedPoint)controlProjectedPoint;
+
 /** Alter the path without rerecalculating the geometry. Recommended for many operations in order to increase performance. 
 *   @param block A block containing the operations to perform. */
 - (void)performBatchOperations:(void (^)(RMShape *aShape))block;
