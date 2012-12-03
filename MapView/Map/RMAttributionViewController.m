@@ -34,9 +34,9 @@
 
         self.view.backgroundColor = [UIColor darkGrayColor];
         
-        [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissModalViewControllerAnimated:)]];
+        [self.view addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissModalViewControllerAnimated:)] autorelease]];
         
-        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 70, self.view.bounds.size.width, 60)];
+        UIWebView *webView = [[[UIWebView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 70, self.view.bounds.size.width, 60)] autorelease];
         
         webView.delegate = self;
         
@@ -44,6 +44,18 @@
 
         webView.backgroundColor = [UIColor clearColor];
         webView.opaque = NO;
+        
+        
+        if ([webView respondsToSelector:@selector(scrollView) ]) {
+            /* >= iOS5 */
+            webView.scrollView.bounces = NO;
+        } else {
+            /* < iOS5 */
+            for (id subview in webView.subviews) {
+                if ([[subview class] isSubclassOfClass:[UIScrollView class]])
+                    ((UIScrollView *)subview).bounces = NO;
+            }
+        }
 
         NSMutableString *attribution = [NSMutableString string];
 
