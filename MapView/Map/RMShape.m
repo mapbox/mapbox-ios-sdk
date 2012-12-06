@@ -309,11 +309,11 @@
 
         if (isDrawing)
         {
-            if (isnan(controlPoint1.x) && isnan(controlPoint2.x))
+            if (controlPoint1.x == (double)INFINITY && controlPoint2.x == (double)INFINITY)
             {
                 [bezierPath addLineToPoint:CGPointMake(point.x, -point.y)];
             }
-            else if (isnan(controlPoint2.x))
+            else if (controlPoint2.x == (double)INFINITY)
             {
                 controlPoint1.x = controlPoint1.x - projectedLocation.x;
                 controlPoint1.y = controlPoint1.y - projectedLocation.y;
@@ -348,8 +348,8 @@
 - (void)moveToProjectedPoint:(RMProjectedPoint)projectedPoint
 {
     [self addCurveToProjectedPoint:projectedPoint
-                     controlPoint1:RMProjectedPointMake((double)NAN, (double)NAN)
-                     controlPoint2:RMProjectedPointMake((double)NAN, (double)NAN)
+                     controlPoint1:RMProjectedPointMake((double)INFINITY, (double)INFINITY)
+                     controlPoint2:RMProjectedPointMake((double)INFINITY, (double)INFINITY)
                        withDrawing:NO];
 }
 
@@ -368,8 +368,8 @@
 - (void)addLineToProjectedPoint:(RMProjectedPoint)projectedPoint
 {
     [self addCurveToProjectedPoint:projectedPoint
-                     controlPoint1:RMProjectedPointMake((double)NAN, (double)NAN)
-                     controlPoint2:RMProjectedPointMake((double)NAN, (double)NAN)
+                     controlPoint1:RMProjectedPointMake((double)INFINITY, (double)INFINITY)
+                     controlPoint2:RMProjectedPointMake((double)INFINITY, (double)INFINITY)
                        withDrawing:YES];
 }
 
@@ -419,7 +419,7 @@
 {
     [self addCurveToProjectedPoint:projectedPoint
                      controlPoint1:controlProjectedPoint
-                     controlPoint2:RMProjectedPointMake((double)NAN, (double)NAN)
+                     controlPoint2:RMProjectedPointMake((double)INFINITY, (double)INFINITY)
                        withDrawing:YES];
 }
 
