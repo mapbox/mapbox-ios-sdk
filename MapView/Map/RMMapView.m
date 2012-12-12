@@ -1707,6 +1707,8 @@
 
         _currentCallout.title    = anAnnotation.title;
         _currentCallout.subtitle = anAnnotation.subtitle;
+        _currentCallout.titleView = anAnnotation.titleView;
+        _currentCallout.subtitleView = anAnnotation.subtitleView;
 
         if (anAnnotation.layer.leftCalloutAccessoryView)
         {

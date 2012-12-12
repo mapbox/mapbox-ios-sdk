@@ -65,6 +65,12 @@
 /** The annotation's subtitle. */
 @property (nonatomic, retain) NSString *subtitle;
 
+/** The annotation's subtitle view. */
+@property (nonatomic, retain) UIView *titleView;
+
+/** The annotation's subtitle. */
+@property (nonatomic, retain) UIView *subtitleView;
+
 /** Storage for arbitrary data. */
 @property (nonatomic, retain) id userInfo;
 
