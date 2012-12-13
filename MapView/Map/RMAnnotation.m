@@ -39,6 +39,8 @@
 @synthesize coordinate;
 @synthesize title;
 @synthesize subtitle;
+@synthesize titleView;
+@synthesize subtitleView;
 @synthesize userInfo;
 @synthesize annotationType;
 @synthesize annotationIcon, badgeIcon;
@@ -67,6 +69,8 @@
     self.coordinate   = aCoordinate;
     self.title        = aTitle;
     self.subtitle     = nil;
+    self.titleView    = nil;
+    self.subtitleView = nil;
     self.userInfo     = nil;
     self.quadTreeNode = nil;
 
@@ -89,6 +93,8 @@
 {
     self.title        = nil;
     self.subtitle     = nil;
+    self.titleView    = nil;
+    self.subtitleView = nil;
     self.userInfo     = nil;
     self.layer        = nil;
     [[self.mapView quadTree] removeAnnotation:self];
