@@ -505,4 +505,23 @@ typedef enum : NSUInteger {
 *   @param animated Whether changes to the map center or rotation should be animated when the mode is changed. */
 - (void)setUserTrackingMode:(RMUserTrackingMode)mode animated:(BOOL)animated;
 
+#pragma mark Scroll Simplification
+
+//Note, these will only work with views who's alphas are manipulated. Do not pass in a view with which you manipulate it's .hidden property, because it will get mangled.
+@property (nonatomic, assign) BOOL shouldSimplifyViewOnScroll;
+@property (nonatomic, assign) BOOL isCurrentlySimplified;
+@property (nonatomic, assign) BOOL isSimplifying;
+@property (nonatomic, assign) BOOL isUnsimplifying;
+@property (nonatomic, strong) NSMutableArray *elementsToHideDuringSimplify;
+
+- (void)addViewToHideForSimplify:(UIView*)viewToHide;
+- (void)removeViewToHideForSimplify:(UIView*)viewToHide;
+
+- (void)addViewsToHideForSimplify:(NSArray*)viewsToHide;
+- (void)removeViewsToHideForSimplify:(NSArray*)viewsToHide;
+
+- (void)setViewsToHideForSimplify:(NSArray*)viewsToHide;
+- (void)removeAllViewsToHideForSimplify;
+
+
 @end
