@@ -1227,7 +1227,8 @@
 
     UITapGestureRecognizer *singleTapRecognizer = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)] autorelease];
     singleTapRecognizer.numberOfTouchesRequired = 1;
-    [singleTapRecognizer requireGestureRecognizerToFail:doubleTapRecognizer];
+    // this line causes a ~1sec delay on annotation taps. do not want
+//    [singleTapRecognizer requireGestureRecognizerToFail:doubleTapRecognizer];
     singleTapRecognizer.delegate = self;
 
     UILongPressGestureRecognizer *longPressRecognizer = [[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)] autorelease];
@@ -2187,6 +2188,8 @@
     _backgroundView = [aView retain];
     if (_backgroundView == nil)
         return;
+
+    _loadingTileView = nil;
 
     _backgroundView.frame = [self bounds];
 
