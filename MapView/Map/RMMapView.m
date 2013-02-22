@@ -2189,6 +2189,8 @@
     if (_backgroundView == nil)
         return;
 
+    _loadingTileView = nil;
+
     _backgroundView.frame = [self bounds];
 
     [self insertSubview:_backgroundView atIndex:0];
