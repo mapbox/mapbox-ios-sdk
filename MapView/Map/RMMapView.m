@@ -878,7 +878,7 @@
                                  ((planetBounds.size.height - normalizedProjectedPoint.y - boundsRect.size.height) / _metersPerPixel) / zoomScale,
                                  (boundsRect.size.width / _metersPerPixel) / zoomScale,
                                  (boundsRect.size.height / _metersPerPixel) / zoomScale);
-    [_mapScrollView zoomToRect:zoomRect animated:animated];
+    [self zoomToRect:zoomRect animated:animated];
 }
 
 - (BOOL)shouldZoomToTargetZoom:(float)targetZoom withZoomFactor:(float)zoomFactor
@@ -958,7 +958,7 @@
                                      ((_mapScrollView.contentOffset.y + pivot.y) - (newZoomSize.height * factorY)) / zoomScale,
                                      newZoomSize.width / zoomScale,
                                      newZoomSize.height / zoomScale);
-        [_mapScrollView zoomToRect:zoomRect animated:animated];
+        [self zoomToRect:zoomRect animated:animated];
     }
     else
     {
@@ -967,6 +967,15 @@
         if ([self zoom] < [self minZoom])
             [self setZoom:[self minZoom]];
     }
+}
+
+- (void)zoomToRect:(CGRect)rect animated:(BOOL)animated {
+    _ignoreZoomEvent = YES;
+    [UIView animateWithDuration:animated ? 0.3 : 0 animations:^{
+        [_mapScrollView zoomToRect:rect animated:NO];
+    }];
+    [self correctPositionOfAllAnnotationsIncludingInvisibles:YES animated:animated];
+    _ignoreZoomEvent = NO;
 }
 
 - (float)nextNativeZoomFactor
@@ -1433,19 +1442,24 @@
         if (fabsf(_accumulatedDelta.x) < kZoomRectPixelBuffer && fabsf(_accumulatedDelta.y) < kZoomRectPixelBuffer)
         {
             [_overlayView moveLayersBy:_accumulatedDelta];
-            [self performSelector:@selector(correctPositionOfAllAnnotations) withObject:nil afterDelay:0.1];
-        }
-        else
-        {
-            if (_mapScrollViewIsZooming)
+            if (!_ignoreZoomEvent) {
+                [self performSelector:@selector(correctPositionOfAllAnnotations) withObject:nil
+                        afterDelay:0.1];
+            }
+        } else if (!_ignoreZoomEvent) {
+            if (_mapScrollViewIsZooming) {
                 [self correctPositionOfAllAnnotationsIncludingInvisibles:NO animated:YES];
-            else
+            } else {
                 [self correctPositionOfAllAnnotations];
+            }
         }
     }
     else
     {
-        [self correctPositionOfAllAnnotationsIncludingInvisibles:NO animated:(_mapScrollViewIsZooming && !_mapScrollView.zooming)];
+        if (!_ignoreZoomEvent) {
+            [self correctPositionOfAllAnnotationsIncludingInvisibles:NO
+                    animated:(_mapScrollViewIsZooming && !_mapScrollView.zooming)];
+        }
 
         if (_currentAnnotation && ! [_currentAnnotation isKindOfClass:[RMMarker class]])
         {

@@ -229,6 +229,8 @@ typedef enum : NSUInteger {
 *   @param animated Whether to animate the zoom. */
 - (void)zoomByFactor:(float)zoomFactor near:(CGPoint)center animated:(BOOL)animated;
 
+- (void)zoomToRect:(CGRect)rect animated:(BOOL)animated;
+
 /** Zoom the map in at the next integral zoom level near a certain point. 
 *   @param pivot The point at which to zoom the map. 
 *   @param animated Whether to animate the zoom. */
