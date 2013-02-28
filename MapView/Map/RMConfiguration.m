@@ -1,7 +1,7 @@
 //
 //  RMConfiguration.m
 //
-// Copyright (c) 2008-2012, Route-Me Contributors
+// Copyright (c) 2008-2013, Route-Me Contributors
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -63,7 +63,22 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 
 + (id)brandedStringWithContentsOfURL:(NSURL *)url encoding:(NSStringEncoding)enc error:(NSError **)error
 {
-    return [[self class] stringWithContentsOfURL:url encoding:enc error:error];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+
+    [request setValue:[[RMConfiguration configuration] userAgent] forHTTPHeaderField:@"User-Agent"];
+
+    NSError *internalError = nil;
+
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&internalError];
+
+    if ( ! returnData)
+    {
+        *error = internalError;
+
+        return nil;
+    }
+
+    return [[[[self class] alloc] initWithData:returnData encoding:enc] autorelease];
 }
 
 @end

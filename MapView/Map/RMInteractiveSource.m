@@ -1,5 +1,5 @@
 //
-//  RMInteractiveSource.h
+//  RMInteractiveSource.m
 //
 //  Created by Justin R. Miller on 6/22/11.
 //  Copyright 2012 MapBox.

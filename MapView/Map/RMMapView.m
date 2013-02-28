@@ -1,7 +1,7 @@
 //
 //  RMMapView.m
 //
-// Copyright (c) 2008-2012, Route-Me Contributors
+// Copyright (c) 2008-2013, Route-Me Contributors
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -156,8 +156,8 @@
     NSMutableSet *_annotations;
     NSMutableSet *_visibleAnnotations;
 
-    BOOL _constrainMovement;
-    RMProjectedRect _constrainingProjectedBounds;
+    BOOL _constrainMovement, _constrainMovementByUser;
+    RMProjectedRect _constrainingProjectedBounds, _constrainingProjectedBoundsByUser;
 
     double _metersPerPixel;
     float _zoom, _lastZoom;
@@ -206,6 +206,7 @@
 @synthesize quadTree = _quadTree;
 @synthesize clusteringEnabled = _clusteringEnabled;
 @synthesize positionClusterMarkersAtTheGravityCenter = _positionClusterMarkersAtTheGravityCenter;
+@synthesize orderMarkersByYPosition = _orderMarkersByYPosition;
 @synthesize orderClusterMarkersAboveOthers = _orderClusterMarkersAboveOthers;
 @synthesize clusterMarkerSize = _clusterMarkerSize, clusterAreaSize = _clusterAreaSize;
 @synthesize adjustTilesForRetinaDisplay = _adjustTilesForRetinaDisplay;
@@ -228,7 +229,7 @@
                                minZoomLevel:(float)initialTileSourceMinZoomLevel
                             backgroundImage:(UIImage *)backgroundImage
 {
-    _constrainMovement = _bouncingEnabled = _zoomingInPivotsAroundCenter = NO;
+    _constrainMovement = _constrainMovementByUser = _bouncingEnabled = _zoomingInPivotsAroundCenter = NO;
     _draggingEnabled = YES;
 
     _lastDraggingTranslation = CGPointZero;
@@ -237,7 +238,7 @@
     self.backgroundColor = [UIColor grayColor];
 
     self.clipsToBounds = YES;
-    
+
     _tileSourcesContainer = [RMTileSourcesContainer new];
     _tiledLayersSuperview = nil;
 
@@ -251,6 +252,9 @@
     _adjustTilesForRetinaDisplay = NO;
     _missingTilesDepth = 1;
     _debugTiles = NO;
+
+    _orderMarkersByYPosition = YES;
+    _orderClusterMarkersAboveOthers = YES;
 
     _annotations = [NSMutableSet new];
     _visibleAnnotations = [NSMutableSet new];
@@ -275,8 +279,7 @@
     }
     else
     {
-        _loadingTileView = [[[RMLoadingTileView alloc] initWithFrame:self.bounds] autorelease];
-        [self setBackgroundView:_loadingTileView];
+        [self setBackgroundView:nil];
     }
 
     if (initialTileSourceMinZoomLevel < newTilesource.minZoom) initialTileSourceMinZoomLevel = newTilesource.minZoom;
@@ -758,8 +761,38 @@
 
 - (void)setProjectedConstraintsSouthWest:(RMProjectedPoint)southWest northEast:(RMProjectedPoint)northEast
 {
-    _constrainMovement = YES;
+    _constrainMovement = _constrainMovementByUser = YES;
     _constrainingProjectedBounds = RMProjectedRectMake(southWest.x, southWest.y, northEast.x - southWest.x, northEast.y - southWest.y);
+    _constrainingProjectedBoundsByUser = RMProjectedRectMake(southWest.x, southWest.y, northEast.x - southWest.x, northEast.y - southWest.y);
+}
+
+- (void)setTileSourcesConstraintsFromLatitudeLongitudeBoundingBox:(RMSphericalTrapezium)bounds
+{
+    BOOL tileSourcesConstrainMovement = !(bounds.northEast.latitude == 90.0 && bounds.northEast.longitude == 180.0 && bounds.southWest.latitude == -90.0 && bounds.southWest.longitude == -180.0);
+
+    if (tileSourcesConstrainMovement)
+    {
+        _constrainMovement = YES;
+        RMProjectedRect tileSourcesConstrainingProjectedBounds = [self projectedRectFromLatitudeLongitudeBounds:bounds];
+
+        if (_constrainMovementByUser)
+        {
+            _constrainingProjectedBounds = RMProjectedRectIntersection(_constrainingProjectedBoundsByUser, tileSourcesConstrainingProjectedBounds);
+
+            if (RMProjectedRectIsZero(_constrainingProjectedBounds))
+                RMLog(@"The constraining bounds from tilesources and user don't intersect!");
+        }
+        else
+            _constrainingProjectedBounds = tileSourcesConstrainingProjectedBounds;
+    }
+    else if (_constrainMovementByUser)
+    {
+        _constrainingProjectedBounds = _constrainingProjectedBoundsByUser;
+    }
+    else
+    {
+        _constrainingProjectedBounds = _projection.planetBounds;
+    }
 }
 
 #pragma mark -
@@ -1140,7 +1173,7 @@
     int tileSideLength = [_tileSourcesContainer tileSideLength];
     CGSize contentSize = CGSizeMake(tileSideLength, tileSideLength); // zoom level 1
 
-    _mapScrollView = [[RMMapScrollView alloc] initWithFrame:[self bounds]];
+    _mapScrollView = [[RMMapScrollView alloc] initWithFrame:self.bounds];
     _mapScrollView.delegate = self;
     _mapScrollView.opaque = NO;
     _mapScrollView.backgroundColor = [UIColor clearColor];
@@ -1752,6 +1785,8 @@
         {
             _currentCallout = [SMCalloutView new];
 
+            _currentCallout.backgroundView = [SMCalloutBackgroundView systemBackgroundView];
+
             _currentCallout.title    = anAnnotation.title;
             _currentCallout.subtitle = anAnnotation.subtitle;
 
@@ -1979,14 +2014,7 @@
     [_mercatorToTileProjection release];
     _mercatorToTileProjection = [[_tileSourcesContainer mercatorToTileProjection] retain];
 
-    RMSphericalTrapezium bounds = [_tileSourcesContainer latitudeLongitudeBoundingBox];
-
-    _constrainMovement = !(bounds.northEast.latitude == 90.0 && bounds.northEast.longitude == 180.0 && bounds.southWest.latitude == -90.0 && bounds.southWest.longitude == -180.0);
-
-    if (_constrainMovement)
-        _constrainingProjectedBounds = (RMProjectedRect)[self projectedRectFromLatitudeLongitudeBounds:bounds];
-    else
-        _constrainingProjectedBounds = _projection.planetBounds;
+    [self setTileSourcesConstraintsFromLatitudeLongitudeBoundingBox:[_tileSourcesContainer latitudeLongitudeBoundingBox]];
 
     [self setTileSourcesMinZoom:_tileSourcesContainer.minZoom];
     [self setTileSourcesMaxZoom:_tileSourcesContainer.maxZoom];
@@ -2019,14 +2047,7 @@
     [_mercatorToTileProjection release];
     _mercatorToTileProjection = [[_tileSourcesContainer mercatorToTileProjection] retain];
 
-    RMSphericalTrapezium bounds = [_tileSourcesContainer latitudeLongitudeBoundingBox];
-
-    _constrainMovement = !(bounds.northEast.latitude == 90.0 && bounds.northEast.longitude == 180.0 && bounds.southWest.latitude == -90.0 && bounds.southWest.longitude == -180.0);
-
-    if (_constrainMovement)
-        _constrainingProjectedBounds = (RMProjectedRect)[self projectedRectFromLatitudeLongitudeBounds:bounds];
-    else
-        _constrainingProjectedBounds = _projection.planetBounds;
+    [self setTileSourcesConstraintsFromLatitudeLongitudeBoundingBox:[_tileSourcesContainer latitudeLongitudeBoundingBox]];
 
     [self setTileSourcesMinZoom:_tileSourcesContainer.minZoom];
     [self setTileSourcesMaxZoom:_tileSourcesContainer.maxZoom];
@@ -2069,6 +2090,10 @@
         [_mercatorToTileProjection release];
         _constrainMovement = NO;
     }
+    else
+    {
+        [self setTileSourcesConstraintsFromLatitudeLongitudeBoundingBox:[_tileSourcesContainer latitudeLongitudeBoundingBox]];
+    }
 
     // Remove the map layer
     RMMapTiledLayerView *tileSourceTiledLayerView = nil;
@@ -2099,6 +2124,10 @@
         [_projection release];
         [_mercatorToTileProjection release];
         _constrainMovement = NO;
+    }
+    else
+    {
+        [self setTileSourcesConstraintsFromLatitudeLongitudeBoundingBox:[_tileSourcesContainer latitudeLongitudeBoundingBox]];
     }
 
     // Remove the map layer
@@ -2184,22 +2213,43 @@
 
 - (void)setBackgroundView:(UIView *)aView
 {
-    if (_backgroundView == aView)
+    if ([_backgroundView isEqual:aView])
         return;
 
-    if (_backgroundView != nil)
+    if (_backgroundView)
     {
         [_backgroundView removeFromSuperview];
         [_backgroundView release];
     }
 
-    _backgroundView = [aView retain];
-    if (_backgroundView == nil)
-        return;
+    if ( ! aView)
+    {
+        if ( ! _loadingTileView)
+            _loadingTileView = [[[RMLoadingTileView alloc] initWithFrame:self.bounds] autorelease];
 
-    _backgroundView.frame = [self bounds];
+        aView = _loadingTileView;
+    }
+    else
+        _loadingTileView = nil;
+
+    _backgroundView = [aView retain];
+
+    _backgroundView.frame = self.bounds;
 
     [self insertSubview:_backgroundView atIndex:0];
+}
+
+- (void)setBackgroundImage:(UIImage *)backgroundImage
+{
+    if (backgroundImage)
+    {
+        [self setBackgroundView:[[[UIView alloc] initWithFrame:self.bounds] autorelease]];
+        self.backgroundView.layer.contents = (id)backgroundImage.CGImage;
+    }
+    else
+    {
+        [self setBackgroundView:nil];
+    }
 }
 
 - (double)metersPerPixel
@@ -2254,6 +2304,9 @@
 
     if (newMinZoom < clampedMinZoom)
         newMinZoom = clampedMinZoom;
+
+    if (newMinZoom < 0.0)
+        newMinZoom = 0.0;
 
     _minZoom = newMinZoom;
 
@@ -2312,6 +2365,9 @@
 // if #zoom is outside of range #minZoom to #maxZoom, zoom level is clamped to that range.
 - (void)setZoom:(float)newZoom
 {
+    if (_zoom == newZoom)
+        return;
+
     [self registerZoomEventByUser:NO];
 
     _zoom = (newZoom > _maxZoom) ? _maxZoom : newZoom;
@@ -2816,6 +2872,9 @@
 
 - (void)correctOrderingOfAllAnnotations
 {
+    if ( ! _orderMarkersByYPosition)
+        return;
+
     // sort annotation layer z-indexes so that they overlap properly
     //
     NSMutableArray *sortedAnnotations = [NSMutableArray arrayWithArray:[_visibleAnnotations allObjects]];
@@ -2837,10 +2896,10 @@
 
         // markers above shapes
         //
-        if (   [annotation1.layer isKindOfClass:[RMMarker class]] && [@[[RMShape class], [RMCircle class]] containsObject:[annotation2.layer class]])
+        if (   [annotation1.layer isKindOfClass:[RMMarker class]] && ! [annotation2.layer isKindOfClass:[RMMarker class]])
             return NSOrderedDescending;
 
-        if (   [@[[RMShape class], [RMCircle class]] containsObject:[annotation1.layer class]] && [annotation2.layer isKindOfClass:[RMMarker class]])
+        if ( ! [annotation1.layer isKindOfClass:[RMMarker class]] &&   [annotation2.layer isKindOfClass:[RMMarker class]])
             return NSOrderedAscending;
 
         // the rest in increasing y-position

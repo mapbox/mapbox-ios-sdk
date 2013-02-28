@@ -1,7 +1,7 @@
 //
 //  RMFoundation.h
 //
-// Copyright (c) 2008-2012, Route-Me Contributors
+// Copyright (c) 2008-2013, Route-Me Contributors
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -83,6 +83,9 @@ bool RMProjectedSizeContainsProjectedSize(RMProjectedSize size1, RMProjectedSize
 
 // Union of two rectangles
 RMProjectedRect RMProjectedRectUnion(RMProjectedRect rect1, RMProjectedRect rect2);
+
+// Rect intersection
+RMProjectedRect RMProjectedRectIntersection(RMProjectedRect rect1, RMProjectedRect rect2);
 
 RMProjectedPoint RMProjectedPointMake(double x, double y);
 RMProjectedRect  RMProjectedRectMake(double x, double y, double width, double height);

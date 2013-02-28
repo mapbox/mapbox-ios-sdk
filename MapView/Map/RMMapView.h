@@ -1,7 +1,7 @@
 //
 //  RMMapView.h
 //
-// Copyright (c) 2008-2012, Route-Me Contributors
+// Copyright (c) 2008-2013, Route-Me Contributors
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -124,6 +124,9 @@ typedef enum : NSUInteger {
 
 /** A custom, static view to use behind the map tiles. The default behavior is to use grid imagery that moves with map panning like MapKit. */
 @property (nonatomic, retain) UIView *backgroundView;
+
+/** A custom image to use behind the map tiles. The default behavior is to show the default `backgroundView` and not a static image. */
+- (void)setBackgroundImage:(UIImage *)backgroundImage;
 
 /** A Boolean value indicating whether to draw tile borders and z/x/y numbers on tile images for debugging purposes. Defaults to `NO`. */
 @property (nonatomic, assign) BOOL debugTiles;
@@ -346,6 +349,9 @@ typedef enum : NSUInteger {
 
 /** Whether to enable clustering of map point annotations. Defaults to `NO`. */
 @property (nonatomic, assign) BOOL clusteringEnabled;
+
+/** Whether to order markers on the z-axis according to increasing y-position. Defaults to `YES`. */
+@property (nonatomic, assign) BOOL orderMarkersByYPosition;
 
 /** Whether to position cluster markers at the weighted center of the points they represent. If `YES`, position clusters in weighted fashion. If `NO`, position them on a rectangular grid. Defaults to `YES`. */
 @property (nonatomic, assign) BOOL positionClusterMarkersAtTheGravityCenter;
