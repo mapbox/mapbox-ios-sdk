@@ -164,6 +164,7 @@
     CGPoint _lastContentOffset, _accumulatedDelta;
     CGSize _lastContentSize;
     BOOL _mapScrollViewIsZooming;
+    BOOL _ignoreZoomEvent;
 
     BOOL _draggingEnabled, _bouncingEnabled;
 
@@ -903,17 +904,20 @@
 
 - (void)setZoom:(float)newZoom atCoordinate:(CLLocationCoordinate2D)newCenter animated:(BOOL)animated
 {
+    _ignoreZoomEvent = YES;
     [UIView animateWithDuration:(animated ? 0.3 : 0.0)
                           delay:0.0
                         options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut
                      animations:^(void)
                      {
-                         [self setZoom:newZoom];
                          [self setCenterCoordinate:newCenter animated:NO];
+                         [self setZoom:newZoom];
 
                          self.userTrackingMode = RMUserTrackingModeNone;
                      }
                      completion:nil];
+    [self correctPositionOfAllAnnotationsIncludingInvisibles:YES animated:YES];
+    _ignoreZoomEvent = NO;
 }
 
 - (void)zoomByFactor:(float)zoomFactor near:(CGPoint)pivot animated:(BOOL)animated
@@ -1297,6 +1301,10 @@
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
+    if (_ignoreZoomEvent) {
+        return;
+    }
+
     BOOL wasUserAction = (scrollView.pinchGestureRecognizer.state == UIGestureRecognizerStateChanged);
 
     [self registerZoomEventByUser:wasUserAction];
