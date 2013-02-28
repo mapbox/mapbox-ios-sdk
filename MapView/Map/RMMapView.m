@@ -971,9 +971,10 @@
 
 - (void)zoomToRect:(CGRect)rect animated:(BOOL)animated {
     _ignoreZoomEvent = YES;
-    [UIView animateWithDuration:animated ? 0.3 : 0 animations:^{
+    [UIView animateWithDuration:animated ? 0.3 : 0 delay:0
+            options:UIViewAnimationOptionBeginFromCurrentState animations:^{
         [_mapScrollView zoomToRect:rect animated:NO];
-    }];
+    } completion:nil];
     [self correctPositionOfAllAnnotationsIncludingInvisibles:YES animated:animated];
     _ignoreZoomEvent = NO;
 }
