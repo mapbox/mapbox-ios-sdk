@@ -31,7 +31,7 @@
 
 bool RMProjectedPointEqualToProjectedPoint(RMProjectedPoint point1, RMProjectedPoint point2)
 {
-	return point1.x == point2.x && point2.y == point2.y;
+	return point1.x == point2.x && point1.y == point2.y;
 }
 
 bool RMProjectedRectIntersectsProjectedRect(RMProjectedRect rect1, RMProjectedRect rect2)
