@@ -19,16 +19,17 @@ Pod::Spec.new do |m|
 
   m.prefix_header_file = 'MapView/MapView_Prefix.pch'
 
-  def m.post_install(target_installer)
-    puts "\nGenerating MapBox resources bundle\n".yellow if config.verbose?
-    Dir.chdir File.join(config.project_pods_root, 'MapBox') do
+  def m.post_install(library)
+    verbose = config.verbose?  # currently no other way to do that
+    puts "\nGenerating MapBox resources bundle\n".yellow if verbose
+    Dir.chdir File.join(library.sandbox_dir, 'MapBox') do
       command = "xcodebuild -project MapView/MapView.xcodeproj -target Resources CONFIGURATION_BUILD_DIR=../../Resources"
-      command << " 2>&1 > /dev/null" unless config.verbose?
+      command << " 2>&1 > /dev/null" unless verbose
       unless system(command)
         raise ::Pod::Informative, "Failed to generate MapBox resources bundle"
       end
     end
-    File.open(File.join(config.project_pods_root, target_installer.target_definition.copy_resources_script_name), 'a') do |file|
+    File.open(library.copy_resources_script_name, 'a') do |file|
       file.puts "install_resource 'Resources/MapBox.bundle'"
     end
   end
