@@ -441,7 +441,8 @@
             UIBezierPath *tapTarget = [UIBezierPath bezierPathWithCGPath:tapTargetPath];
             containsPoint = [tapTarget containsPoint:thePoint];
         }
-        
+        CGPathRetain(tapTargetPath);
+
     }
     else
     {
