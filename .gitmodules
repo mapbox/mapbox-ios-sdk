@@ -7,3 +7,6 @@
 [submodule "MapView/Map/SMCalloutView"]
 	path = MapView/Map/SMCalloutView
 	url = https://github.com/nfarina/calloutview.git
+[submodule "WhirlyGlobe-Maply"]
+	path = WhirlyGlobe-Maply
+	url = https://github.com/mousebird/WhirlyGlobe.git

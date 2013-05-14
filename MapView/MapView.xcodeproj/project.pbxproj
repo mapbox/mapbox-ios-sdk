@@ -27,9 +27,9 @@
 		16FFF2CC14E3DBF700A170EC /* RMMapQuestOpenAerialSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 16FFF2CA14E3DBF700A170EC /* RMMapQuestOpenAerialSource.m */; };
 		23A0AAE90EB90A99003A4521 /* RMFoundation.c in Sources */ = {isa = PBXBuildFile; fileRef = 23A0AAE80EB90A99003A4521 /* RMFoundation.c */; };
 		25757F501291C8640083D504 /* RMCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 25757F4E1291C8640083D504 /* RMCircle.m */; };
-		2B472FED1731B71B000507E9 /* libWhirlyGlobe-MaplyComponent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B472FEC1731B43B000507E9 /* libWhirlyGlobe-MaplyComponent.a */; };
 		2BCA68B11741A6F000696BA8 /* RMMaplyTileSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BCA68AF1741A6F000696BA8 /* RMMaplyTileSource.m */; };
 		2BCA68B21741A6F000696BA8 /* RMMaplyTileSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BCA68B01741A6F000696BA8 /* RMMaplyTileSource.h */; };
+		2BCA68C21742E48E00696BA8 /* libWhirlyGlobe-MaplyComponent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BCA68C11742E48200696BA8 /* libWhirlyGlobe-MaplyComponent.a */; };
 		B8474BA50EB40094006A0BC1 /* RMDatabaseCache.m in Sources */ = {isa = PBXBuildFile; fileRef = B8474B990EB40094006A0BC1 /* RMDatabaseCache.m */; };
 		B8474BC10EB4019A006A0BC1 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B8474BC00EB4019A006A0BC1 /* libsqlite3.dylib */; };
 		B8C9743F0E8A19B2007D16AD /* RMTileImage.m in Sources */ = {isa = PBXBuildFile; fileRef = B83E64D90E80E73F001663B6 /* RMTileImage.m */; };
@@ -94,9 +94,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2B472FEB1731B43B000507E9 /* PBXContainerItemProxy */ = {
+		2BCA68C01742E48200696BA8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 2B472FE61731B43A000507E9 /* WhirlyGlobe-MaplyComponent.xcodeproj */;
+			containerPortal = 2BCA68BB1742E48200696BA8 /* WhirlyGlobe-MaplyComponent.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 2B11E0DB15B4C030007AAE3F;
 			remoteInfo = "WhirlyGlobe-MaplyComponent";
@@ -156,9 +156,9 @@
 		25757F4D1291C8640083D504 /* RMCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMCircle.h; sourceTree = "<group>"; };
 		25757F4E1291C8640083D504 /* RMCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMCircle.m; sourceTree = "<group>"; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		2B472FE61731B43A000507E9 /* WhirlyGlobe-MaplyComponent.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "WhirlyGlobe-MaplyComponent.xcodeproj"; path = "../../../../WhirlyGlobe2/WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/WhirlyGlobe-MaplyComponent.xcodeproj"; sourceTree = "<group>"; };
 		2BCA68AF1741A6F000696BA8 /* RMMaplyTileSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMMaplyTileSource.m; sourceTree = "<group>"; };
 		2BCA68B01741A6F000696BA8 /* RMMaplyTileSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMMaplyTileSource.h; sourceTree = "<group>"; };
+		2BCA68BB1742E48200696BA8 /* WhirlyGlobe-MaplyComponent.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "WhirlyGlobe-MaplyComponent.xcodeproj"; path = "../WhirlyGlobe-Maply/WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/WhirlyGlobe-MaplyComponent.xcodeproj"; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* MapView_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapView_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		96492C3F0FA8AD3400EBA6D2 /* RMGlobalConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMGlobalConstants.h; sourceTree = "<group>"; };
 		B1EB26C510B5D8E6009F8658 /* RMNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMNotifications.h; sourceTree = "<group>"; };
@@ -267,7 +267,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B472FED1731B71B000507E9 /* libWhirlyGlobe-MaplyComponent.a in Frameworks */,
+				2BCA68C21742E48E00696BA8 /* libWhirlyGlobe-MaplyComponent.a in Frameworks */,
 				B8C974500E8A19B2007D16AD /* CoreFoundation.framework in Frameworks */,
 				B8C974510E8A19B2007D16AD /* CoreGraphics.framework in Frameworks */,
 				B8C974520E8A19B2007D16AD /* CoreLocation.framework in Frameworks */,
@@ -338,7 +338,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				2B472FE61731B43A000507E9 /* WhirlyGlobe-MaplyComponent.xcodeproj */,
+				2BCA68BB1742E48200696BA8 /* WhirlyGlobe-MaplyComponent.xcodeproj */,
 				B8C9740D0E8A196E007D16AD /* Map */,
 				DD932BC2165C294100D69D49 /* Externals */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -361,14 +361,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		2B472FE71731B43A000507E9 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				2B472FEC1731B43B000507E9 /* libWhirlyGlobe-MaplyComponent.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		2BCA68AD1741A2D200696BA8 /* Maply Interface */ = {
 			isa = PBXGroup;
 			children = (
@@ -376,6 +368,14 @@
 				2BCA68AF1741A6F000696BA8 /* RMMaplyTileSource.m */,
 			);
 			name = "Maply Interface";
+			sourceTree = "<group>";
+		};
+		2BCA68BC1742E48200696BA8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2BCA68C11742E48200696BA8 /* libWhirlyGlobe-MaplyComponent.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		B83E64CE0E80E73F001663B6 /* Tile & Overlay Rendering */ = {
@@ -697,8 +697,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 2B472FE71731B43A000507E9 /* Products */;
-					ProjectRef = 2B472FE61731B43A000507E9 /* WhirlyGlobe-MaplyComponent.xcodeproj */;
+					ProductGroup = 2BCA68BC1742E48200696BA8 /* Products */;
+					ProjectRef = 2BCA68BB1742E48200696BA8 /* WhirlyGlobe-MaplyComponent.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -710,11 +710,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		2B472FEC1731B43B000507E9 /* libWhirlyGlobe-MaplyComponent.a */ = {
+		2BCA68C11742E48200696BA8 /* libWhirlyGlobe-MaplyComponent.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = "libWhirlyGlobe-MaplyComponent.a";
-			remoteRef = 2B472FEB1731B43B000507E9 /* PBXContainerItemProxy */;
+			remoteRef = 2BCA68C01742E48200696BA8 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -842,7 +842,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				HEADER_SEARCH_PATHS = (
 					../Proj4,
-					"/Users/sjg/iPhone/WhirlyGlobe2/WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/include",
+					"\"$(SRCROOT)/../WhirlyGlobe-Maply/WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/include/\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -867,7 +867,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "NS_BLOCK_ASSERTIONS=1";
 				HEADER_SEARCH_PATHS = (
 					../Proj4,
-					"/Users/sjg/iPhone/WhirlyGlobe2/WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/include",
+					"\"$(SRCROOT)/../WhirlyGlobe-Maply/WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/include/\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
