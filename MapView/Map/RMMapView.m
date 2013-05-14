@@ -53,6 +53,9 @@
 
 #import "SMCalloutView.h"
 
+#import "MaplyComponent.h"
+#import "RMMaplyTileSource.h"
+
 #pragma mark --- begin constants ----
 
 #define kZoomRectPixelBuffer 150.0
@@ -194,6 +197,9 @@
     SMCalloutView *_currentCallout;
 
     BOOL _rotateAtMinZoom;
+    
+    // Note: Maply experiment
+    MaplyViewController *maplyViewC;
 }
 
 @synthesize decelerationMode = _decelerationMode;
@@ -228,6 +234,8 @@
                                minZoomLevel:(float)initialTileSourceMinZoomLevel
                             backgroundImage:(UIImage *)backgroundImage
 {
+    // Note: Turn this off to get rid of Maply
+    _maplyMode = TRUE;
     _constrainMovement = _constrainMovementByUser = _bouncingEnabled = _zoomingInPivotsAroundCenter = NO;
     _draggingEnabled = YES;
 
@@ -313,7 +321,7 @@
                                              selector:@selector(handleDidChangeOrientationNotification:)
                                                  name:UIApplicationDidChangeStatusBarOrientationNotification
                                                object:nil];
-
+    
     RMLog(@"Map initialised. tileSource:%@, minZoom:%f, maxZoom:%f, zoom:%f at {%f,%f}", newTilesource, self.minZoom, self.maxZoom, self.zoom, initialCenterCoordinate.longitude, initialCenterCoordinate.latitude);
 }
 
@@ -419,6 +427,12 @@
 
 - (void)dealloc
 {
+    if (maplyViewC)
+    {
+        [maplyViewC.view removeFromSuperview];
+        maplyViewC = nil;
+    }
+    
     [_moveDelegateQueue cancelAllOperations];
     [_zoomDelegateQueue cancelAllOperations];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -1132,7 +1146,7 @@
     }
 
     [_tiledLayersSuperview removeFromSuperview];  _tiledLayersSuperview = nil;
-
+    
     [_mapScrollView removeObserver:self forKeyPath:@"contentOffset"];
     [_mapScrollView removeFromSuperview];  _mapScrollView = nil;
 
@@ -1160,16 +1174,53 @@
     _tiledLayersSuperview = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, contentSize.width, contentSize.height)];
     _tiledLayersSuperview.userInteractionEnabled = NO;
 
-    for (id <RMTileSource> tileSource in _tileSourcesContainer.tileSources)
+    if (!_maplyMode)
     {
-        RMMapTiledLayerView *tiledLayerView = [[RMMapTiledLayerView alloc] initWithFrame:CGRectMake(0.0, 0.0, contentSize.width, contentSize.height) mapView:self forTileSource:tileSource];
+        for (id <RMTileSource> tileSource in _tileSourcesContainer.tileSources)
+        {
+            RMMapTiledLayerView *tiledLayerView = [[RMMapTiledLayerView alloc] initWithFrame:CGRectMake(0.0, 0.0, contentSize.width, contentSize.height) mapView:self forTileSource:tileSource];
 
-        ((CATiledLayer *)tiledLayerView.layer).tileSize = CGSizeMake(tileSideLength, tileSideLength);
+            ((CATiledLayer *)tiledLayerView.layer).tileSize = CGSizeMake(tileSideLength, tileSideLength);
 
-        [_tiledLayersSuperview addSubview:tiledLayerView];
+            [_tiledLayersSuperview addSubview:tiledLayerView];
+        }
     }
-
+        
     [_mapScrollView addSubview:_tiledLayersSuperview];
+
+    if (_maplyMode)
+    {
+        if (maplyViewC)
+        {
+            [maplyViewC.view removeFromSuperview];
+            [maplyViewC resetTetheredFlatMap:_mapScrollView tetherView:_tiledLayersSuperview];
+            [maplyViewC removeAllLayers];
+            maplyViewC.view.frame = self.bounds;
+        } else {
+            maplyViewC = [[MaplyViewController alloc] initAsTetheredFlatMap:_mapScrollView tetherView:_tiledLayersSuperview];
+            maplyViewC.view.frame = self.bounds;
+            // Kick off the animation, as we can't trust the view controller lifecycle
+            [maplyViewC startAnimation];
+//            MaplyQuadEarthWithRemoteTiles *layer = [[MaplyQuadEarthWithRemoteTiles alloc] initWithBaseURL:@"http://a.tiles.mapbox.com/v3/examples.map-zq0f1vuc/" ext:@"png" minZoom:0 maxZoom:19];
+//            [maplyViewC addLayer:layer];
+        }
+        
+        // Set up the tile sources in Maply
+        for (id <RMTileSource> tileSource in _tileSourcesContainer.tileSources)
+        {
+            RMMaplyTileSource *maplyTileSource = [[RMMaplyTileSource alloc] initWithTileSource:tileSource cache:_tileCache];
+            if (maplyTileSource)
+            {
+                MaplyQuadEarthTilesLayer *maplyLayer = [[MaplyQuadEarthTilesLayer alloc] initWithCoordSystem:[maplyTileSource getMaplyCoordSystem] tileSource:maplyTileSource];
+                [maplyViewC addLayer:maplyLayer];
+            }
+        }
+        
+        if (_backgroundView)
+            [self insertSubview:maplyViewC.view aboveSubview:_backgroundView];
+        else
+            [self insertSubview:maplyViewC.view atIndex:0];
+    }
 
     _lastZoom = [self zoom];
     _lastContentOffset = _mapScrollView.contentOffset;
@@ -1182,10 +1233,15 @@
     _mapScrollView.zoomScale = exp2f([self zoom]);
     [self setDecelerationMode:_decelerationMode];
 
-    if (_backgroundView)
-        [self insertSubview:_mapScrollView aboveSubview:_backgroundView];
-    else
-        [self insertSubview:_mapScrollView atIndex:0];
+    if (_maplyMode)
+    {
+        [self insertSubview:_mapScrollView aboveSubview:maplyViewC.view];
+    } else {
+        if (_backgroundView)
+            [self insertSubview:_mapScrollView aboveSubview:_backgroundView];
+        else
+            [self insertSubview:_mapScrollView atIndex:0];
+    }
 
     _overlayView = [[RMMapOverlayView alloc] initWithFrame:[self bounds]];
     _overlayView.userInteractionEnabled = NO;
@@ -1300,6 +1356,15 @@
         _loadingTileView.mapZooming = NO;
 }
 
+// Note: Maply test
+- (void)setMaplyValues:(UIScrollView *)scrollView
+{
+    // Note: Why is this necessary?
+    _tiledLayersSuperview.frame = _tiledLayersSuperview.frame;
+//    NSLog(@"center = (%f,%f), height = %f\n\tcontentOffset = (%f,%f) frame = (%f,%f), (%f,%f)",coord.longitude,coord.latitude,newHeight,
+//          scrollView.contentOffset.x,scrollView.contentOffset.y,frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (_loadingTileView)
@@ -1308,6 +1373,10 @@
         CGPoint newOffset = CGPointMake(_loadingTileView.contentOffset.x + delta.width, _loadingTileView.contentOffset.y + delta.height);
         _loadingTileView.contentOffset = newOffset;
     }
+
+    // Note: Maply test
+    if (maplyViewC)
+        [self setMaplyValues:scrollView];
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
@@ -1323,6 +1392,10 @@
 
     if (_zoom < 3 && self.userTrackingMode == RMUserTrackingModeFollowWithHeading)
         self.userTrackingMode = RMUserTrackingModeFollow;
+
+    // Note: Maply test
+    if (maplyViewC)
+        [self setMaplyValues:scrollView];
 }
 
 // Detect dragging/zooming
@@ -1367,7 +1440,7 @@
 
     CGPoint correctedContentOffset = CGPointMake(normalizedProjectedPoint.x / currentMetersPerPixel,
                                                  aScrollView.contentSize.height - ((normalizedProjectedPoint.y / currentMetersPerPixel) + aScrollView.bounds.size.height));
-    *aContentOffset = correctedContentOffset;
+    *aContentOffset = correctedContentOffset;    
 }
 
 - (void)scrollView:(RMMapScrollView *)aScrollView correctedContentSize:(inout CGSize *)aContentSize
@@ -1392,6 +1465,7 @@
         factor = (projectedSize.height / _constrainingProjectedBounds.size.height);
 
     *aContentSize = CGSizeMake((*aContentSize).width * factor, (*aContentSize).height * factor);
+    
 }
 
 - (void)observeValueForKeyPath:(NSString *)aKeyPath ofObject:(id)anObject change:(NSDictionary *)change context:(void *)context
@@ -2284,7 +2358,7 @@
 
     _maxZoom = newMaxZoom;
 
-//    RMLog(@"New maxZoom:%f", newMaxZoom);
+    RMLog(@"New maxZoom:%f", newMaxZoom);
 
     _mapScrollView.maximumZoomScale = exp2f(newMaxZoom);
 }

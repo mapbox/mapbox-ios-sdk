@@ -175,6 +175,9 @@ typedef enum : NSUInteger {
 /** The center point of the map represented as a projected point. */
 @property (nonatomic, assign) RMProjectedPoint centerProjectedPoint;
 
+/** If set, we'll use Maply to back the tile and shape display. */
+@property (nonatomic, assign) BOOL maplyMode;
+
 /** Set the map center to a given coordinate. 
 *   @param coordinate A coordinate to set as the map center. 
 *   @param animated Whether to animate the change to the map center. */
