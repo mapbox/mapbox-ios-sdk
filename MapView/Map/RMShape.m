@@ -44,7 +44,7 @@
 
     NSMutableArray *points;
 
-    RMMapView *mapView;
+    RMMapView * __weak mapView;
 }
 
 @synthesize scaleLineWidth;

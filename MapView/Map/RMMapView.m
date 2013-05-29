@@ -469,6 +469,7 @@
     if (maplyViewC)
     {
         [maplyViewC.view removeFromSuperview];
+        [maplyViewC stopAnimation];
         maplyViewC = nil;
     }
     
@@ -1238,6 +1239,7 @@
         } else {
             maplyViewC = [[MaplyViewController alloc] initAsTetheredFlatMap:_mapScrollView tetherView:_tiledLayersSuperview];
             maplyViewC.view.frame = self.bounds;
+            // Note: Ideally we won't use animation
             // Kick off the animation, as we can't trust the view controller lifecycle
             [maplyViewC startAnimation];
         }

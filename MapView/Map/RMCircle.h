@@ -34,7 +34,7 @@
 /** An RMCircle is used to represent a perfect circle shape on a map view. An RMCircle changes visible size in response to map zooms in order to consistently represent coverage of the same geographic area. */
 @interface RMCircle : RMMapLayer
 {
-	RMMapView *mapView;
+	RMMapView * __weak mapView;
 	CAShapeLayer *shapeLayer;
 
 	UIColor *lineColor;

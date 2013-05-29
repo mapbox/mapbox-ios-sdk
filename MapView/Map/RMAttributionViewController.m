@@ -21,7 +21,7 @@
 
 @implementation RMAttributionViewController
 {
-    RMMapView *_mapView;
+    RMMapView * __weak _mapView;
 }
 
 - (id)initWithMapView:(RMMapView *)mapView
