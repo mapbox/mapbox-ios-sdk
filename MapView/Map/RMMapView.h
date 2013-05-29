@@ -143,6 +143,7 @@ typedef enum : NSUInteger {
 *   @param newTilesource The tile source to use for the map tiles. 
 *   @return An initialized map view, or `nil` if the map view was unable to be initialized. */
 - (id)initWithFrame:(CGRect)frame andTilesource:(id <RMTileSource>)newTilesource;
+- (id)initWithFrame:(CGRect)frame andTilesource:(id <RMTileSource>)newTilesource maplyMode:(BOOL)maplyMode;
 
 /** Designated initializer. Initialize a map view. 
 *   @param frame The map view's frame. 
@@ -160,6 +161,14 @@ typedef enum : NSUInteger {
        maxZoomLevel:(float)initialTileSourceMaxZoomLevel
        minZoomLevel:(float)initialTileSourceMinZoomLevel
     backgroundImage:(UIImage *)backgroundImage;
+- (id)initWithFrame:(CGRect)frame
+      andTilesource:(id <RMTileSource>)newTilesource
+   centerCoordinate:(CLLocationCoordinate2D)initialCenterCoordinate
+          zoomLevel:(float)initialTileSourceZoomLevel
+       maxZoomLevel:(float)initialTileSourceMaxZoomLevel
+       minZoomLevel:(float)initialTileSourceMinZoomLevel
+    backgroundImage:(UIImage *)backgroundImage
+          maplyMode:(BOOL)maplyMode;
 
 - (void)setFrame:(CGRect)frame;
 

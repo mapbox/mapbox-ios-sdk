@@ -101,7 +101,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:RMTileRequested object:[NSNumber numberWithUnsignedLongLong:RMTileKey(tile)]];
     });
     
-    __block UIImage *image = nil;
+    __block NSData *imageData = nil;
 
     [queue inDatabase:^(FMDatabase *db)
     {
@@ -110,20 +110,26 @@
                                    [NSNumber numberWithUnsignedInt:x], 
                                    [NSNumber numberWithUnsignedInt:y]];
 
-        if ([db hadError])
-            image = [RMTileImage errorTile];
+//        if ([db hadError])
+//            image = [RMTileImage errorTile];
 
         [results next];
 
-        NSData *data = [results dataForColumn:@"tile_data"];
+        imageData = [results dataForColumn:@"tile_data"];
 
-        if ( ! data)
-            image = [RMTileImage errorTile];
-        else
-            image = [UIImage imageWithData:data];
+//        if ( ! data)
+//            image = [RMTileImage errorTile];
+//        else
+//            image = [UIImage imageWithData:data];
 
         [results close];
     }];
+    
+    UIImage *image = nil;
+    if (!imageData)
+        image = [RMTileImage errorTile];
+    else
+        image = [UIImage imageWithData:imageData];
 
     dispatch_async(dispatch_get_main_queue(), ^(void)
     {

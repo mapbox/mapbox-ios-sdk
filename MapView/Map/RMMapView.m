@@ -235,7 +235,7 @@
                             backgroundImage:(UIImage *)backgroundImage
 {
     // Note: Turn this off to get rid of Maply
-    _maplyMode = TRUE;
+//    _maplyMode = TRUE;
     _constrainMovement = _constrainMovementByUser = _bouncingEnabled = _zoomingInPivotsAroundCenter = NO;
     _draggingEnabled = YES;
 
@@ -364,6 +364,22 @@
                backgroundImage:nil];
 }
 
+- (id)initWithFrame:(CGRect)frame andTilesource:(id <RMTileSource>)newTilesource maplyMode:(BOOL)maplyMode
+{
+	CLLocationCoordinate2D coordinate;
+	coordinate.latitude = kDefaultInitialLatitude;
+	coordinate.longitude = kDefaultInitialLongitude;
+    
+	return [self initWithFrame:frame
+                 andTilesource:newTilesource
+              centerCoordinate:coordinate
+                     zoomLevel:kDefaultInitialZoomLevel
+                  maxZoomLevel:kDefaultMaximumZoomLevel
+                  minZoomLevel:kDefaultMinimumZoomLevel
+               backgroundImage:nil
+                     maplyMode:maplyMode];
+}
+
 - (id)initWithFrame:(CGRect)frame
       andTilesource:(id <RMTileSource>)newTilesource
    centerCoordinate:(CLLocationCoordinate2D)initialCenterCoordinate
@@ -382,6 +398,29 @@
                                  minZoomLevel:minZoomLevel
                               backgroundImage:backgroundImage];
 
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame
+      andTilesource:(id <RMTileSource>)newTilesource
+   centerCoordinate:(CLLocationCoordinate2D)initialCenterCoordinate
+          zoomLevel:(float)initialZoomLevel
+       maxZoomLevel:(float)maxZoomLevel
+       minZoomLevel:(float)minZoomLevel
+    backgroundImage:(UIImage *)backgroundImage
+          maplyMode:(BOOL)maplyMode
+{
+    if (!newTilesource || !(self = [super initWithFrame:frame]))
+        return nil;
+    
+    _maplyMode = maplyMode;
+    [self performInitializationWithTilesource:newTilesource
+                             centerCoordinate:initialCenterCoordinate
+                                    zoomLevel:initialZoomLevel
+                                 maxZoomLevel:maxZoomLevel
+                                 minZoomLevel:minZoomLevel
+                              backgroundImage:backgroundImage];
+    
     return self;
 }
 
@@ -1201,8 +1240,6 @@
             maplyViewC.view.frame = self.bounds;
             // Kick off the animation, as we can't trust the view controller lifecycle
             [maplyViewC startAnimation];
-//            MaplyQuadEarthWithRemoteTiles *layer = [[MaplyQuadEarthWithRemoteTiles alloc] initWithBaseURL:@"http://a.tiles.mapbox.com/v3/examples.map-zq0f1vuc/" ext:@"png" minZoom:0 maxZoom:19];
-//            [maplyViewC addLayer:layer];
         }
         
         // Set up the tile sources in Maply
