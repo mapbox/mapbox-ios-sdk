@@ -198,7 +198,6 @@
 
     BOOL _rotateAtMinZoom;
     
-    // Note: Maply experiment
     MaplyViewController *maplyViewC;
 }
 
@@ -1069,7 +1068,7 @@
         factor = exp2f(newZoom - [self zoom]);
     }
 
-//    RMLog(@"zoom in from:%f to:%f by factor:%f around {%f,%f}", [self zoom], newZoom, factor, pivot.x, pivot.y);
+//    RMLog(@"zoom in from:%f to:%f by factor:%f around {%f,%f}, %d", [self zoom], newZoom, factor, pivot.x, pivot.y,(int)animated);
     [self zoomByFactor:factor near:pivot animated:animated];
 }
 
@@ -1239,7 +1238,6 @@
         } else {
             maplyViewC = [[MaplyViewController alloc] initAsTetheredFlatMap:_mapScrollView tetherView:_tiledLayersSuperview];
             maplyViewC.view.frame = self.bounds;
-            // Note: Ideally we won't use animation
             // Kick off the animation, as we can't trust the view controller lifecycle
             [maplyViewC startAnimation];
         }
@@ -1395,15 +1393,6 @@
         _loadingTileView.mapZooming = NO;
 }
 
-// Note: Maply test
-- (void)setMaplyValues:(UIScrollView *)scrollView
-{
-    // Note: Why is this necessary?
-    _tiledLayersSuperview.frame = _tiledLayersSuperview.frame;
-//    NSLog(@"center = (%f,%f), height = %f\n\tcontentOffset = (%f,%f) frame = (%f,%f), (%f,%f)",coord.longitude,coord.latitude,newHeight,
-//          scrollView.contentOffset.x,scrollView.contentOffset.y,frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
-}
-
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (_loadingTileView)
@@ -1412,10 +1401,6 @@
         CGPoint newOffset = CGPointMake(_loadingTileView.contentOffset.x + delta.width, _loadingTileView.contentOffset.y + delta.height);
         _loadingTileView.contentOffset = newOffset;
     }
-
-    // Note: Maply test
-    if (maplyViewC)
-        [self setMaplyValues:scrollView];
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
@@ -1431,10 +1416,6 @@
 
     if (_zoom < 3 && self.userTrackingMode == RMUserTrackingModeFollowWithHeading)
         self.userTrackingMode = RMUserTrackingModeFollow;
-
-    // Note: Maply test
-    if (maplyViewC)
-        [self setMaplyValues:scrollView];
 }
 
 // Detect dragging/zooming
