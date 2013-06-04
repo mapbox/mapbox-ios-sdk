@@ -55,6 +55,8 @@
 
 #import "MaplyComponent.h"
 #import "RMMaplyTileSource.h"
+// Note: Added for Maply tile sources
+#import "RMMBTilesSource.h"
 
 #pragma mark --- begin constants ----
 
@@ -233,8 +235,7 @@
                                minZoomLevel:(float)initialTileSourceMinZoomLevel
                             backgroundImage:(UIImage *)backgroundImage
 {
-    // Note: Turn this off to get rid of Maply
-//    _maplyMode = TRUE;
+//    _maplyMode = RMMaplyModeNone;
     _constrainMovement = _constrainMovementByUser = _bouncingEnabled = _zoomingInPivotsAroundCenter = NO;
     _draggingEnabled = YES;
 
@@ -363,7 +364,7 @@
                backgroundImage:nil];
 }
 
-- (id)initWithFrame:(CGRect)frame andTilesource:(id <RMTileSource>)newTilesource maplyMode:(BOOL)maplyMode
+- (id)initWithFrame:(CGRect)frame andTilesource:(id <RMTileSource>)newTilesource maplyMode:(RMMaplyMode)maplyMode
 {
 	CLLocationCoordinate2D coordinate;
 	coordinate.latitude = kDefaultInitialLatitude;
@@ -407,7 +408,7 @@
        maxZoomLevel:(float)maxZoomLevel
        minZoomLevel:(float)minZoomLevel
     backgroundImage:(UIImage *)backgroundImage
-          maplyMode:(BOOL)maplyMode
+          maplyMode:(RMMaplyMode)maplyMode
 {
     if (!newTilesource || !(self = [super initWithFrame:frame]))
         return nil;
@@ -550,6 +551,11 @@
 	CGRect bounds = self.bounds;
 
 	return [NSString stringWithFormat:@"MapView at {%.0f,%.0f}-{%.0fx%.0f}", bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height];
+}
+
+- (MaplyViewController *)maplyViewController
+{
+    return maplyViewC;
 }
 
 #pragma mark -
@@ -1213,7 +1219,7 @@
     _tiledLayersSuperview = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, contentSize.width, contentSize.height)];
     _tiledLayersSuperview.userInteractionEnabled = NO;
 
-    if (!_maplyMode)
+    if (_maplyMode == RMMaplyModeNone)
     {
         for (id <RMTileSource> tileSource in _tileSourcesContainer.tileSources)
         {
@@ -1227,7 +1233,7 @@
         
     [_mapScrollView addSubview:_tiledLayersSuperview];
 
-    if (_maplyMode)
+    if (_maplyMode != RMMaplyModeNone)
     {
         if (maplyViewC)
         {
@@ -1243,14 +1249,23 @@
         }
         
         // Set up the tile sources in Maply
+        int tileSourceCount = 0;
         for (id <RMTileSource> tileSource in _tileSourcesContainer.tileSources)
         {
             RMMaplyTileSource *maplyTileSource = [[RMMaplyTileSource alloc] initWithTileSource:tileSource cache:_tileCache];
             if (maplyTileSource)
             {
-                MaplyQuadEarthTilesLayer *maplyLayer = [[MaplyQuadEarthTilesLayer alloc] initWithCoordSystem:[maplyTileSource getMaplyCoordSystem] tileSource:maplyTileSource];
-                [maplyViewC addLayer:maplyLayer];
+                // Try to use Maply tile sources instead of route-me ones
+                if (_maplyMode == RMMaplyModeMaplySources)
+                {
+                    // Note: Fill this in
+                } else {
+                    MaplyQuadEarthTilesLayer *maplyLayer = [[MaplyQuadEarthTilesLayer alloc] initWithCoordSystem:[maplyTileSource getMaplyCoordSystem] tileSource:maplyTileSource];
+                    maplyLayer.drawPriority = tileSourceCount;
+                    [maplyViewC addLayer:maplyLayer];
+                }
             }
+            tileSourceCount++;
         }
         
         if (_backgroundView)
@@ -1270,7 +1285,7 @@
     _mapScrollView.zoomScale = exp2f([self zoom]);
     [self setDecelerationMode:_decelerationMode];
 
-    if (_maplyMode)
+    if (_maplyMode != RMMaplyModeNone)
     {
         [self insertSubview:_mapScrollView aboveSubview:maplyViewC.view];
     } else {

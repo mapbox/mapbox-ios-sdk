@@ -48,6 +48,14 @@
 @class RMAnnotation;
 @class RMQuadTree;
 @class RMUserLocation;
+@class MaplyViewController;
+
+/** These are the various modes Maply can be invoked with:
+    None - Old renderer.
+    Regular - Maply, but uses route-me tile sources
+    MaplySources - Maply and uses Maply tile sources for ones it recognizes
+  */
+typedef enum {RMMaplyModeNone,RMMaplyModeRegular,RMMaplyModeMaplySources} RMMaplyMode;
 
 // constants for the scrollview deceleration mode
 typedef enum : NSUInteger {
@@ -143,7 +151,7 @@ typedef enum : NSUInteger {
 *   @param newTilesource The tile source to use for the map tiles. 
 *   @return An initialized map view, or `nil` if the map view was unable to be initialized. */
 - (id)initWithFrame:(CGRect)frame andTilesource:(id <RMTileSource>)newTilesource;
-- (id)initWithFrame:(CGRect)frame andTilesource:(id <RMTileSource>)newTilesource maplyMode:(BOOL)maplyMode;
+- (id)initWithFrame:(CGRect)frame andTilesource:(id <RMTileSource>)newTilesource maplyMode:(RMMaplyMode)maplyMode;
 
 /** Designated initializer. Initialize a map view. 
 *   @param frame The map view's frame. 
@@ -168,7 +176,7 @@ typedef enum : NSUInteger {
        maxZoomLevel:(float)initialTileSourceMaxZoomLevel
        minZoomLevel:(float)initialTileSourceMinZoomLevel
     backgroundImage:(UIImage *)backgroundImage
-          maplyMode:(BOOL)maplyMode;
+          maplyMode:(RMMaplyMode)maplyMode;
 
 - (void)setFrame:(CGRect)frame;
 
@@ -185,7 +193,10 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) RMProjectedPoint centerProjectedPoint;
 
 /** If set, we'll use Maply to back the tile and shape display. */
-@property (nonatomic, assign) BOOL maplyMode;
+@property (nonatomic, assign) RMMaplyMode maplyMode;
+
+/** If we're in Maply mode, return the view controller (yes, I know) that we're using for that. */
+- (MaplyViewController *)maplyViewController;
 
 /** Set the map center to a given coordinate. 
 *   @param coordinate A coordinate to set as the map center. 
