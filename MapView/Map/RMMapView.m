@@ -3534,7 +3534,8 @@
     }
     else if ( ! _viewControllerPresentingAttribution && _attributionButton)
     {
-        [_attributionButton removeFromSuperview];
+      [_attributionButton removeFromSuperview];
+      _attributionButton = nil;
     }
 }
 
