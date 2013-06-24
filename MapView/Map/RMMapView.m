@@ -57,6 +57,7 @@
 #import "RMMaplyTileSource.h"
 // Note: Added for Maply tile sources
 #import "RMMBTilesSource.h"
+#import "RMMonitorView.h"
 
 #pragma mark --- begin constants ----
 
@@ -1028,6 +1029,18 @@
                                      ((_mapScrollView.contentOffset.y + pivot.y) - (newZoomSize.height * factorY)) / zoomScale,
                                      newZoomSize.width / zoomScale,
                                      newZoomSize.height / zoomScale);
+
+        // We need to explicitly animate zoom to get our callback
+        if (maplyViewC)
+        {
+            CGSize newContentSize = _mapScrollView.contentSize;
+            newContentSize.width *= zoomFactor * _screenScale;     newContentSize.height *= zoomFactor * _screenScale;
+            CGPoint newContentOffset;
+            newContentOffset.x = zoomRect.origin.x * zoomScale * zoomFactor * _screenScale;
+            newContentOffset.y = zoomRect.origin.y * zoomScale * zoomFactor * _screenScale;
+            [maplyViewC animateToExtentsWindowSize:newContentSize contentOffset:newContentOffset time:0.25];
+        }
+
         [_mapScrollView zoomToRect:zoomRect animated:animated];
     }
     else
@@ -1527,8 +1540,8 @@
     }
 
 //    RMLog(@"contentOffset: {%.0f,%.0f} -> {%.1f,%.1f} (%.0f,%.0f)", oldContentOffset.x, oldContentOffset.y, newContentOffset.x, newContentOffset.y, newContentOffset.x - oldContentOffset.x, newContentOffset.y - oldContentOffset.y);
-//    RMLog(@"contentSize: {%.0f,%.0f} -> {%.0f,%.0f}", _lastContentSize.width, _lastContentSize.height, mapScrollView.contentSize.width, mapScrollView.contentSize.height);
-//    RMLog(@"isZooming: %d, scrollview.zooming: %d", _mapScrollViewIsZooming, mapScrollView.zooming);
+//    RMLog(@"contentSize: {%.0f,%.0f} -> {%.0f,%.0f}", _lastContentSize.width, _lastContentSize.height, _mapScrollView.contentSize.width, _mapScrollView.contentSize.height);
+//    RMLog(@"isZooming: %d, scrollview.zooming: %d", _mapScrollViewIsZooming, _mapScrollView.zooming);
 
     RMProjectedRect planetBounds = _projection.planetBounds;
     _metersPerPixel = planetBounds.size.width / _mapScrollView.contentSize.width;
