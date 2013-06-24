@@ -57,7 +57,6 @@
 #import "RMMaplyTileSource.h"
 // Note: Added for Maply tile sources
 #import "RMMBTilesSource.h"
-#import "RMMonitorView.h"
 
 #pragma mark --- begin constants ----
 
