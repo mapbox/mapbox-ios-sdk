@@ -3215,12 +3215,7 @@
         return;
 
     if ([newLocation distanceFromLocation:oldLocation])
-    {
         self.userLocation.location = newLocation;
-
-        if (_delegateHasDidUpdateUserLocation)
-            [_delegate mapView:self didUpdateUserLocation:self.userLocation];
-    }
 
     if (self.userTrackingMode != RMUserTrackingModeNone)
     {
@@ -3380,6 +3375,9 @@
 
     if ( ! [_annotations containsObject:self.userLocation])
         [self addAnnotation:self.userLocation];
+
+    if (_delegateHasDidUpdateUserLocation && [newLocation distanceFromLocation:oldLocation])
+        [_delegate mapView:self didUpdateUserLocation:self.userLocation];
 }
 
 - (BOOL)locationManagerShouldDisplayHeadingCalibration:(CLLocationManager *)manager
