@@ -2887,6 +2887,9 @@
 
 - (void)addAnnotation:(RMAnnotation *)annotation
 {
+    if (!annotation)
+        return;
+    
     @synchronized (_annotations)
     {
         if ([_annotations containsObject:annotation])
