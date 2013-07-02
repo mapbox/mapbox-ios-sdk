@@ -27,7 +27,6 @@
 
 #import "RMWMSSource.h"
 
-
 @implementation RMWMSSource
 
 @synthesize minZoom;
@@ -89,7 +88,22 @@
     meters.x = (px * resolution) - originShift; 
     meters.y = originShift - (py * resolution); 
     return meters; 
-} 
+}
+
+- (NSString *)featureInfoUrlForPoint:(CGPoint)point inMap:(RMMapView *)mapView;
+{
+    // convert to where the user clicked in the tile
+    RMProjectedPoint xy = [mapView pixelToProjectedPoint:point];
+    RMFractalTileProjection *tileProjection = (RMFractalTileProjection *)[mapView mercatorToTileProjection];
+    RMTilePoint tilePoint = [tileProjection project:xy atZoom:[mapView zoom]];
+    float x = kDefaultTileSize * tilePoint.offset.x;
+    float y = kDefaultTileSize * tilePoint.offset.y;
+    NSString *bbox = [self bboxForTile:tilePoint.tile];
+    return [wms createGetFeatureInfoForBbox:bbox
+                                       size:CGSizeMake(kDefaultTileSize, kDefaultTileSize)
+                                      point:CGPointMake(x, y)];
+}
+
 
 - (void) dealloc
 {

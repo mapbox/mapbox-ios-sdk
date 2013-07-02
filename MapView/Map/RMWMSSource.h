@@ -27,6 +27,7 @@
 
 #import <Foundation/Foundation.h>
 
+#import "RMMapView.h"
 #import "RMAbstractWebMapSource.h"
 #import "RMTile.h"
 #import "RMWMS.h"
@@ -36,10 +37,11 @@
  
  Example:
  RMWMS *wms = [[RMWMS alloc] init];
- [wms setUrlPrefix:@"http://vmap0.tiles.osgeo.org/wms/vmap0"];
- [wms setLayers:@"basic"];
+ wms.urlPrefix = @"http://vmap0.tiles.osgeo.org/wms/vmap0";
+ wms.layers = @"basic";
  RMWMSSource *wmsSource = [[RMWMSSource alloc] init];
- [wmsSource setWms:wms];
+ wmsSource.wms = wms;
+ wmsSource.uniqueTilecacheKey = @"abc";
  [mapView setTileSource:wmsSource];
  */
 @interface RMWMSSource : RMAbstractWebMapSource {
@@ -73,5 +75,7 @@
 -(NSString*) bboxForTile: (RMTile) tile;
 -(float) resolutionAtZoom : (int) zoom ;
 -(CGPoint) pixelsToMetersAtZoom: (int) px PixelY:(int)py atResolution:(float) resolution ;
+
+- (NSString *)featureInfoUrlForPoint:(CGPoint)point inMap:(RMMapView *)mapView;
 
 @end
