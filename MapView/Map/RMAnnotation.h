@@ -89,6 +89,7 @@
 /** @name Representing an Annotation Visually */
 
 /** An object representing the annotation's visual appearance.
+*
 *   @see RMMarker
 *   @see RMShape
 *   @see RMCircle */

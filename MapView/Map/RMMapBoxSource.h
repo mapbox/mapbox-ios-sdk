@@ -62,12 +62,29 @@ typedef enum : NSUInteger {
 /** @name Creating Tile Sources */
 
 /** Initialize a tile source using the MapBox map ID.
+*
+*   This method requires a network connection in order to download the TileJSON used to define the tile source. 
+*
 *   @param mapID The MapBox map ID string, typically in the format `<username>.map-<random characters>`.
 *   @return An initialized MapBox tile source. */
 - (id)initWithMapID:(NSString *)mapID;
 
+/** Initialize a tile source using the MapBox map ID, optionally enabling SSL.
+*
+*   This method requires a network connection in order to download the TileJSON used to define the tile source.
+*
+*   @param mapID The MapBox map ID string, typically in the format `<username>.map-<random characters>`.
+*   @param enableSSL Whether to use SSL-enabled HTTPS connections for map tiles and other related data. Defaults to `NO`. At some point in the future, this will default to `YES`. 
+*   @return An initialized MapBox tile source. */
+- (id)initWithMapID:(NSString *)mapID enablingSSL:(BOOL)enableSSL;
+
 /** Initialize a tile source with either a remote or local TileJSON structure.
-*   @param referenceURL A remote or local URL pointing to a TileJSON structure. 
+*
+*   Passing a remote URL requires a network connection. If offline functionality is desired, you should cache the TileJSON locally at a prior date, then pass a file path URL to this method.
+*
+*   @see tileJSON
+*
+*   @param referenceURL A remote or file path URL pointing to a TileJSON structure.
 *   @return An initialized MapBox tile source. */
 - (id)initWithReferenceURL:(NSURL *)referenceURL;
 
@@ -77,19 +94,37 @@ typedef enum : NSUInteger {
 - (id)initWithTileJSON:(NSString *)tileJSON;
 
 /** For TileJSON 2.1.0+ layers, initialize a tile source and automatically find and add annotations from [simplestyle](http://mapbox.com/developers/simplestyle/) data.
+*
+*   This method requires a network connection in order to download the TileJSON used to define the tile source.
+*
 *   @param mapID The MapBox map ID string, typically in the format `<username>.map-<random characters>`.
 *   @param mapView A map view on which to display the annotations.
 *   @return An initialized MapBox tile source. */
 - (id)initWithMapID:(NSString *)mapID enablingDataOnMapView:(RMMapView *)mapView;
 
+/** For TileJSON 2.1.0+ layers, initialize a tile source and automatically find and add annotations from [simplestyle](http://mapbox.com/developers/simplestyle/) data, optionally enabling SSL.
+*
+*   This method requires a network connection in order to download the TileJSON used to define the tile source.
+*
+*   @param mapID The MapBox map ID string, typically in the format `<username>.map-<random characters>`.
+*   @param mapView A map view on which to display the annotations.
+*   @param enableSSL Whether to use SSL-enabled HTTPS connections for map tiles and other related data. Defaults to `NO`. At some point in the future, this will default to `YES`.
+*   @return An initialized MapBox tile source. */
+- (id)initWithMapID:(NSString *)mapID enablingDataOnMapView:(RMMapView *)mapView enablingSSL:(BOOL)enableSSL;
+
 /** For TileJSON 2.1.0+ layers, initialize a tile source and automatically find and add annotations from [simplestyle](http://mapbox.com/developers/simplestyle/) data.
-*   @param tileJSON A string containing TileJSON. 
+*   @param tileJSON A string containing TileJSON.
 *   @param mapView A map view on which to display the annotations. 
 *   @return An initialized MapBox tile source. */
 - (id)initWithTileJSON:(NSString *)tileJSON enablingDataOnMapView:(RMMapView *)mapView;
 
 /** For TileJSON 2.1.0+ layers, initialize a tile source and automatically find and add annotations from [simplestyle](http://mapbox.com/developers/simplestyle/) data.
-*   @param referenceURL A remote or local URL pointing to a TileJSON structure.
+*
+*   Passing a remote URL requires a network connection. If offline functionality is desired, you should cache the TileJSON locally at a prior date, then pass a file path URL to this method.
+*
+*   @see tileJSON
+*
+*   @param referenceURL A remote or file path URL pointing to a TileJSON structure.
 *   @param mapView A map view on which to display the annotations.
 *   @return An initialized MapBox tile source. */
 - (id)initWithReferenceURL:(NSURL *)referenceURL enablingDataOnMapView:(RMMapView *)mapView;
@@ -116,6 +151,8 @@ typedef enum : NSUInteger {
 
 /** The TileJSON data in dictionary format. Useful for retrieving info about the layer without having to parse TileJSON. */
 @property (nonatomic, readonly, strong) NSDictionary *infoDictionary;
+
+/** @name Configuring Map Options */
 
 /** Image quality that is retrieved from the network. Useful for lower-bandwidth environments. The default is to provide full-quality imagery. 
 *

@@ -61,7 +61,12 @@
 
 - (id)initWithMapID:(NSString *)mapID
 {
-    return [self initWithMapID:mapID enablingDataOnMapView:nil];
+    return [self initWithMapID:mapID enablingSSL:NO];
+}
+
+- (id)initWithMapID:(NSString *)mapID enablingSSL:(BOOL)enableSSL
+{
+    return [self initWithMapID:mapID enablingDataOnMapView:nil enablingSSL:enableSSL];
 }
 
 - (id)initWithTileJSON:(NSString *)tileJSON
@@ -155,13 +160,18 @@
     
     if ([[referenceURL pathExtension] isEqualToString:@"json"] && (dataObject = [NSString brandedStringWithContentsOfURL:referenceURL encoding:NSUTF8StringEncoding error:nil]) && dataObject)
         return [self initWithTileJSON:dataObject enablingDataOnMapView:mapView];
-    
+
     return nil;
 }
 
 - (id)initWithMapID:(NSString *)mapID enablingDataOnMapView:(RMMapView *)mapView
 {
-    NSString *referenceURLString = [NSString stringWithFormat:@"http://a.tiles.mapbox.com/v3/%@.json", mapID];
+    return [self initWithMapID:mapID enablingDataOnMapView:mapView enablingSSL:NO];
+}
+
+- (id)initWithMapID:(NSString *)mapID enablingDataOnMapView:(RMMapView *)mapView enablingSSL:(BOOL)enableSSL
+{
+    NSString *referenceURLString = [NSString stringWithFormat:@"http%@://api.tiles.mapbox.com/v3/%@.json%@", (enableSSL ? @"s" : @""), mapID, (enableSSL ? @"?secure" : @"")];
 
     return [self initWithReferenceURL:[NSURL URLWithString:referenceURLString] enablingDataOnMapView:mapView];
 }
@@ -175,7 +185,9 @@
 
 - (NSURL *)tileJSONURL
 {
-    return [NSURL URLWithString:[NSString stringWithFormat:@"http://a.tiles.mapbox.com/v3/%@.json", [self.infoDictionary objectForKey:@"id"]]];
+    BOOL useSSL = [[[self.infoDictionary objectForKey:@"tiles"] objectAtIndex:0] hasPrefix:@"https"];
+
+    return [NSURL URLWithString:[NSString stringWithFormat:@"http%@://api.tiles.mapbox.com/v3/%@.json%@", (useSSL ? @"s" : @""), [self.infoDictionary objectForKey:@"id"], (useSSL ? @"?secure" : @"")]];
 }
 
 - (NSURL *)URLForTile:(RMTile)tile
