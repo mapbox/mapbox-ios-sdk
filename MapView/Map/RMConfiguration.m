@@ -73,7 +73,9 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 
     if ( ! returnData)
     {
-        *error = internalError;
+        if (error != NULL) {
+            *error = internalError;
+        }
 
         return nil;
     }
