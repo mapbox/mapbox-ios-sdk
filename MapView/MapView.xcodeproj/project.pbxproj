@@ -46,6 +46,10 @@
 		23A0AAEB0EB90AA6003A4521 /* RMFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 23A0AAEA0EB90AA6003A4521 /* RMFoundation.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		25757F4F1291C8640083D504 /* RMCircle.h in Headers */ = {isa = PBXBuildFile; fileRef = 25757F4D1291C8640083D504 /* RMCircle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		25757F501291C8640083D504 /* RMCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 25757F4E1291C8640083D504 /* RMCircle.m */; };
+		44BCB6A71779A19F00729B70 /* RMWMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 44BCB6A31779A19F00729B70 /* RMWMS.h */; };
+		44BCB6A81779A19F00729B70 /* RMWMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 44BCB6A41779A19F00729B70 /* RMWMS.m */; };
+		44BCB6A91779A19F00729B70 /* RMWMSSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 44BCB6A51779A19F00729B70 /* RMWMSSource.h */; };
+		44BCB6AA1779A19F00729B70 /* RMWMSSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 44BCB6A61779A19F00729B70 /* RMWMSSource.m */; };
 		96492C400FA8AD3400EBA6D2 /* RMGlobalConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 96492C3F0FA8AD3400EBA6D2 /* RMGlobalConstants.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		B1EB26C610B5D8E6009F8658 /* RMNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = B1EB26C510B5D8E6009F8658 /* RMNotifications.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		B8474BA40EB40094006A0BC1 /* RMDatabaseCache.h in Headers */ = {isa = PBXBuildFile; fileRef = B8474B980EB40094006A0BC1 /* RMDatabaseCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -210,6 +214,10 @@
 		25757F4E1291C8640083D504 /* RMCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMCircle.m; sourceTree = "<group>"; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* MapView_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapView_Prefix.pch; sourceTree = SOURCE_ROOT; };
+		44BCB6A31779A19F00729B70 /* RMWMS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMWMS.h; sourceTree = "<group>"; };
+		44BCB6A41779A19F00729B70 /* RMWMS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMWMS.m; sourceTree = "<group>"; };
+		44BCB6A51779A19F00729B70 /* RMWMSSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMWMSSource.h; sourceTree = "<group>"; };
+		44BCB6A61779A19F00729B70 /* RMWMSSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMWMSSource.m; sourceTree = "<group>"; };
 		96492C3F0FA8AD3400EBA6D2 /* RMGlobalConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMGlobalConstants.h; sourceTree = "<group>"; };
 		B1EB26C510B5D8E6009F8658 /* RMNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMNotifications.h; sourceTree = "<group>"; };
 		B83E64B60E80E73F001663B6 /* RMPixel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMPixel.h; sourceTree = "<group>"; };
@@ -373,6 +381,10 @@
 				DD4195C8162356900049E6BA /* RMBingSource.m */,
 				DD1985BF165C5F6400DF667F /* RMTileMillSource.h */,
 				DD1985C0165C5F6400DF667F /* RMTileMillSource.m */,
+				44BCB6A31779A19F00729B70 /* RMWMS.h */,
+				44BCB6A41779A19F00729B70 /* RMWMS.m */,
+				44BCB6A51779A19F00729B70 /* RMWMSSource.h */,
+				44BCB6A61779A19F00729B70 /* RMWMSSource.m */,
 			);
 			name = "Map Sources";
 			sourceTree = "<group>";
@@ -728,6 +740,8 @@
 				DD2B375114CF814F008DE8CB /* FMDatabaseQueue.h in Headers */,
 				DD5A200B15CAD09400FE4157 /* GRMustache.h in Headers */,
 				DD1E3C6E161F954F004FC649 /* SMCalloutView.h in Headers */,
+				44BCB6A71779A19F00729B70 /* RMWMS.h in Headers */,
+				44BCB6A91779A19F00729B70 /* RMWMSSource.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -887,6 +901,8 @@
 				DDE357F516522661001DB842 /* RMPolylineAnnotation.m in Sources */,
 				DDE357F916522CD8001DB842 /* RMPolygonAnnotation.m in Sources */,
 				DD1985C2165C5F6400DF667F /* RMTileMillSource.m in Sources */,
+				44BCB6A81779A19F00729B70 /* RMWMS.m in Sources */,
+				44BCB6AA1779A19F00729B70 /* RMWMSSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
