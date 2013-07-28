@@ -122,7 +122,7 @@
 *   @param aCoordinate The location for the annotation. 
 *   @param aTitle The annotation's title. 
 *   @return An annotation object, or `nil` if an annotation was unable to be created. */
-+ (id)annotationWithMapView:(RMMapView *)aMapView coordinate:(CLLocationCoordinate2D)aCoordinate andTitle:(NSString *)aTitle;
++ (instancetype)annotationWithMapView:(RMMapView *)aMapView coordinate:(CLLocationCoordinate2D)aCoordinate andTitle:(NSString *)aTitle;
 
 /** Initialize an annotation. 
 *   @param aMapView The map view on which to place the annotation. 

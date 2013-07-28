@@ -34,7 +34,7 @@
 
 /** Access the shared instance of the configuration. 
 *   @return The shared configuration instance. */
-+ (RMConfiguration *)configuration;
++ (instancetype)configuration;
 
 - (RMConfiguration *)initWithPath:(NSString *)path;
 
@@ -65,7 +65,7 @@
 
 @interface NSData (RMUserAgent)
 
-+ (NSData *)brandedDataWithContentsOfURL:(NSURL *)aURL;
++ (instancetype)brandedDataWithContentsOfURL:(NSURL *)aURL;
 
 @end
 
@@ -73,6 +73,6 @@
 
 @interface NSString (RMUserAgent)
 
-+ (id)brandedStringWithContentsOfURL:(NSURL *)url encoding:(NSStringEncoding)enc error:(NSError **)error;
++ (instancetype)brandedStringWithContentsOfURL:(NSURL *)url encoding:(NSStringEncoding)enc error:(NSError **)error;
 
 @end

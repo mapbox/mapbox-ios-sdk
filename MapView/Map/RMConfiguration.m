@@ -46,7 +46,7 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 
 @implementation NSData (RMUserAgent)
 
-+ (NSData *)brandedDataWithContentsOfURL:(NSURL *)aURL
++ (instancetype)brandedDataWithContentsOfURL:(NSURL *)aURL
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:aURL];
 
@@ -61,7 +61,7 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 
 @implementation NSString (RMUserAgent)
 
-+ (id)brandedStringWithContentsOfURL:(NSURL *)url encoding:(NSStringEncoding)enc error:(NSError **)error
++ (instancetype)brandedStringWithContentsOfURL:(NSURL *)url encoding:(NSStringEncoding)enc error:(NSError **)error
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
 
@@ -92,7 +92,7 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 
 @synthesize userAgent=_userAgent;
 
-+ (RMConfiguration *)configuration
++ (instancetype)configuration
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

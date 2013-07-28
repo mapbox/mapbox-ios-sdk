@@ -50,7 +50,7 @@
 static RMProjection *_googleProjection = nil;
 static RMProjection *_latitudeLongitudeProjection = nil;
 
-+ (RMProjection *)googleProjection
++ (instancetype)googleProjection
 {
     if (_googleProjection)
     {
@@ -66,7 +66,7 @@ static RMProjection *_latitudeLongitudeProjection = nil;
     }
 }
 
-+ (RMProjection *)EPSGLatLong
++ (instancetype)EPSGLatLong
 {
     if (_latitudeLongitudeProjection)
     {
