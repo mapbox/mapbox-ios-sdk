@@ -84,7 +84,9 @@
     });
 
     NSArray *URLs = [self URLsForTile:tile];
-
+    if ([URLs count] == 0)
+        return nil;  // make sure there is a valid URL
+    
     if ([URLs count] > 1)
     {
         // fill up collection array with placeholders
@@ -108,7 +110,7 @@
                 {
                     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:currentURL];
                     [request setTimeoutInterval:(self.requestTimeoutSeconds / (CGFloat)self.retryCount)];
-                    tileData = [NSURLConnection sendBrandedSynchronousRequest:request returningResponse:nil error:nil];
+                    tileData = [NSURLConnection sendBrandedSynchronousRequest:request returningResponse:nil error:NULL];
                 }
 
                 if (tileData)
@@ -157,7 +159,7 @@
             NSHTTPURLResponse *response = nil;
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[URLs objectAtIndex:0]];
             [request setTimeoutInterval:(self.requestTimeoutSeconds / (CGFloat)self.retryCount)];
-            image = [UIImage imageWithData:[NSURLConnection sendBrandedSynchronousRequest:request returningResponse:&response error:nil]];
+            image = [UIImage imageWithData:[NSURLConnection sendBrandedSynchronousRequest:request returningResponse:&response error:NULL]];
 
             if (response.statusCode == HTTP_404_NOT_FOUND)
                 break;
