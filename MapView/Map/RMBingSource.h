@@ -27,7 +27,7 @@
 
 #import "RMAbstractWebMapSource.h"
 
-typedef enum NSUInteger {
+typedef enum : NSUInteger {
     RMBingImagerySetRoad             = 0, // default
     RMBingImagerySetAerial           = 1,
     RMBingImagerySetAerialWithLabels = 2,
