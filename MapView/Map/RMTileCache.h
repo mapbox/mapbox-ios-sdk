@@ -72,36 +72,6 @@ typedef enum : short {
 
 #pragma mark -
 
-/** The RMTileCacheBackgroundDelegate protocol is for receiving notifications about background tile cache download operations. */
-@protocol RMTileCacheBackgroundDelegate <NSObject>
-
-@optional
-
-/** Sent when the background caching operation begins.
-*   @param tileCache The tile cache. 
-*   @param tileCount The total number of tiles required for coverage of the desired geographic area. 
-*   @param tileSource The tile source providing the tiles. */
-- (void)tileCache:(RMTileCache *)tileCache didBeginBackgroundCacheWithCount:(int)tileCount forTileSource:(id <RMTileSource>)tileSource;
-
-/** Sent upon caching of each tile in a background cache operation.
-*   @param tileCache The tile cache. 
-*   @param tile A structure representing the tile in question. 
-*   @param tileIndex The index of the tile in question, beginning with `1` and ending with totalTileCount. 
-*   @param totalTileCount The total number of of tiles required for coverage of the desired geographic area. */
-- (void)tileCache:(RMTileCache *)tileCache didBackgroundCacheTile:(RMTile)tile withIndex:(int)tileIndex ofTotalTileCount:(int)totalTileCount;
-
-/** Sent when all tiles have completed downloading and caching. 
-*   @param tileCache The tile cache. */
-- (void)tileCacheDidFinishBackgroundCache:(RMTileCache *)tileCache;
-
-/** Sent when the cache download operation has completed cancellation and the cache object is safe to dispose of. 
-*   @param tileCache The tile cache. */
-- (void)tileCacheDidCancelBackgroundCache:(RMTileCache *)tileCache;
-
-@end
-
-#pragma mark -
-
 /** An RMTileCache object manages memory-based and disk-based caches for map tiles that have been retrieved from the network. 
 *
 *   An RMMapView has one RMTileCache across all tile sources, which is further divided according to each tile source's uniqueTilecacheKey property in order to keep tiles separate in the cache.
@@ -141,26 +111,5 @@ typedef enum : short {
 @property (nonatomic, readonly, strong) NSArray *tileCaches;
 
 - (void)didReceiveMemoryWarning;
-
-/** @name Background Downloading */
-
-/** A delegate to notify of background tile cache download operations. */
-@property (nonatomic, weak) id <RMTileCacheBackgroundDelegate>backgroundCacheDelegate;
-
-/** Whether or not the tile cache is currently background caching. */
-@property (nonatomic, readonly, assign) BOOL isBackgroundCaching;
-
-/** Tells the tile cache to begin background caching. Progress during the caching operation can be observed by implementing the RMTileCacheBackgroundDelegate protocol.
-*   @param tileSource The tile source from which to retrieve tiles.
-*   @param southWest The southwest corner of the geographic area to cache.
-*   @param northEast The northeast corner of the geographic area to cache. 
-*   @param minZoom The minimum zoom level to cache. 
-*   @param maxZoom The maximum zoom level to cache. */
-- (void)beginBackgroundCacheForTileSource:(id <RMTileSource>)tileSource southWest:(CLLocationCoordinate2D)southWest northEast:(CLLocationCoordinate2D)northEast minZoom:(float)minZoom maxZoom:(float)maxZoom;
-
-/** Cancel any background caching. 
-*
-*   This method returns immediately so as to not block the calling thread. If you wish to be notified of the actual cancellation completion, implement the tileCacheDidCancelBackgroundCache: delegate method. */
-- (void)cancelBackgroundCache;
 
 @end
