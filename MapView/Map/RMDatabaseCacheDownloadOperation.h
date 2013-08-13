@@ -1,5 +1,5 @@
 //
-//  RMTileCacheDownloadOperation.h
+//  RMDatabaseCacheDownloadOperation.h
 //
 // Copyright (c) 2008-2013, Route-Me Contributors
 // All rights reserved.
@@ -29,10 +29,13 @@
 
 #import "RMTile.h"
 #import "RMTileSource.h"
-#import "RMTileCache.h"
 
-@interface RMTileCacheDownloadOperation : NSOperation
+@class RMDatabaseCache;
 
-- (id)initWithTile:(RMTile)tile forTileSource:(id <RMTileSource>)source usingCache:(RMTileCache *)cache;
+@interface RMDatabaseCacheDownloadOperation : NSOperation
+
+@property (nonatomic, assign) BOOL tileExisted;
+
+- (id)initWithTile:(RMTile)tile forTileSource:(id <RMTileSource>)source usingCache:(RMDatabaseCache *)cache;
 
 @end
