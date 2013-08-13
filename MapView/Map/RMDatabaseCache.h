@@ -71,7 +71,11 @@ typedef enum : NSUInteger {
 
 /** An RMDatabaseCache object represents disk-based caching of map tile images. This cache is meant for longer-term storage than RMMemoryCache, potentially for long periods of time, allowing completely offline use of map view.
 *
-*   @warning The database cache is currently based on [SQLite](http://www.sqlite.org), a lightweight, cross-platform, file-based relational database system. The schema is independent of and unrelated to the [MBTiles](http://mbtiles.org) file format or the RMMBTilesSource tile source. */
+*   @warning The database cache is currently based on [SQLite](http://www.sqlite.org), a lightweight, cross-platform, file-based relational database system. The schema is independent of and unrelated to the [MBTiles](http://mbtiles.org) file format or the RMMBTilesSource tile source. 
+*
+*   An RMDatabaseCache is a key component of offline map use. Tile requests can be served from the database cache if available, avoiding network operation. If tiles exist in the cache already, a tile source that is instantiated when offline will still be able to serve tile imagery to the map renderer for areas that have been previously cached. This can occur either from normal map use, by setting the readOnly property to NO and adding the database cache to an RMMapView's tileCache, or from proactive caching ahead of time using the beginBackgroundCacheForTileSource:southWest:northEast:minZoom:maxZoom:withIdentifier: method.
+*
+*/
 @interface RMDatabaseCache : NSObject <RMTileCache>
 
 /** @name Getting the Database Path */
