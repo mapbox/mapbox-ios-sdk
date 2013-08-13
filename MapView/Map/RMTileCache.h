@@ -83,11 +83,38 @@ typedef enum : short {
 
 /** Initializes and returns a newly allocated cache object with specified expiry period.
 *
+*   The internal memory-based and disk-based caches will be initialized to default settings or according to a Route-Me property list included as a resource in your project. See "File-based cache configuration" in the SDK Guide for details.
+*
 *   If the `init` method is used to initialize a cache instead, a period of `0` is used. In that case, time-based expiration of tiles is not performed, but rather the cached tile count is used instead.
 *
 *   @param period A period of time after which tiles should be expunged from the cache.
 *   @return An initialized cache object or `nil` if the object couldn't be created. */
 - (id)initWithExpiryPeriod:(NSTimeInterval)period;
+
+/** Initializes and returns a newly allocated cache object with the supplied tile caches.
+ *
+ *  The internal memory cache will be initialized with a default size and the expiry period is set to `0`
+ *
+ *   @param caches An array containing memory-based or disk-based caches implementing the `RMTileCache` protocol.
+ *   @return An initialized cache object or `nil` if the object couldn't be created. */
+- (id)initWithCaches:(NSArray *)caches;
+
+/** Initializes and returns a newly allocated cache object with the supplied tile caches and expiry period.
+ *
+ *  The internal memory cache will be initialized with a default size.
+ *
+ *   @param caches An array containing memory-based or disk-based caches implementing the `RMTileCache` protocol.
+ *   @param period A period of time after which tiles should be expunged from the cache.
+ *   @return An initialized cache object or `nil` if the object couldn't be created. */
+- (id)initWithCaches:(NSArray *)caches andExpiryPeriod:(NSTimeInterval)period;
+
+/** Initializes and returns a newly allocated cache object with the supplied memory cache, other tile caches and expiry period.
+ *
+ *   @param memoryCache RMMemoryCache object to be used for fast memory-based caching of the most recently used tiles.
+ *   @param caches An array containing memory-based or disk-based caches implementing the `RMTileCache` protocol.
+ *   @param period A period of time after which tiles should be expunged from the cache.
+ *   @return An initialized cache object or `nil` if the object couldn't be created. */
+- (id)initWithMemoryCache:(RMMemoryCache *)memoryCache otherCaches:(NSArray *)caches andExpiryPeriod:(NSTimeInterval)period;
 
 /** @name Identifying Cache Objects */
 
@@ -105,8 +132,13 @@ typedef enum : short {
 - (void)addCache:(id <RMTileCache>)cache;
 - (void)insertCache:(id <RMTileCache>)cache atIndex:(NSUInteger)index;
 
-/** The list of caches managed by a cache manager. This could include memory-based, disk-based, or other types of caches. */
-@property (nonatomic, readonly, strong) NSArray *tileCaches;
+/** Removes a given cache from the cache management system.
+ *
+ *   @param cache A memory-based or disk-based cache. */
+- (void)removeCache:(id <RMTileCache>)cache;
+
+/** The list of caches managed by a cache manager. This could include memory-based, disk-based, or other types of caches conforming to the RMTileCache protocol. */
+@property (nonatomic, strong) NSArray *tileCaches;
 
 - (void)didReceiveMemoryWarning;
 

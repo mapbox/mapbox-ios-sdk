@@ -34,6 +34,9 @@
 #import "RMConfiguration.h"
 #import "RMTileSource.h"
 
+#define kDefaultMemoryCacheCapacity 32
+#define kDefaultExpiryPeriod        0
+
 @interface RMTileCache (Configuration)
 
 - (id <RMTileCache>)memoryCacheWithConfig:(NSDictionary *)cfg;
@@ -54,17 +57,35 @@
     dispatch_queue_t _tileCacheQueue;
 }
 
-- (id)initWithExpiryPeriod:(NSTimeInterval)period
+- (id)initWithMemoryCache:(RMMemoryCache *)memoryCache otherCaches:(NSArray *)caches andExpiryPeriod:(NSTimeInterval)period
 {
     if (!(self = [super init]))
         return nil;
-
-    _tileCaches = [NSMutableArray new];
+    
+    _memoryCache = memoryCache;
+    if (caches)
+        _tileCaches = [caches mutableCopy];
+    else
+        _tileCaches = [NSMutableArray new];
     _tileCacheQueue = dispatch_queue_create("routeme.tileCacheQueue", DISPATCH_QUEUE_CONCURRENT);
-
-    _memoryCache = nil;
     _expiryPeriod = period;
     
+    return self;
+}
+
+- (id)initWithCaches:(NSArray *)caches andExpiryPeriod:(NSTimeInterval)period
+{
+    RMMemoryCache *defaultMemoryCache = [[RMMemoryCache alloc] initWithCapacity:kDefaultMemoryCacheCapacity];
+    return [self initWithMemoryCache:defaultMemoryCache otherCaches:caches andExpiryPeriod:period];
+}
+
+- (id)initWithCaches:(NSArray *)caches
+{
+    return [self initWithCaches:caches andExpiryPeriod:kDefaultExpiryPeriod];
+}
+
+- (id)initWithExpiryPeriod:(NSTimeInterval)period
+{
     id cacheCfg = [[RMConfiguration configuration] cacheConfiguration];
     if (!cacheCfg)
         cacheCfg = [NSArray arrayWithObjects:
@@ -72,6 +93,9 @@
                     [NSDictionary dictionaryWithObject: @"db-cache"     forKey: @"type"],
                     nil];
 
+    NSMutableArray *caches = [NSMutableArray new];
+    RMMemoryCache *memoryCache = nil;
+    
     for (id cfg in cacheCfg)
     {
         id <RMTileCache> newCache = nil;
@@ -82,7 +106,7 @@
 
             if ([@"memory-cache" isEqualToString:type])
             {
-                _memoryCache = [self memoryCacheWithConfig:cfg];
+                memoryCache = [self memoryCacheWithConfig:cfg];
                 continue;
             }
 
@@ -90,7 +114,7 @@
                 newCache = [self databaseCacheWithConfig:cfg];
 
             if (newCache)
-                [_tileCaches addObject:newCache];
+                [caches addObject:newCache];
             else
                 RMLog(@"failed to create cache of type %@", type);
 
@@ -99,13 +123,13 @@
             RMLog(@"*** configuration error: %@", [e reason]);
         }
     }
-
-    return self;
+    
+    return [self initWithMemoryCache:memoryCache otherCaches:caches andExpiryPeriod:period];
 }
 
 - (id)init
 {
-    if (!(self = [self initWithExpiryPeriod:0]))
+    if (!(self = [self initWithExpiryPeriod:kDefaultExpiryPeriod]))
         return nil;
 
     return self;
@@ -113,10 +137,12 @@
 
 - (void)dealloc
 {
-    dispatch_barrier_sync(_tileCacheQueue, ^{
-         _memoryCache = nil;
-         _tileCaches = nil;
-    });
+    if (_tileCacheQueue) { // check for proper initialization
+        dispatch_barrier_sync(_tileCacheQueue, ^{
+            _memoryCache = nil;
+            _tileCaches = nil;
+        });
+    }
 }
 
 - (void)addCache:(id <RMTileCache>)cache
@@ -136,9 +162,23 @@
     });
 }
 
+- (void)removeCache:(id <RMTileCache>)cache
+{
+    dispatch_barrier_async(_tileCacheQueue, ^{
+        [_tileCaches removeObject:cache];
+    });
+}
+
 - (NSArray *)tileCaches
 {
     return [NSArray arrayWithArray:_tileCaches];
+}
+
+- (void)setTileCaches:(NSArray *)tileCaches
+{
+    dispatch_barrier_async(_tileCacheQueue, ^{
+        _tileCaches = [tileCaches mutableCopy];
+    });
 }
 
 + (NSNumber *)tileHash:(RMTile)tile
@@ -285,7 +325,7 @@ static NSMutableDictionary *predicateValues = nil;
 
 - (id <RMTileCache>)memoryCacheWithConfig:(NSDictionary *)cfg
 {
-    NSUInteger capacity = 32;
+    NSUInteger capacity = kDefaultMemoryCacheCapacity;
 
 	NSNumber *capacityNumber = [cfg objectForKey:@"capacity"];
 	if (capacityNumber != nil)
