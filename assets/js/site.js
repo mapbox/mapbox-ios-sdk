@@ -64,10 +64,10 @@
 
         _next: function() {
             var active = this.$menu.find('.active').removeClass('active'),
-                next = active.nextAll('li.filtered').first();
+                next = active.nextAll('.filtered').first();
 
             if (!next.length) {
-                next = $(this.$menu.find('li')[0]);
+                next = $(this.$menu.find('a')[0]);
                 next.addClass('active');
 
                 // Execute only if the height of the menu and its offset
@@ -94,10 +94,10 @@
 
         _prev: function() {
             var active = this.$menu.find('.active').removeClass('active'),
-                prev = active.prevAll('li.filtered').first();
+                prev = active.prevAll('.filtered').first();
 
             if (!prev.length) {
-                prev = this.$menu.find('li').last();
+                prev = this.$menu.find('a').last();
                 prev.addClass('active');
 
                 // Execute only if the height of the menu and its offset
@@ -124,7 +124,7 @@
         },
 
         _select: function(e) {
-            window.location.hash = this.$menu.find('.active a').attr('href');
+            window.location.hash = this.$menu.find('.active').attr('href');
         },
 
         _mouseenter: function(e) {
@@ -140,14 +140,14 @@
                     body = $(document.getElementById('content-' + id)).text();
 
                 if (!q || body.toLowerCase().indexOf(q) !== -1 || id.toLowerCase().indexOf(q) !== -1) {
-                    $this.parent().addClass('filtered');
+                    $this.addClass('filtered');
                     if ($this.parent().hasClass('heading')) {
                         $this.css('color', '');
                     } else {
                         $this.show();
                     }
                 } else {
-                    $this.parent().removeClass('filtered');
+                    $this.removeClass('filtered');
                     if ($this.parent().hasClass('heading')) {
                         $this.css('color', '#BDBDBD');
                     } else {

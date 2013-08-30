@@ -1,138 +1,62 @@
 ---
 layout: default
 section: developers
-class: box
 ---
-<style>
-.section-tasks ul.task-list { margin-left:20px; }
-.section-tasks ul.task-list li {
-  list-style:none;
-  margin:0px;
-  }
-.section-tasks .tooltip .tooltip { display:none; }
-
-.section-method { margin:0px 0px 20px; }
-
-.section-method h3,
-.section-method .method-declaration { margin-bottom:10px; }
-
-.section-method h4,
-.section-method p { margin:0px; }
-
-.section-method ul,
-.section-method li,
-.section-method dt,
-.section-method dd,
-.section-method p { margin:0px; }
-
-.section-method ul *,
-.section-method dl * { display:inline; }
-
-.section-method dl { padding-left:20px; text-indent:-20px; }
-.section-method dt { margin-right:5px; }
-
-.method-subsection { margin-left:20px; }
-
-.method-subsection p,
-.method-subsection code,
-.method-subsection dl {
-  font-size:12px;
-  line-height:1.6666em;
-  }
-
-.method-subsection > p,
-.method-subsection > dl,
-.method-subsection > code { margin-left:20px; }
-
-.task-item-suffix,
-.method-subsection.parameters em {
-  font-size:12px;
-  color:#88c;
-  }
-
-.method-subsection.brief-description p { font-size:15px; }
-.method-subsection.brief-description p,
-.method-subsection.method-declaration code { margin-left:0px; }
-
-.doc-search input {
-  width:95%;
-  height:40px;
-  padding:10px 40px 10px 8px;
-  }
-.doc-search span {
-  position:absolute;
-  top:10px;
-  right:10%;
-  margin-right:10px;
-  }
-.doc-nav .nav li.active a {
-  background-color:#ecf5fa;
-  color:#3C4E5A;
-  }
-
-code p { display:inline; }
-.doc-footer {
-  border-top:1px solid #ccc;
-  border-left:1px solid #ccc;
-  text-align:center;
-  }
-
-@media only screen and (max-width: 640px) {
-  .doc-footer {
-    border-left:none;
-  }
-}
-</style>
-
-<div class='clearfix doc-header pad3 fillL'>
-  <div class='cell6'>
-    <h2>{{site.title}}</h2>
-    <p>{{site.description}}</p>
+<div class='clearfix doc-header fill-light'>
+  <div class='col12 pad4x contain'>
+    <a class='tag pad1y2x fill-darken0' href='{{site.url}}/{{page.section|downcase}}'>{{page.section}}</a>
   </div>
-  <ul class='cell6 doc-subnav clearfix'>
-    <li><a href='{{site.baseurl}}/'>Guide</a></li>
-    <li><a href='{{site.baseurl}}/api/' class='active'>API</a></li>
-    <li><a href='{{site.baseurl}}/examples/'>Examples</a></li>
-    <li><a href='{{site.baseurl}}/changelog/'>Changelog</a></li>
-  </ul>
-</div>
 
-<div class='doc-page pad3c fillM clearfix'>
-<div class='fillW clearfix'>
-  <div class='cell3'>
-    <div class='doc-nav'>
-      <form class='doc-search'>
-        <input type='text' placeholder='Filter'>
-        <span class='icon search'></span>
-      </form>
-      {% if page.navigation %}
-      {% for heading in page.navigation %}
-        <ul class='nav anchors'>
-          <li class='heading'><a href='#{{heading[0]|replace:' ','_'}}'>{{heading[0]}}</a></li>
-        {% for item in heading[1] %}
-          <li><a href='#{{item|replace:' ','_'}}'>{{item | replace:'-class','' | replace:'-protocol',''}}</a></li>
-        {% endfor %}
-        </ul>
-      {% endfor %}
-      {% endif %}
+  <div class='pad4 clearfix'>
+      <div class='col6'>
+        <h2>{{site.title}}</h2>
+        <p>{{site.description}}</p>
+      </div>
+
+      <nav class='col6 pill clearfix'>
+        <a class='button col3' href='{{site.baseurl}}/'>Guide</a>
+        <a class='button col3 active' href='{{site.baseurl}}/api/'>API</a>
+        <a class='button col3' href='{{site.baseurl}}/examples/'>Examples</a>
+        <a class='button col3' href='{{site.baseurl}}/changelog/'>Changelog</a>
+      </nav>
     </div>
-  </div>
-  <div id='docs' class='cell9 doc-content prose'>
-    <div class='doc pad2'>
-      {{content}}
-    </div>
-    <div class='doc-footer'>
-      <div class='pad2'>
-        The code and documentation to <a href='https://github.com/mapbox/mapbox-ios-sdk'>mapbox-ios-sdk is hosted on GitHub</a> where you can contribute changes and improvements.
+
+    <div class='doc-page pad4c fill-grey clearfix'>
+      <div class='fill-white clearfix'>
+        <div class='col3'>
+          <div class='doc-nav'>
+            <form class='doc-search contain pad2'>
+              <input class='stretch' type='text' placeholder='Filter'>
+              <span class='icon search'></span>
+            </form>
+            {% if page.navigation %}
+            {% for heading in page.navigation %}
+              <nav class='v small'>
+                <a class='pad1y2x heading' href='#{{heading[0]|replace:' ','_'}}'><strong>{{heading[0]}}</strong></a>
+              {% for item in heading[1] %}
+                <a class='pad1y2x' href='#{{item|replace:' ','_'}}'>{{item | replace:'-class','' | replace:'-protocol',''}}</a>
+              {% endfor %}
+              </nav>
+            {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+        <div id='docs' class='col9 doc-content prose keyline-left'>
+          <div class='doc pad4'>
+            {{content}}
+          </div>
+          <div class='keyline-top small center'>
+            <div class='pad2'>
+              The code and documentation to <a href='https://github.com/mapbox/mapbox-ios-sdk'>mapbox-ios-sdk is hosted on GitHub</a> where you can contribute changes and improvements.
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
-</div>
-
 {% include developers-footer.html %}
 
 <script>
     var docs = new Docs();
-    docs.bindSearch($('.doc-search input'), $('.doc-nav ul'));
+    docs.bindSearch($('.doc-search input'), $('nav.v'));
 </script>

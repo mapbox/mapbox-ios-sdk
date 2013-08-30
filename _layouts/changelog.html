@@ -3,42 +3,45 @@ layout: default
 section: developers
 class: box
 ---
-<style>
-.doc-footer,
-.doc-content .doc { border-left:0px; }
-</style>
-<div class='clearfix doc-header pad3 fillL'>
-  <div class='cell6'>
-    <h2>{{site.title}}</h2>
-    <p>{{site.description}}</p>
+<div class='clearfix doc-header fill-light'>
+  <div class='col12 pad4x contain'>
+    <a class='tag pad1y2x fill-darken0' href='{{site.url}}/{{page.section|downcase}}'>{{page.section}}</a>
   </div>
-  <ul class='cell6 doc-subnav clearfix'>
-    <li><a href='{{site.baseurl}}/'>Guide</a></li>
-    <li><a href='{{site.baseurl}}/api/'>API</a></li>
-    <li><a href='{{site.baseurl}}/examples/'>Examples</a></li>
-    <li><a href='{{site.baseurl}}/changelog/' class='active'>Changelog</a></li>
-  </ul>
-</div>
 
-<div class='doc-page pad3c fillM clearfix'>
-  <div class='fillW prose doc-content clearfix' style='border:0'>
-    <div class='doc pad2'>
-      {% for item in page.releases %}
-        <h2 id='{{item.version|replace:' ', '_'}}'>{{item.version}} {% if item.date %}<small>{{item.date|date:'%B %d %Y'}}</small>{% endif %}</h2>
-        <ul class='checklist'>
-          {% for item in item.notes %}
-          <li class='check'>{{item | markdownify}}</li>
-          {% endfor %}
-        </ul>
-      {% endfor %}
+  <div class='pad4 clearfix'>
+      <div class='col6'>
+        <h2>{{site.title}}</h2>
+        <p>{{site.description}}</p>
+      </div>
+
+      <nav class='col6 pill clearfix'>
+        <a class='button col3' href='{{site.baseurl}}/'>Guide</a>
+        <a class='button col3' href='{{site.baseurl}}/api/'>API</a>
+        <a class='button col3' href='{{site.baseurl}}/examples/'>Examples</a>
+        <a class='button col3 active' href='{{site.baseurl}}/changelog/'>Changelog</a>
+      </nav>
     </div>
-    <div class='doc-footer'>
-      <div class='pad2'>
-        The code and documentation to <a href='http://github.com/mapbox/mapbox-ios-sdk'>mapbox-ios-sdk is hosted on GitHub</a> where you can contribute changes and improvements.
+
+    <div class='doc-page pad4c fill-grey clearfix'>
+      <div class='fill-white prose doc-content clearfix' style='border:0'>
+        {% for item in page.releases %}
+        <div class='doc pad4 keyline-top'>
+          <h2 id='{{item.version|replace:' ', '_'}}'>{{item.version}} {% if item.date %}<small>{{item.date|date:'%B %d %Y'}}</small>{% endif %}</h2>
+          <ul class='checklist'>
+            {% for item in item.notes %}
+            <li class='check'>{{item | markdownify}}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+        <div class='keyline-top small center'>
+          <div class='pad2'>
+            The code and documentation to <a href='http://github.com/mapbox/mapbox-ios-sdk'>mapbox-ios-sdk is hosted on GitHub</a> where you can contribute changes and improvements.
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 {% include developers-footer.html %}
 

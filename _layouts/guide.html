@@ -1,54 +1,59 @@
 ---
 layout: default
 section: developers
-class: box
 ---
-<div class='clearfix doc-header pad3 fillL'>
-  <div class='cell6'>
-    <h2>{{site.title}}</h2>
-    <p>{{site.description}}</p>
+<div class='clearfix doc-header fill-light'>
+  <div class='col12 pad4x contain'>
+    <a class='tag pad1y2x fill-darken0' href='{{site.url}}/{{page.section|downcase}}'>{{page.section}}</a>
   </div>
-  <ul class='cell6 doc-subnav clearfix'>
-    <li><a href='{{site.baseurl}}/' class='active'>Guide</a></li>
-    <li><a href='{{site.baseurl}}/api/'>API</a></li>
-    <li><a href='{{site.baseurl}}/examples/'>Examples</a></li>
-    <li><a href='{{site.baseurl}}/changelog/'>Changelog</a></li>
-  </ul>
-</div>
 
-<div class='doc-page pad3c fillM clearfix'>
-<div class='fillW clearfix'>
-  <div class='cell3'>
-    <div class='doc-nav'>
-      {% if page.navigation %}
-      {% for section in page.navigation %}
-        <ul class='nav anchors'>
-          <li class='heading'><a href='#{{section.title|downcase|replace:' ','_'}}'>{{section.title}}</a></li>
-        {% for item in section.items %}
-        {% if item.hash %}
-          <li><a href='#{{item.hash}}'>{{item.text}}</a></li>
-        {% else %}
-          <li><a href='#{{item|downcase|replace:' ','_'}}'>{{item}}</a></li>
-        {% endif %}
-        {% endfor %}
-        </ul>
-      {% endfor %}
-      {% endif %}
+  <div class='pad4 clearfix'>
+      <div class='col6'>
+        <h2>{{site.title}}</h2>
+        <p>{{site.description}}</p>
+      </div>
+      <nav class='col6 pill clearfix'>
+        <a class='button col3 active' href='{{site.baseurl}}/'>Guide</a>
+        <a class='button col3' href='{{site.baseurl}}/api/'>API</a>
+        <a class='button col3' href='{{site.baseurl}}/examples/'>Examples</a>
+        <a class='button col3' href='{{site.baseurl}}/changelog/'>Changelog</a>
+      </nav>
     </div>
-  </div>
-  <div class='cell9 doc-content prose'>
-    <div class='doc pad2'>
-      <h1 id='{{page.title|downcase|replace:' ','_'}}'>{{page.title}}</h1>
-      {{content}}
-    </div>
-    <div class='doc-footer'>
-      <div class='pad2'>
-        The code and documentation to <a href='http://github.com/mapbox/mapbox-ios-sdk'>mapbox-ios-sdk is hosted on GitHub</a> where you can contribute changes and improvements.
+
+    <div class='doc-page pad4c fill-grey clearfix'>
+      <div class='fill-white clearfix'>
+        <div class='col3 pad2y'>
+          <div class='doc-nav'>
+            {% if page.navigation %}
+            {% for section in page.navigation %}
+              <nav class='v small anchors'>
+                <a class='pad1y2x heading' href='#{{section.title|downcase|replace:' ','_'}}'><strong>{{section.title}}</strong></a>
+                {% for item in section.items %}
+                {% if item.hash %}
+                <a class='pad1y2x' href='#{{item.hash}}'>{{item.text}}</a>
+                {% else %}
+                <a class='pad1y2x' href='#{{item|downcase|replace:' ','_'}}'>{{item}}</a>
+                {% endif %}
+                {% endfor %}
+              </nav>
+            {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+        <div class='col9 doc-content keyline-left prose'>
+          <div class='doc pad4'>
+            <h1 id='{{page.title|downcase|replace:' ','_'}}'>{{page.title}}</h1>
+            {{content}}
+          </div>
+          <div class='keyline-top small center'>
+            <div class='pad2'>
+              The code and documentation to <a href='http://github.com/mapbox/mapbox-ios-sdk'>mapbox-ios-sdk is hosted on GitHub</a> where you can contribute changes and improvements.
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
-</div>
 
 {% include developers-footer.html %}
 
