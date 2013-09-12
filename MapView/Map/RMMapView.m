@@ -2695,7 +2695,7 @@
     // Synchronize marker movement with the map scroll view
     if (animated && !_mapScrollView.isZooming)
     {
-        [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
         [CATransaction setAnimationDuration:0.30];
     }
     else
@@ -3092,7 +3092,7 @@
             [_locationManager stopUpdatingHeading];
 
             [CATransaction setAnimationDuration:0.5];
-            [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+            [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
 
             [UIView animateWithDuration:(animated ? 0.5 : 0.0)
                                   delay:0.0
@@ -3144,7 +3144,7 @@
             }
 
             [CATransaction setAnimationDuration:0.5];
-            [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+            [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
 
             [UIView animateWithDuration:(animated ? 0.5 : 0.0)
                                   delay:0.0
@@ -3320,7 +3320,7 @@
         //
         [CATransaction begin];
         [CATransaction setAnimationDuration:0.75];
-        [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
 
         CABasicAnimation *bounceAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
         bounceAnimation.repeatCount = MAXFLOAT;
@@ -3359,7 +3359,7 @@
 
         [CATransaction begin];
         [CATransaction setAnimationDuration:2.5];
-        [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
 
         // scale out radially
         //
@@ -3445,7 +3445,7 @@
 
         [CATransaction begin];
         [CATransaction setAnimationDuration:0.5];
-        [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
 
         [UIView animateWithDuration:0.5
                               delay:0.0
