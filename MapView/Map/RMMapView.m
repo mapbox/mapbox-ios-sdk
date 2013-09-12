@@ -1272,7 +1272,7 @@
                 {
                     // Note: Fill this in
                 } else {
-                    MaplyQuadEarthTilesLayer *maplyLayer = [[MaplyQuadEarthTilesLayer alloc] initWithCoordSystem:[maplyTileSource getMaplyCoordSystem] tileSource:maplyTileSource];
+                    MaplyQuadImageTilesLayer *maplyLayer = [[MaplyQuadImageTilesLayer alloc] initWithCoordSystem:[maplyTileSource getMaplyCoordSystem] tileSource:maplyTileSource];
                     maplyLayer.drawPriority = tileSourceCount;
                     [maplyViewC addLayer:maplyLayer];
                 }
