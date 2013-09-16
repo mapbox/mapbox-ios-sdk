@@ -11,7 +11,7 @@ categories: api
 navigation:"
 CONTENT="\
 <p>Welcome to the iOS SDK API documentation. Here you can find details on the classes, protocols, and other parts of the SDK. You might also be interested in the <a href='/mapbox-ios-sdk/Docs/publish/docset.atom'>Atom feed</a>, which allows <a href='https://developer.apple.com/library/ios/#recipes/xcode_help-documentation_preferences/SettingDocPreferencesHelp.html'>direct embedding</a> of the documentation into Xcode.</p>
-<p><img src='http://farm9.staticflickr.com/8532/8596722686_3edf70b878_z.jpg'/></p>
+<p><img src='https://farm9.staticflickr.com/8532/8596722686_3edf70b878_z.jpg'/></p>
 "
 
 scrape() {
