@@ -72,41 +72,9 @@ typedef enum : short {
 
 #pragma mark -
 
-/** The RMTileCacheBackgroundDelegate protocol is for receiving notifications about background tile cache download operations. */
-@protocol RMTileCacheBackgroundDelegate <NSObject>
-
-@optional
-
-/** Sent when the background caching operation begins.
-*   @param tileCache The tile cache. 
-*   @param tileCount The total number of tiles required for coverage of the desired geographic area. 
-*   @param tileSource The tile source providing the tiles. */
-- (void)tileCache:(RMTileCache *)tileCache didBeginBackgroundCacheWithCount:(int)tileCount forTileSource:(id <RMTileSource>)tileSource;
-
-/** Sent upon caching of each tile in a background cache operation.
-*   @param tileCache The tile cache. 
-*   @param tile A structure representing the tile in question. 
-*   @param tileIndex The index of the tile in question, beginning with `1` and ending with totalTileCount. 
-*   @param totalTileCount The total number of of tiles required for coverage of the desired geographic area. */
-- (void)tileCache:(RMTileCache *)tileCache didBackgroundCacheTile:(RMTile)tile withIndex:(int)tileIndex ofTotalTileCount:(int)totalTileCount;
-
-/** Sent when all tiles have completed downloading and caching. 
-*   @param tileCache The tile cache. */
-- (void)tileCacheDidFinishBackgroundCache:(RMTileCache *)tileCache;
-
-/** Sent when the cache download operation has completed cancellation and the cache object is safe to dispose of. 
-*   @param tileCache The tile cache. */
-- (void)tileCacheDidCancelBackgroundCache:(RMTileCache *)tileCache;
-
-@end
-
-#pragma mark -
-
 /** An RMTileCache object manages memory-based and disk-based caches for map tiles that have been retrieved from the network. 
 *
 *   An RMMapView has one RMTileCache across all tile sources, which is further divided according to each tile source's uniqueTilecacheKey property in order to keep tiles separate in the cache.
-*
-*   An RMTileCache is a key component of offline map use. All tile requests pass through the tile cache and are served from cache if available, avoiding network operation. If tiles exist in cache already, a tile source that is instantiated when offline will still be able to serve tile imagery to the map renderer for areas that have been previously cached. This can occur either from normal map use, since all tiles are cached after being retrieved, or from proactive caching ahead of time using the beginBackgroundCacheForTileSource:southWest:northEast:minZoom:maxZoom: method. 
 *
 *   @see [RMDatabaseCache initUsingCacheDir:] */
 @interface RMTileCache : NSObject <RMTileCache>
@@ -115,11 +83,38 @@ typedef enum : short {
 
 /** Initializes and returns a newly allocated cache object with specified expiry period.
 *
+*   The internal memory-based and disk-based caches will be initialized to default settings or according to a Route-Me property list included as a resource in your project. See "File-based cache configuration" in the SDK Guide for details.
+*
 *   If the `init` method is used to initialize a cache instead, a period of `0` is used. In that case, time-based expiration of tiles is not performed, but rather the cached tile count is used instead.
 *
 *   @param period A period of time after which tiles should be expunged from the cache.
 *   @return An initialized cache object or `nil` if the object couldn't be created. */
 - (id)initWithExpiryPeriod:(NSTimeInterval)period;
+
+/** Initializes and returns a newly allocated cache object with the supplied tile caches.
+ *
+ *  The internal memory cache will be initialized with a default size and the expiry period is set to `0`
+ *
+ *   @param caches An array containing memory-based or disk-based caches implementing the `RMTileCache` protocol.
+ *   @return An initialized cache object or `nil` if the object couldn't be created. */
+- (id)initWithCaches:(NSArray *)caches;
+
+/** Initializes and returns a newly allocated cache object with the supplied tile caches and expiry period.
+ *
+ *  The internal memory cache will be initialized with a default size.
+ *
+ *   @param caches An array containing memory-based or disk-based caches implementing the `RMTileCache` protocol.
+ *   @param period A period of time after which tiles should be expunged from the cache.
+ *   @return An initialized cache object or `nil` if the object couldn't be created. */
+- (id)initWithCaches:(NSArray *)caches andExpiryPeriod:(NSTimeInterval)period;
+
+/** Initializes and returns a newly allocated cache object with the supplied memory cache, other tile caches and expiry period.
+ *
+ *   @param memoryCache RMMemoryCache object to be used for fast memory-based caching of the most recently used tiles.
+ *   @param caches An array containing memory-based or disk-based caches implementing the `RMTileCache` protocol.
+ *   @param period A period of time after which tiles should be expunged from the cache.
+ *   @return An initialized cache object or `nil` if the object couldn't be created. */
+- (id)initWithMemoryCache:(RMMemoryCache *)memoryCache otherCaches:(NSArray *)caches andExpiryPeriod:(NSTimeInterval)period;
 
 /** @name Identifying Cache Objects */
 
@@ -137,30 +132,14 @@ typedef enum : short {
 - (void)addCache:(id <RMTileCache>)cache;
 - (void)insertCache:(id <RMTileCache>)cache atIndex:(NSUInteger)index;
 
-/** The list of caches managed by a cache manager. This could include memory-based, disk-based, or other types of caches. */
-@property (nonatomic, readonly, strong) NSArray *tileCaches;
+/** Removes a given cache from the cache management system.
+ *
+ *   @param cache A memory-based or disk-based cache. */
+- (void)removeCache:(id <RMTileCache>)cache;
+
+/** The list of caches managed by a cache manager. This could include memory-based, disk-based, or other types of caches conforming to the RMTileCache protocol. */
+@property (nonatomic, strong) NSArray *tileCaches;
 
 - (void)didReceiveMemoryWarning;
-
-/** @name Background Downloading */
-
-/** A delegate to notify of background tile cache download operations. */
-@property (nonatomic, weak) id <RMTileCacheBackgroundDelegate>backgroundCacheDelegate;
-
-/** Whether or not the tile cache is currently background caching. */
-@property (nonatomic, readonly, assign) BOOL isBackgroundCaching;
-
-/** Tells the tile cache to begin background caching. Progress during the caching operation can be observed by implementing the RMTileCacheBackgroundDelegate protocol.
-*   @param tileSource The tile source from which to retrieve tiles.
-*   @param southWest The southwest corner of the geographic area to cache.
-*   @param northEast The northeast corner of the geographic area to cache. 
-*   @param minZoom The minimum zoom level to cache. 
-*   @param maxZoom The maximum zoom level to cache. */
-- (void)beginBackgroundCacheForTileSource:(id <RMTileSource>)tileSource southWest:(CLLocationCoordinate2D)southWest northEast:(CLLocationCoordinate2D)northEast minZoom:(float)minZoom maxZoom:(float)maxZoom;
-
-/** Cancel any background caching. 
-*
-*   This method returns immediately so as to not block the calling thread. If you wish to be notified of the actual cancellation completion, implement the tileCacheDidCancelBackgroundCache: delegate method. */
-- (void)cancelBackgroundCache;
 
 @end

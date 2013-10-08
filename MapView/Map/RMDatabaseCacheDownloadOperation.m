@@ -1,5 +1,5 @@
 //
-//  RMTileCacheDownloadOperation.m
+//  RMDatabaseCacheDownloadOperation.m
 //
 // Copyright (c) 2008-2013, Route-Me Contributors
 // All rights reserved.
@@ -25,16 +25,17 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#import "RMTileCacheDownloadOperation.h"
+#import "RMDatabaseCacheDownloadOperation.h"
+#import "RMDatabaseCache.h"
 
-@implementation RMTileCacheDownloadOperation
+@implementation RMDatabaseCacheDownloadOperation
 {
     RMTile _tile;
     id <RMTileSource>_source;
-    RMTileCache *_cache;
+    RMDatabaseCache *_cache;
 }
 
-- (id)initWithTile:(RMTile)tile forTileSource:(id <RMTileSource>)source usingCache:(RMTileCache *)cache
+- (id)initWithTile:(RMTile)tile forTileSource:(id <RMTileSource>)source usingCache:(RMDatabaseCache *)cache
 {
     if (!(self = [super init]))
         return nil;
@@ -42,7 +43,8 @@
     _tile   = tile;
     _source = source;
     _cache  = cache;
-
+    self.tileExisted = NO;
+    
     return self;
 }
 
@@ -54,12 +56,19 @@
     if ([self isCancelled])
         return;
 
-    if ( ! [_cache cachedImage:_tile withCacheKey:[_source uniqueTilecacheKey]])
+    if ([_cache containsTile:_tile withCacheKey:[_source uniqueTilecacheKey]])
+    {
+        self.tileExisted = YES;
+    }
+    else
     {
         if ([self isCancelled])
             return;
 
-        if ( ! [_source imageForTile:_tile inCache:_cache])
+        UIImage *image = [_source imageForTile:_tile inCache:nil];
+        if (image)
+            [_cache addImageAndWait:image forTile:_tile withCacheKey:[_source uniqueTilecacheKey]];
+        else
             [self cancel];
     }
 }
