@@ -1274,6 +1274,7 @@
                 } else {
                     MaplyQuadImageTilesLayer *maplyLayer = [[MaplyQuadImageTilesLayer alloc] initWithCoordSystem:[maplyTileSource getMaplyCoordSystem] tileSource:maplyTileSource];
                     maplyLayer.drawPriority = tileSourceCount;
+                    maplyLayer.useTargetZoomLevel = false;
                     [maplyViewC addLayer:maplyLayer];
                 }
             }

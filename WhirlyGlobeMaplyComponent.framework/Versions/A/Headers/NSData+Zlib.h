@@ -20,13 +20,21 @@
 
 #import <Foundation/Foundation.h>
 
+/** The NSData zlib category adds compress and uncompress methods to
+    NSData.
+  */
 @interface NSData(zlib)
 
-/// Return a compressed version of the given data
+/// Return a compressed version of the data.
 - (NSData *) compressData;
 
 /// Return an uncompressed verison of the given data
 - (NSData *) uncompressGZip;
 
-
 @end
+
+// A function we can call to force the linker to bring in categories
+#ifdef __cplusplus
+extern "C"
+#endif
+void NSDataDummyFunc();

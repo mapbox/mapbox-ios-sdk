@@ -71,6 +71,11 @@
     return [tileSource tileSideLength];
 }
 
+- (bool)tileIsLocal:(MaplyTileID)tileID
+{
+    return true;
+}
+
 /// Return the image for a given tile
 - (UIImage *)imageForTile:(MaplyTileID)tileID
 {
