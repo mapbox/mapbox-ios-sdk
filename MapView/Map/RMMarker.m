@@ -170,11 +170,13 @@
 
 - (void)replaceUIImage:(UIImage *)image anchorPoint:(CGPoint)_anchorPoint
 {
+    [self willChangeValueForKey:@"contents"];
     self.contents = (id)[image CGImage];
     self.bounds = CGRectMake(0, 0, image.size.width, image.size.height);
     self.anchorPoint = _anchorPoint;
 
     self.masksToBounds = NO;
+    [self didChangeValueForKey:@"contents"];
 }
 
 - (void)setLabel:(UIView *)aView

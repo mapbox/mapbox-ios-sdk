@@ -427,6 +427,7 @@
     [_zoomDelegateQueue cancelAllOperations];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_mapScrollView removeObserver:self forKeyPath:@"contentOffset"];
+    [_userLocation.layer removeObserver:self forKeyPath:@"contents"];
     [_tileSourcesContainer cancelAllDownloads];
     _locationManager.delegate = nil;
     [_locationManager stopUpdatingLocation];
@@ -1400,6 +1401,15 @@
 
 - (void)observeValueForKeyPath:(NSString *)aKeyPath ofObject:(id)anObject change:(NSDictionary *)change context:(void *)context
 {
+    if (anObject == _userLocation.layer) {
+        if (_userLocationTrackingView) {
+            _userLocationTrackingView.image = [UIImage imageWithCGImage:(CGImageRef)_userLocation.layer.contents
+                                                                  scale:_userLocation.layer.contentsScale
+                                                            orientation:UIImageOrientationUp];
+        }
+        return;
+    }
+    
     NSValue *oldValue = [change objectForKey:NSKeyValueChangeOldKey],
             *newValue = [change objectForKey:NSKeyValueChangeNewKey];
 
@@ -3109,7 +3119,7 @@
 
             if (_userLocationTrackingView || _userHeadingTrackingView || _userHaloTrackingView)
             {
-                [_userLocationTrackingView removeFromSuperview]; _userLocationTrackingView = nil;
+                [_userLocationTrackingView removeFromSuperview]; _userLocationTrackingView = nil; [_userLocation.layer removeObserver:self forKeyPath:@"contents"];
                 [_userHeadingTrackingView removeFromSuperview]; _userHeadingTrackingView = nil;
                 [_userHaloTrackingView removeFromSuperview]; _userHaloTrackingView = nil;
             }
@@ -3132,7 +3142,7 @@
 
             if (_userLocationTrackingView || _userHeadingTrackingView || _userHaloTrackingView)
             {
-                [_userLocationTrackingView removeFromSuperview]; _userLocationTrackingView = nil;
+                [_userLocationTrackingView removeFromSuperview]; _userLocationTrackingView = nil; [_userLocation.layer removeObserver:self forKeyPath:@"contents"];
                 [_userHeadingTrackingView removeFromSuperview]; _userHeadingTrackingView = nil;
                 [_userHaloTrackingView removeFromSuperview]; _userHaloTrackingView = nil;
             }
@@ -3212,6 +3222,8 @@
                                                          UIViewAutoresizingFlexibleBottomMargin;
             
             [self insertSubview:_userLocationTrackingView aboveSubview:_userHeadingTrackingView];
+            
+            [_userLocation.layer addObserver:self forKeyPath:@"contents" options:NSKeyValueObservingOptionNew context:NULL];
 
             if (self.zoom < 3)
                 [self zoomByFactor:exp2f(3 - [self zoom]) near:self.center animated:YES];
