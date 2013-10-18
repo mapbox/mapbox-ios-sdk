@@ -78,8 +78,10 @@
 
         _infoDictionary = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:[tileJSON dataUsingEncoding:NSUTF8StringEncoding]
                                                                           options:0
-                                                                            error:nil];
-
+                                                                            error:NULL];
+        if (_infoDictionary == nil)
+            return nil; // make sure we have a valid MapBox source
+        
         _tileJSON = tileJSON;
 
         id dataObject = nil;
@@ -94,7 +96,7 @@
                     
                     NSMutableString *jsonString = nil;
                     
-                    if (dataURL && (jsonString = [NSMutableString brandedStringWithContentsOfURL:dataURL encoding:NSUTF8StringEncoding error:nil]) && jsonString)
+                    if (dataURL && (jsonString = [NSMutableString brandedStringWithContentsOfURL:dataURL encoding:NSUTF8StringEncoding error:NULL]) && jsonString)
                     {
                         if ([jsonString hasPrefix:@"grid("])
                         {
@@ -104,7 +106,7 @@
                         
                         id jsonObject = nil;
                         
-                        if ((jsonObject = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil]) && [jsonObject isKindOfClass:[NSDictionary class]])
+                        if ((jsonObject = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:NULL]) && [jsonObject isKindOfClass:[NSDictionary class]])
                         {
                             for (NSDictionary *feature in [jsonObject objectForKey:@"features"])
                             {
@@ -154,7 +156,7 @@
                                                                                                         options:NSAnchoredSearch & NSBackwardsSearch
                                                                                                           range:NSMakeRange(0, [[referenceURL absoluteString] length])]];
     
-    if ([[referenceURL pathExtension] isEqualToString:@"json"] && (dataObject = [NSString brandedStringWithContentsOfURL:referenceURL encoding:NSUTF8StringEncoding error:nil]) && dataObject)
+    if ([[referenceURL pathExtension] isEqualToString:@"json"] && (dataObject = [NSString brandedStringWithContentsOfURL:referenceURL encoding:NSUTF8StringEncoding error:NULL]) && dataObject)
         return [self initWithTileJSON:dataObject enablingDataOnMapView:mapView];
 
     return nil;
@@ -174,7 +176,8 @@
 
 - (void)dealloc
 {
-    dispatch_release(_dataQueue);
+    if (_dataQueue) // check for proper initialization
+        dispatch_release(_dataQueue);
 }
 
 #pragma mark 
