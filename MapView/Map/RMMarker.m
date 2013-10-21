@@ -35,6 +35,7 @@
 @synthesize label;
 @synthesize textForegroundColor;
 @synthesize textBackgroundColor;
+@synthesize contentView;
 
 #define defaultMarkerAnchorPoint CGPointMake(0.5, 0.5)
 

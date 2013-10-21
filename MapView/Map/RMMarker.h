@@ -46,6 +46,10 @@ typedef enum {
     UIColor *textBackgroundColor;
 }
 
+/** @name Custom "content" view */
+/** Custom "content" view that can be any width/height. If this is set, title/subtitle/titleView/subtitleView are all ignored. */
+@property (nonatomic, retain) UIView *contentView;
+
 /** @name Setting Label Properties */
 
 /** A custom label for the marker. The label is shown when first set. */
