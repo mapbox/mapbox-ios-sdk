@@ -480,43 +480,34 @@
                     return;
                 }
 
-                RMProjectedPoint clusterMarkerPosition;
-
+                RMProjectedPoint clusterMarkerPosition = RMProjectedPointMake(_boundingBox.origin.x + halfWidth, _boundingBox.origin.y + (_boundingBox.size.height / 2.0));
                 if (findGravityCenter)
                 {
-                    double averageX = 0.0, averageY = 0.0;
-
-                    for (RMAnnotation *annotation in enclosedAnnotations)
-                    {
-                        averageX += annotation.projectedLocation.x;
-                        averageY += annotation.projectedLocation.y;
-                    }
-
-                    averageX /= (double)enclosedAnnotationsCount;
-                    averageY /= (double)enclosedAnnotationsCount;
-
-                    double halfClusterMarkerWidth = clusterMarkerSize.width / 2.0,
-                           halfClusterMarkerHeight = clusterMarkerSize.height / 2.0;
-
-                    if (averageX - halfClusterMarkerWidth < _boundingBox.origin.x)
-                        averageX = _boundingBox.origin.x + halfClusterMarkerWidth;
-                    if (averageX + halfClusterMarkerWidth > _boundingBox.origin.x + _boundingBox.size.width)
-                        averageX = _boundingBox.origin.x + _boundingBox.size.width - halfClusterMarkerWidth;
-                    if (averageY - halfClusterMarkerHeight < _boundingBox.origin.y)
-                        averageY = _boundingBox.origin.y + halfClusterMarkerHeight;
-                    if (averageY + halfClusterMarkerHeight > _boundingBox.origin.y + _boundingBox.size.height)
-                        averageY = _boundingBox.origin.y + _boundingBox.size.height - halfClusterMarkerHeight;
-
+                    RMProjectedPoint center = RMProjectedPointMake(_boundingBox.origin.x + halfWidth, _boundingBox.origin.y + (_boundingBox.size.height / 2.0));
+                    
+                    //Sort annotation by the distance from central point
+                    NSArray *sortedAnnotations = [enclosedAnnotations sortedArrayUsingComparator:^NSComparisonResult(RMAnnotation *obj1, RMAnnotation *obj2) {
+                        
+                        double distance1 = RMEuclideanDistanceBetweenProjectedPoints(obj1.projectedLocation, center);
+                        double distance2 = RMEuclideanDistanceBetweenProjectedPoints(obj2.projectedLocation, center);
+                        
+                        if (distance1 < distance2)
+                        {
+                            return NSOrderedAscending;
+                        }
+                        else
+                        {
+                            return NSOrderedDescending;
+                        }
+                    }];
+                    
+                    RMAnnotation *nearestAnnotation = [sortedAnnotations objectAtIndex:0];
+                    
                     // TODO: anchorPoint
-                    clusterMarkerPosition = RMProjectedPointMake(averageX, averageY);
+                    clusterMarkerPosition = RMProjectedPointMake(nearestAnnotation.projectedLocation.x, nearestAnnotation.projectedLocation.y);
                 }
-                else
-                {
-                    clusterMarkerPosition = RMProjectedPointMake(_boundingBox.origin.x + halfWidth, _boundingBox.origin.y + (_boundingBox.size.height / 2.0));
-                }
-
+                
                 CLLocationCoordinate2D clusterMarkerCoordinate = [[_mapView projection] projectedPointToCoordinate:clusterMarkerPosition];
-
                 _cachedClusterAnnotation = [[RMAnnotation alloc] initWithMapView:_mapView
                                                                      coordinate:clusterMarkerCoordinate
                                                                        andTitle:[NSString stringWithFormat:@"%d", enclosedAnnotationsCount]];
