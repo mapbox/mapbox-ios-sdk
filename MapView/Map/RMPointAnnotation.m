@@ -29,6 +29,7 @@
 #import "RMPointAnnotation.h"
 
 #import "RMMarker.h"
+#import "RMMapView.h"
 
 @implementation RMPointAnnotation
 
@@ -44,7 +45,7 @@
 {
     if ( ! [super layer])
     {
-        RMMarker *marker = [[RMMarker alloc] initWithMapBoxMarkerImage];
+        RMMarker *marker = [[RMMarker alloc] initWithMapBoxMarkerImage:nil tintColor:(RMPostVersion7 ? self.mapView.tintColor : nil)];
 
         marker.canShowCallout = YES;
 

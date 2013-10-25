@@ -83,6 +83,12 @@
 		B8F3FC650EA2E792004D8F85 /* RMMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F3FC630EA2E792004D8F85 /* RMMarker.m */; };
 		D1437B36122869E400888DAE /* RMDBMapSource.m in Sources */ = {isa = PBXBuildFile; fileRef = D1437B32122869E400888DAE /* RMDBMapSource.m */; };
 		D1437B37122869E400888DAE /* RMDBMapSource.h in Headers */ = {isa = PBXBuildFile; fileRef = D1437B33122869E400888DAE /* RMDBMapSource.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		DD07A23817F3AF9800E420B2 /* HeadingAngleMaskSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = DD07A23217F3AF9800E420B2 /* HeadingAngleMaskSmall.png */; };
+		DD07A23917F3AF9800E420B2 /* HeadingAngleMaskMedium.png in Resources */ = {isa = PBXBuildFile; fileRef = DD07A23317F3AF9800E420B2 /* HeadingAngleMaskMedium.png */; };
+		DD07A23A17F3AF9800E420B2 /* HeadingAngleMaskLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = DD07A23417F3AF9800E420B2 /* HeadingAngleMaskLarge.png */; };
+		DD07A23B17F3AF9800E420B2 /* HeadingAngleMaskSmall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD07A23517F3AF9800E420B2 /* HeadingAngleMaskSmall@2x.png */; };
+		DD07A23C17F3AF9800E420B2 /* HeadingAngleMaskMedium@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD07A23617F3AF9800E420B2 /* HeadingAngleMaskMedium@2x.png */; };
+		DD07A23D17F3AF9800E420B2 /* HeadingAngleMaskLarge@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD07A23717F3AF9800E420B2 /* HeadingAngleMaskLarge@2x.png */; };
 		DD1985C1165C5F6400DF667F /* RMTileMillSource.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1985BF165C5F6400DF667F /* RMTileMillSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD1985C2165C5F6400DF667F /* RMTileMillSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DD1985C0165C5F6400DF667F /* RMTileMillSource.m */; };
 		DD1E3C6E161F954F004FC649 /* SMCalloutView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1E3C6C161F954F004FC649 /* SMCalloutView.h */; };
@@ -100,19 +106,19 @@
 		DD2B375214CF814F008DE8CB /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B374E14CF814F008DE8CB /* FMDatabaseQueue.m */; };
 		DD2B375514CF8197008DE8CB /* RMMBTilesSource.h in Headers */ = {isa = PBXBuildFile; fileRef = DD2B375314CF8197008DE8CB /* RMMBTilesSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD2B375614CF8197008DE8CB /* RMMBTilesSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B375414CF8197008DE8CB /* RMMBTilesSource.m */; };
+		DD36766B17D94F980001F27B /* mapbox-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD36766A17D94F980001F27B /* mapbox-logo@2x.png */; };
 		DD3BEF7915913C55007892D8 /* RMAttributionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = DD3BEF7715913C55007892D8 /* RMAttributionViewController.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		DD3BEF7A15913C55007892D8 /* RMAttributionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3BEF7815913C55007892D8 /* RMAttributionViewController.m */; };
 		DD4195C9162356900049E6BA /* RMBingSource.h in Headers */ = {isa = PBXBuildFile; fileRef = DD4195C7162356900049E6BA /* RMBingSource.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		DD4195CA162356900049E6BA /* RMBingSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4195C8162356900049E6BA /* RMBingSource.m */; };
 		DD41960116250ED40049E6BA /* RMTileCacheDownloadOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = DD4195FF16250ED40049E6BA /* RMTileCacheDownloadOperation.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		DD41960216250ED40049E6BA /* RMTileCacheDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = DD41960016250ED40049E6BA /* RMTileCacheDownloadOperation.m */; };
-		DD41961F16263E400049E6BA /* libGRMustache5-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD41961E16263E400049E6BA /* libGRMustache5-iOS.a */; };
 		DD4BE198161CE296003EF677 /* MapBox.h in Headers */ = {isa = PBXBuildFile; fileRef = DD4BE197161CE296003EF677 /* MapBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DD5A200B15CAD09400FE4157 /* GRMustache.h in Headers */ = {isa = PBXBuildFile; fileRef = DD5A200A15CAD09400FE4157 /* GRMustache.h */; };
 		DD5FA1EB15E2B020004EB6C5 /* RMLoadingTileView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD5FA1E915E2B020004EB6C5 /* RMLoadingTileView.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		DD5FA1EC15E2B020004EB6C5 /* RMLoadingTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD5FA1EA15E2B020004EB6C5 /* RMLoadingTileView.m */; };
 		DD63176317D15EB5008CA79B /* RMCircleAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = DD63176117D15EB5008CA79B /* RMCircleAnnotation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD63176417D15EB5008CA79B /* RMCircleAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = DD63176217D15EB5008CA79B /* RMCircleAnnotation.m */; };
+		DD63DD531811AD0B00726E03 /* libGRMustache6-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD63DD521811AD0B00726E03 /* libGRMustache6-iOS.a */; };
 		DD7C7E38164C894F0021CCA5 /* RMStaticMapView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD7C7E36164C894F0021CCA5 /* RMStaticMapView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD7C7E39164C894F0021CCA5 /* RMStaticMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD7C7E37164C894F0021CCA5 /* RMStaticMapView.m */; };
 		DD8CDB4A14E0507100B73EB9 /* RMMapQuestOSMSource.h in Headers */ = {isa = PBXBuildFile; fileRef = DD8CDB4814E0507100B73EB9 /* RMMapQuestOSMSource.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -126,7 +132,6 @@
 		DD932BB7165C287000D69D49 /* HeadingAngleSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BA9165C287000D69D49 /* HeadingAngleSmall.png */; };
 		DD932BB8165C287000D69D49 /* HeadingAngleSmall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BAA165C287000D69D49 /* HeadingAngleSmall@2x.png */; };
 		DD932BB9165C287000D69D49 /* LoadingTile.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BAB165C287000D69D49 /* LoadingTile.png */; };
-		DD932BBA165C287000D69D49 /* LoadingTileZoom.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BAC165C287000D69D49 /* LoadingTileZoom.png */; };
 		DD932BBB165C287000D69D49 /* TrackingDotHalo.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BAD165C287000D69D49 /* TrackingDotHalo.png */; };
 		DD932BBC165C287000D69D49 /* TrackingDotHalo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BAE165C287000D69D49 /* TrackingDotHalo@2x.png */; };
 		DD932BBD165C287000D69D49 /* TrackingHeading.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BAF165C287000D69D49 /* TrackingHeading.png */; };
@@ -140,10 +145,22 @@
 		DD97C11616489678007C4652 /* libProj4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD97C11516489678007C4652 /* libProj4.a */; };
 		DD98B6FA14D76B930092882F /* RMMapBoxSource.h in Headers */ = {isa = PBXBuildFile; fileRef = DD98B6F814D76B930092882F /* RMMapBoxSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD98B6FB14D76B930092882F /* RMMapBoxSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DD98B6F914D76B930092882F /* RMMapBoxSource.m */; };
+		DDA257011798A95600BBB325 /* TrackingLocationOffMaskLandscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA256F61798A95600BBB325 /* TrackingLocationOffMaskLandscape@2x.png */; };
+		DDA257021798A95600BBB325 /* TrackingLocationOffMask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA256F71798A95600BBB325 /* TrackingLocationOffMask@2x.png */; };
+		DDA257031798A95600BBB325 /* TrackingLocationMaskLandscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA256F81798A95600BBB325 /* TrackingLocationMaskLandscape@2x.png */; };
+		DDA257041798A95600BBB325 /* TrackingLocationMask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA256F91798A95600BBB325 /* TrackingLocationMask@2x.png */; };
+		DDA257051798A95600BBB325 /* TrackingHeadingMaskLandscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA256FA1798A95600BBB325 /* TrackingHeadingMaskLandscape@2x.png */; };
+		DDA257061798A95600BBB325 /* TrackingHeadingMask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA256FB1798A95600BBB325 /* TrackingHeadingMask@2x.png */; };
+		DDA257071798A95600BBB325 /* Compass@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA256FC1798A95600BBB325 /* Compass@2x.png */; };
+		DDA257081798A95600BBB325 /* Compass.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA256FD1798A95600BBB325 /* Compass.png */; };
+		DDA257091798A95600BBB325 /* TrackingHeadingMask.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA256FE1798A95600BBB325 /* TrackingHeadingMask.png */; };
+		DDA2570A1798A95600BBB325 /* TrackingLocationOffMask.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA256FF1798A95600BBB325 /* TrackingLocationOffMask.png */; };
+		DDA2570B1798A95600BBB325 /* TrackingLocationMask.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA257001798A95600BBB325 /* TrackingLocationMask.png */; };
 		DDA6B8BD155CAB67003DB5D8 /* RMUserTrackingBarButtonItem.h in Headers */ = {isa = PBXBuildFile; fileRef = DDA6B8BB155CAB67003DB5D8 /* RMUserTrackingBarButtonItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDA6B8BE155CAB67003DB5D8 /* RMUserTrackingBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA6B8BC155CAB67003DB5D8 /* RMUserTrackingBarButtonItem.m */; };
 		DDC4BED5152E3BD700089409 /* RMInteractiveSource.h in Headers */ = {isa = PBXBuildFile; fileRef = DDC4BED3152E3BD700089409 /* RMInteractiveSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDC4BEF2152E3FAE00089409 /* RMInteractiveSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC4BED4152E3BD700089409 /* RMInteractiveSource.m */; };
+		DDC8D28717E92ED100A4FB32 /* LoadingTile6.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC8D28517E92ED100A4FB32 /* LoadingTile6.png */; };
 		DDE357E71651F570001DB842 /* RMPointAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = DDE357E51651F570001DB842 /* RMPointAnnotation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDE357E81651F570001DB842 /* RMPointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = DDE357E61651F570001DB842 /* RMPointAnnotation.m */; };
 		DDE357F0165223A3001DB842 /* RMShapeAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = DDE357EE165223A3001DB842 /* RMShapeAnnotation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -152,6 +169,7 @@
 		DDE357F516522661001DB842 /* RMPolylineAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = DDE357F316522661001DB842 /* RMPolylineAnnotation.m */; };
 		DDE357F816522CD8001DB842 /* RMPolygonAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = DDE357F616522CD8001DB842 /* RMPolygonAnnotation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDE357F916522CD8001DB842 /* RMPolygonAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = DDE357F716522CD8001DB842 /* RMPolygonAnnotation.m */; };
+		DDE68E5A17D94C0500F1E869 /* mapbox-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE68E5917D94C0500F1E869 /* mapbox-logo.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -244,6 +262,12 @@
 		B8F3FC630EA2E792004D8F85 /* RMMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMMarker.m; sourceTree = "<group>"; };
 		D1437B32122869E400888DAE /* RMDBMapSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMDBMapSource.m; sourceTree = "<group>"; };
 		D1437B33122869E400888DAE /* RMDBMapSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMDBMapSource.h; sourceTree = "<group>"; };
+		DD07A23217F3AF9800E420B2 /* HeadingAngleMaskSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HeadingAngleMaskSmall.png; path = Map/Resources/HeadingAngleMaskSmall.png; sourceTree = "<group>"; };
+		DD07A23317F3AF9800E420B2 /* HeadingAngleMaskMedium.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HeadingAngleMaskMedium.png; path = Map/Resources/HeadingAngleMaskMedium.png; sourceTree = "<group>"; };
+		DD07A23417F3AF9800E420B2 /* HeadingAngleMaskLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HeadingAngleMaskLarge.png; path = Map/Resources/HeadingAngleMaskLarge.png; sourceTree = "<group>"; };
+		DD07A23517F3AF9800E420B2 /* HeadingAngleMaskSmall@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "HeadingAngleMaskSmall@2x.png"; path = "Map/Resources/HeadingAngleMaskSmall@2x.png"; sourceTree = "<group>"; };
+		DD07A23617F3AF9800E420B2 /* HeadingAngleMaskMedium@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "HeadingAngleMaskMedium@2x.png"; path = "Map/Resources/HeadingAngleMaskMedium@2x.png"; sourceTree = "<group>"; };
+		DD07A23717F3AF9800E420B2 /* HeadingAngleMaskLarge@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "HeadingAngleMaskLarge@2x.png"; path = "Map/Resources/HeadingAngleMaskLarge@2x.png"; sourceTree = "<group>"; };
 		DD1985BF165C5F6400DF667F /* RMTileMillSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMTileMillSource.h; sourceTree = "<group>"; };
 		DD1985C0165C5F6400DF667F /* RMTileMillSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMTileMillSource.m; sourceTree = "<group>"; };
 		DD1E3C6C161F954F004FC649 /* SMCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMCalloutView.h; path = SMCalloutView/SMCalloutView.h; sourceTree = "<group>"; };
@@ -261,19 +285,19 @@
 		DD2B374E14CF814F008DE8CB /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
 		DD2B375314CF8197008DE8CB /* RMMBTilesSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMMBTilesSource.h; sourceTree = "<group>"; };
 		DD2B375414CF8197008DE8CB /* RMMBTilesSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMMBTilesSource.m; sourceTree = "<group>"; };
+		DD36766A17D94F980001F27B /* mapbox-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "mapbox-logo@2x.png"; path = "Map/Resources/mapbox-logo@2x.png"; sourceTree = "<group>"; };
 		DD3BEF7715913C55007892D8 /* RMAttributionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMAttributionViewController.h; sourceTree = "<group>"; };
 		DD3BEF7815913C55007892D8 /* RMAttributionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMAttributionViewController.m; sourceTree = "<group>"; };
 		DD4195C7162356900049E6BA /* RMBingSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMBingSource.h; sourceTree = "<group>"; };
 		DD4195C8162356900049E6BA /* RMBingSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMBingSource.m; sourceTree = "<group>"; };
 		DD4195FF16250ED40049E6BA /* RMTileCacheDownloadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMTileCacheDownloadOperation.h; sourceTree = "<group>"; };
 		DD41960016250ED40049E6BA /* RMTileCacheDownloadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMTileCacheDownloadOperation.m; sourceTree = "<group>"; };
-		DD41961E16263E400049E6BA /* libGRMustache5-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGRMustache5-iOS.a"; path = "GRMustache/lib/libGRMustache5-iOS.a"; sourceTree = "<group>"; };
 		DD4BE197161CE296003EF677 /* MapBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapBox.h; sourceTree = "<group>"; };
-		DD5A200A15CAD09400FE4157 /* GRMustache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRMustache.h; path = GRMustache/include/GRMustache.h; sourceTree = "<group>"; };
 		DD5FA1E915E2B020004EB6C5 /* RMLoadingTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMLoadingTileView.h; sourceTree = "<group>"; };
 		DD5FA1EA15E2B020004EB6C5 /* RMLoadingTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMLoadingTileView.m; sourceTree = "<group>"; };
 		DD63176117D15EB5008CA79B /* RMCircleAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMCircleAnnotation.h; sourceTree = "<group>"; };
 		DD63176217D15EB5008CA79B /* RMCircleAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMCircleAnnotation.m; sourceTree = "<group>"; };
+		DD63DD521811AD0B00726E03 /* libGRMustache6-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGRMustache6-iOS.a"; path = "GRMustache/lib/libGRMustache6-iOS.a"; sourceTree = "<group>"; };
 		DD6A83751644A20C0097F31F /* MapBox.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MapBox.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD7C7E36164C894F0021CCA5 /* RMStaticMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMStaticMapView.h; sourceTree = "<group>"; };
 		DD7C7E37164C894F0021CCA5 /* RMStaticMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMStaticMapView.m; sourceTree = "<group>"; };
@@ -288,7 +312,6 @@
 		DD932BA9165C287000D69D49 /* HeadingAngleSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HeadingAngleSmall.png; path = Map/Resources/HeadingAngleSmall.png; sourceTree = "<group>"; };
 		DD932BAA165C287000D69D49 /* HeadingAngleSmall@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "HeadingAngleSmall@2x.png"; path = "Map/Resources/HeadingAngleSmall@2x.png"; sourceTree = "<group>"; };
 		DD932BAB165C287000D69D49 /* LoadingTile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LoadingTile.png; path = Map/Resources/LoadingTile.png; sourceTree = "<group>"; };
-		DD932BAC165C287000D69D49 /* LoadingTileZoom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LoadingTileZoom.png; path = Map/Resources/LoadingTileZoom.png; sourceTree = "<group>"; };
 		DD932BAD165C287000D69D49 /* TrackingDotHalo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TrackingDotHalo.png; path = Map/Resources/TrackingDotHalo.png; sourceTree = "<group>"; };
 		DD932BAE165C287000D69D49 /* TrackingDotHalo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TrackingDotHalo@2x.png"; path = "Map/Resources/TrackingDotHalo@2x.png"; sourceTree = "<group>"; };
 		DD932BAF165C287000D69D49 /* TrackingHeading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TrackingHeading.png; path = Map/Resources/TrackingHeading.png; sourceTree = "<group>"; };
@@ -302,10 +325,22 @@
 		DD97C11516489678007C4652 /* libProj4.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libProj4.a; path = ../Proj4/libProj4.a; sourceTree = "<group>"; };
 		DD98B6F814D76B930092882F /* RMMapBoxSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMMapBoxSource.h; sourceTree = "<group>"; };
 		DD98B6F914D76B930092882F /* RMMapBoxSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMMapBoxSource.m; sourceTree = "<group>"; };
+		DDA256F61798A95600BBB325 /* TrackingLocationOffMaskLandscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TrackingLocationOffMaskLandscape@2x.png"; path = "Map/Resources/TrackingLocationOffMaskLandscape@2x.png"; sourceTree = "<group>"; };
+		DDA256F71798A95600BBB325 /* TrackingLocationOffMask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TrackingLocationOffMask@2x.png"; path = "Map/Resources/TrackingLocationOffMask@2x.png"; sourceTree = "<group>"; };
+		DDA256F81798A95600BBB325 /* TrackingLocationMaskLandscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TrackingLocationMaskLandscape@2x.png"; path = "Map/Resources/TrackingLocationMaskLandscape@2x.png"; sourceTree = "<group>"; };
+		DDA256F91798A95600BBB325 /* TrackingLocationMask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TrackingLocationMask@2x.png"; path = "Map/Resources/TrackingLocationMask@2x.png"; sourceTree = "<group>"; };
+		DDA256FA1798A95600BBB325 /* TrackingHeadingMaskLandscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TrackingHeadingMaskLandscape@2x.png"; path = "Map/Resources/TrackingHeadingMaskLandscape@2x.png"; sourceTree = "<group>"; };
+		DDA256FB1798A95600BBB325 /* TrackingHeadingMask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TrackingHeadingMask@2x.png"; path = "Map/Resources/TrackingHeadingMask@2x.png"; sourceTree = "<group>"; };
+		DDA256FC1798A95600BBB325 /* Compass@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Compass@2x.png"; path = "Map/Resources/Compass@2x.png"; sourceTree = "<group>"; };
+		DDA256FD1798A95600BBB325 /* Compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Compass.png; path = Map/Resources/Compass.png; sourceTree = "<group>"; };
+		DDA256FE1798A95600BBB325 /* TrackingHeadingMask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TrackingHeadingMask.png; path = Map/Resources/TrackingHeadingMask.png; sourceTree = "<group>"; };
+		DDA256FF1798A95600BBB325 /* TrackingLocationOffMask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TrackingLocationOffMask.png; path = Map/Resources/TrackingLocationOffMask.png; sourceTree = "<group>"; };
+		DDA257001798A95600BBB325 /* TrackingLocationMask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TrackingLocationMask.png; path = Map/Resources/TrackingLocationMask.png; sourceTree = "<group>"; };
 		DDA6B8BB155CAB67003DB5D8 /* RMUserTrackingBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMUserTrackingBarButtonItem.h; sourceTree = "<group>"; };
 		DDA6B8BC155CAB67003DB5D8 /* RMUserTrackingBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMUserTrackingBarButtonItem.m; sourceTree = "<group>"; };
 		DDC4BED3152E3BD700089409 /* RMInteractiveSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMInteractiveSource.h; sourceTree = "<group>"; };
 		DDC4BED4152E3BD700089409 /* RMInteractiveSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMInteractiveSource.m; sourceTree = "<group>"; };
+		DDC8D28517E92ED100A4FB32 /* LoadingTile6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LoadingTile6.png; path = Map/Resources/LoadingTile6.png; sourceTree = "<group>"; };
 		DDE357E51651F570001DB842 /* RMPointAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMPointAnnotation.h; sourceTree = "<group>"; };
 		DDE357E61651F570001DB842 /* RMPointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMPointAnnotation.m; sourceTree = "<group>"; };
 		DDE357EE165223A3001DB842 /* RMShapeAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMShapeAnnotation.h; sourceTree = "<group>"; };
@@ -314,6 +349,7 @@
 		DDE357F316522661001DB842 /* RMPolylineAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMPolylineAnnotation.m; sourceTree = "<group>"; };
 		DDE357F616522CD8001DB842 /* RMPolygonAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMPolygonAnnotation.h; sourceTree = "<group>"; };
 		DDE357F716522CD8001DB842 /* RMPolygonAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMPolygonAnnotation.m; sourceTree = "<group>"; };
+		DDE68E5917D94C0500F1E869 /* mapbox-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "mapbox-logo.png"; path = "Map/Resources/mapbox-logo.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -327,7 +363,7 @@
 				B8C974530E8A19B2007D16AD /* UIKit.framework in Frameworks */,
 				B8C974540E8A19B2007D16AD /* QuartzCore.framework in Frameworks */,
 				B8474BC10EB4019A006A0BC1 /* libsqlite3.dylib in Frameworks */,
-				DD41961F16263E400049E6BA /* libGRMustache5-iOS.a in Frameworks */,
+				DD63DD531811AD0B00726E03 /* libGRMustache6-iOS.a in Frameworks */,
 				DD97C11616489678007C4652 /* libProj4.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -601,25 +637,44 @@
 		DD932BC1165C287600D69D49 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DD280D1216EFDDD30014B549 /* examples.map-z2effxa8.json */,
 				DD932BA5165C287000D69D49 /* mapbox.png */,
 				DD932BA6165C287000D69D49 /* mapbox@2x.png */,
+				DDE68E5917D94C0500F1E869 /* mapbox-logo.png */,
+				DD36766A17D94F980001F27B /* mapbox-logo@2x.png */,
+				DDA256FD1798A95600BBB325 /* Compass.png */,
+				DDA256FC1798A95600BBB325 /* Compass@2x.png */,
 				DD932BA9165C287000D69D49 /* HeadingAngleSmall.png */,
 				DD932BAA165C287000D69D49 /* HeadingAngleSmall@2x.png */,
 				DD94D46816C2E064003D5739 /* HeadingAngleMedium.png */,
 				DD94D46916C2E064003D5739 /* HeadingAngleMedium@2x.png */,
 				DD94D46616C2E064003D5739 /* HeadingAngleLarge.png */,
 				DD94D46716C2E064003D5739 /* HeadingAngleLarge@2x.png */,
+				DD07A23217F3AF9800E420B2 /* HeadingAngleMaskSmall.png */,
+				DD07A23517F3AF9800E420B2 /* HeadingAngleMaskSmall@2x.png */,
+				DD07A23317F3AF9800E420B2 /* HeadingAngleMaskMedium.png */,
+				DD07A23617F3AF9800E420B2 /* HeadingAngleMaskMedium@2x.png */,
+				DD07A23417F3AF9800E420B2 /* HeadingAngleMaskLarge.png */,
+				DD07A23717F3AF9800E420B2 /* HeadingAngleMaskLarge@2x.png */,
 				DD932BAB165C287000D69D49 /* LoadingTile.png */,
-				DD932BAC165C287000D69D49 /* LoadingTileZoom.png */,
+				DDC8D28517E92ED100A4FB32 /* LoadingTile6.png */,
 				DD932BA7165C287000D69D49 /* TrackingDot.png */,
 				DD932BA8165C287000D69D49 /* TrackingDot@2x.png */,
 				DD932BAD165C287000D69D49 /* TrackingDotHalo.png */,
 				DD932BAE165C287000D69D49 /* TrackingDotHalo@2x.png */,
 				DD932BAF165C287000D69D49 /* TrackingHeading.png */,
 				DD932BB0165C287000D69D49 /* TrackingHeading@2x.png */,
+				DDA256FE1798A95600BBB325 /* TrackingHeadingMask.png */,
+				DDA256FB1798A95600BBB325 /* TrackingHeadingMask@2x.png */,
+				DDA256FA1798A95600BBB325 /* TrackingHeadingMaskLandscape@2x.png */,
 				DD932BB1165C287000D69D49 /* TrackingLocation.png */,
 				DD932BB2165C287000D69D49 /* TrackingLocation@2x.png */,
-				DD280D1216EFDDD30014B549 /* examples.map-z2effxa8.json */,
+				DDA257001798A95600BBB325 /* TrackingLocationMask.png */,
+				DDA256F91798A95600BBB325 /* TrackingLocationMask@2x.png */,
+				DDA256F81798A95600BBB325 /* TrackingLocationMaskLandscape@2x.png */,
+				DDA256FF1798A95600BBB325 /* TrackingLocationOffMask.png */,
+				DDA256F71798A95600BBB325 /* TrackingLocationOffMask@2x.png */,
+				DDA256F61798A95600BBB325 /* TrackingLocationOffMaskLandscape@2x.png */,
 			);
 			name = Resources;
 			path = ..;
@@ -648,8 +703,7 @@
 		DDC4BEEE152E3DEC00089409 /* GRMustache */ = {
 			isa = PBXGroup;
 			children = (
-				DD5A200A15CAD09400FE4157 /* GRMustache.h */,
-				DD41961E16263E400049E6BA /* libGRMustache5-iOS.a */,
+				DD63DD521811AD0B00726E03 /* libGRMustache6-iOS.a */,
 			);
 			name = GRMustache;
 			path = Map;
@@ -730,7 +784,6 @@
 				DD2B374914CF8041008DE8CB /* FMResultSet.h in Headers */,
 				DD2B374F14CF814F008DE8CB /* FMDatabasePool.h in Headers */,
 				DD2B375114CF814F008DE8CB /* FMDatabaseQueue.h in Headers */,
-				DD5A200B15CAD09400FE4157 /* GRMustache.h in Headers */,
 				DD1E3C6E161F954F004FC649 /* SMCalloutView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -778,7 +831,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "MapView" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -809,22 +862,41 @@
 				DD932BB3165C287000D69D49 /* mapbox.png in Resources */,
 				DD932BB4165C287000D69D49 /* mapbox@2x.png in Resources */,
 				DD932BB7165C287000D69D49 /* HeadingAngleSmall.png in Resources */,
+				DD07A23A17F3AF9800E420B2 /* HeadingAngleMaskLarge.png in Resources */,
+				DD07A23C17F3AF9800E420B2 /* HeadingAngleMaskMedium@2x.png in Resources */,
+				DD07A23917F3AF9800E420B2 /* HeadingAngleMaskMedium.png in Resources */,
+				DDA257071798A95600BBB325 /* Compass@2x.png in Resources */,
 				DD932BB8165C287000D69D49 /* HeadingAngleSmall@2x.png in Resources */,
 				DD932BB9165C287000D69D49 /* LoadingTile.png in Resources */,
-				DD932BBA165C287000D69D49 /* LoadingTileZoom.png in Resources */,
+				DDE68E5A17D94C0500F1E869 /* mapbox-logo.png in Resources */,
 				DD932BB5165C287000D69D49 /* TrackingDot.png in Resources */,
 				DD932BB6165C287000D69D49 /* TrackingDot@2x.png in Resources */,
 				DD932BBB165C287000D69D49 /* TrackingDotHalo.png in Resources */,
 				DD932BBC165C287000D69D49 /* TrackingDotHalo@2x.png in Resources */,
+				DDA257031798A95600BBB325 /* TrackingLocationMaskLandscape@2x.png in Resources */,
+				DDA257051798A95600BBB325 /* TrackingHeadingMaskLandscape@2x.png in Resources */,
+				DDA257061798A95600BBB325 /* TrackingHeadingMask@2x.png in Resources */,
 				DD932BBD165C287000D69D49 /* TrackingHeading.png in Resources */,
+				DDA2570B1798A95600BBB325 /* TrackingLocationMask.png in Resources */,
+				DDC8D28717E92ED100A4FB32 /* LoadingTile6.png in Resources */,
 				DD932BBE165C287000D69D49 /* TrackingHeading@2x.png in Resources */,
+				DDA257091798A95600BBB325 /* TrackingHeadingMask.png in Resources */,
 				DD932BBF165C287000D69D49 /* TrackingLocation.png in Resources */,
 				DD932BC0165C287000D69D49 /* TrackingLocation@2x.png in Resources */,
+				DDA2570A1798A95600BBB325 /* TrackingLocationOffMask.png in Resources */,
+				DDA257011798A95600BBB325 /* TrackingLocationOffMaskLandscape@2x.png in Resources */,
+				DDA257041798A95600BBB325 /* TrackingLocationMask@2x.png in Resources */,
+				DDA257081798A95600BBB325 /* Compass.png in Resources */,
+				DD07A23817F3AF9800E420B2 /* HeadingAngleMaskSmall.png in Resources */,
 				DD94D46A16C2E064003D5739 /* HeadingAngleLarge.png in Resources */,
 				DD94D46B16C2E064003D5739 /* HeadingAngleLarge@2x.png in Resources */,
+				DD07A23D17F3AF9800E420B2 /* HeadingAngleMaskLarge@2x.png in Resources */,
 				DD94D46C16C2E064003D5739 /* HeadingAngleMedium.png in Resources */,
 				DD94D46D16C2E064003D5739 /* HeadingAngleMedium@2x.png in Resources */,
 				DD280D1416EFDDD30014B549 /* examples.map-z2effxa8.json in Resources */,
+				DD07A23B17F3AF9800E420B2 /* HeadingAngleMaskSmall@2x.png in Resources */,
+				DD36766B17D94F980001F27B /* mapbox-logo@2x.png in Resources */,
+				DDA257021798A95600BBB325 /* TrackingLocationOffMask@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -923,7 +995,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MapView_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
-				HEADER_SEARCH_PATHS = ../Proj4;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../Proj4\"",
+					"\"$(SRCROOT)/Map/GRMustache/include\"",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Map/GRMustache/lib\"",
@@ -945,7 +1020,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MapView_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "NS_BLOCK_ASSERTIONS=1";
-				HEADER_SEARCH_PATHS = ../Proj4;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../Proj4\"",
+					"\"$(SRCROOT)/Map/GRMustache/include\"",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Map/GRMustache/lib\"",
@@ -960,11 +1038,14 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Don't Code Sign";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEPLOYMENT_POSTPROCESSING = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -976,9 +1057,12 @@
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"-O",
 					"-Wuninitialized",
@@ -996,11 +1080,14 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				DEPLOYMENT_POSTPROCESSING = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -1011,7 +1098,9 @@
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = "";

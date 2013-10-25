@@ -34,6 +34,14 @@
 #import "RMMapLayer.h"
 #import "RMQuadTree.h"
 
+@interface RMQuadTreeNode (RMAnnotation)
+
+- (void)annotationDidChangeBoundingBox:(RMAnnotation *)annotation;
+
+@end
+
+#pragma mark -
+
 @implementation RMAnnotation
 
 @synthesize coordinate;

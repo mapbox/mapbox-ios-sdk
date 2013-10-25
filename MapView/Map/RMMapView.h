@@ -493,7 +493,7 @@ typedef enum : NSUInteger {
 *   This property does not indicate whether the user’s position is actually visible on the map, only whether the map view is allowed to display it. To determine whether the user’s position is visible, use the userLocationVisible property. The default value of this property is `NO`.
 *
 *   Setting this property to `YES` causes the map view to use the Core Location framework to find the current location. As long as this property is `YES`, the map view continues to track the user’s location and update it periodically. */
-@property (nonatomic, assign)   BOOL showsUserLocation;
+@property (nonatomic, assign) BOOL showsUserLocation;
 
 /** The annotation object representing the user’s current location. (read-only) */
 @property (nonatomic, readonly) RMUserLocation *userLocation;
@@ -506,10 +506,10 @@ typedef enum : NSUInteger {
 @property (nonatomic, readonly, getter=isUserLocationVisible) BOOL userLocationVisible;
 
 /** The mode used to track the user location. */
-@property (nonatomic, assign)   RMUserTrackingMode userTrackingMode;
+@property (nonatomic, assign) RMUserTrackingMode userTrackingMode;
 
 /** Whether the map view should display a heading calibration alert when necessary. The default value is `YES`. */
-@property (nonatomic, assign)   BOOL displayHeadingCalibration;
+@property (nonatomic, assign) BOOL displayHeadingCalibration;
 
 /** Set the mode used to track the user location. 
 *

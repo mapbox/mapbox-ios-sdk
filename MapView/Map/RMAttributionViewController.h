@@ -10,7 +10,7 @@
 
 @class RMMapView;
 
-@interface RMAttributionViewController : UIViewController <UIWebViewDelegate>
+@interface RMAttributionViewController : UIViewController
 
 - (id)initWithMapView:(RMMapView *)mapView;
 

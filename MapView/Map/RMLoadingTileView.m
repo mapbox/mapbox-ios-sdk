@@ -60,11 +60,11 @@
 {
     if (zooming)
     {
-        _contentView.backgroundColor = [UIColor colorWithPatternImage:[RMMapView resourceImageNamed:@"LoadingTileZoom.png"]];
+        _contentView.backgroundColor = [UIColor clearColor];
     }
     else
     {
-        _contentView.backgroundColor = [UIColor colorWithPatternImage:[RMMapView resourceImageNamed:@"LoadingTile.png"]];
+        _contentView.backgroundColor = [UIColor colorWithPatternImage:[RMMapView resourceImageNamed:(RMPostVersion6 ? @"LoadingTile6.png" : @"LoadingTile.png")]];
         
         _contentView.frame = CGRectMake(0, 0, self.frame.size.width * 3, self.frame.size.height * 3);
         self.contentSize = _contentView.bounds.size;
