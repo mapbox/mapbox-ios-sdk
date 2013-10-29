@@ -67,16 +67,10 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 
     [request setValue:[[RMConfiguration configuration] userAgent] forHTTPHeaderField:@"User-Agent"];
 
-    NSError *internalError = nil;
-
-    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&internalError];
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:error];
 
     if ( ! returnData)
-    {
-        *error = internalError;
-
         return nil;
-    }
 
     return [[[self class] alloc] initWithData:returnData encoding:enc];
 }
@@ -117,13 +111,13 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 
     RMLog(@"reading route-me configuration from %@", path);
 
-    NSString *error = nil;
+    NSError *error = nil;
     NSData *plistData = [NSData dataWithContentsOfFile:path];
 
-    _propertyList = [NSPropertyListSerialization propertyListFromData:plistData
-                                                     mutabilityOption:NSPropertyListImmutable
+    _propertyList = [NSPropertyListSerialization propertyListWithData:plistData
+                                                              options:NSPropertyListImmutable
                                                                format:NULL
-                                                     errorDescription:&error];
+                                                                error:&error];
 
     if ( ! _propertyList)
     {

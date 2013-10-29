@@ -85,7 +85,11 @@
 
     NSArray *URLs = [self URLsForTile:tile];
 
-    if ([URLs count] > 1)
+    if ([URLs count] == 0)
+    {
+        return nil;
+    }
+    else if ([URLs count] > 1)
     {
         // fill up collection array with placeholders
         //

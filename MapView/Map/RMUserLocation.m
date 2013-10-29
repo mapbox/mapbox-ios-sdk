@@ -70,7 +70,12 @@
             self.hasCustomLayer = YES;
 
         if ( ! super.layer)
-            super.layer = [[RMMarker alloc] initWithUIImage:[RMMapView resourceImageNamed:@"TrackingDot.png"]];
+        {
+            if (RMPreVersion7)
+                super.layer = [[RMMarker alloc] initWithUIImage:[RMMapView resourceImageNamed:@"TrackingDot.png"]];
+            else
+                [self updateTintColor];
+        }
 
         super.layer.zPosition = -MAXFLOAT + 2;
     }
@@ -81,6 +86,67 @@
 - (BOOL)isUpdating
 {
     return (self.mapView.userTrackingMode != RMUserTrackingModeNone);
+}
+
+- (void)updateTintColor
+{
+    if ( ! self.hasCustomLayer && CLLocationCoordinate2DIsValid(self.coordinate))
+    {
+        // white dot background with shadow
+        //
+        CGFloat whiteWidth = 24.0;
+
+        CGRect rect = CGRectMake(0, 0, whiteWidth * 1.25, whiteWidth * 1.25);
+
+        UIGraphicsBeginImageContextWithOptions(rect.size, NO, [[UIScreen mainScreen] scale]);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+
+        CGContextSetShadow(context, CGSizeMake(0, 0), whiteWidth / 4.0);
+
+        CGContextSetFillColorWithColor(context, [[UIColor whiteColor] CGColor]);
+        CGContextFillEllipseInRect(context, CGRectMake((rect.size.width - whiteWidth) / 2.0, (rect.size.height - whiteWidth) / 2.0, whiteWidth, whiteWidth));
+
+        UIImage *whiteBackground = UIGraphicsGetImageFromCurrentImageContext();
+
+        UIGraphicsEndImageContext();
+
+        super.layer = [[RMMarker alloc] initWithUIImage:whiteBackground];
+
+        // pulsing, tinted dot sublayer
+        //
+        CGFloat tintedWidth = whiteWidth * 0.7;
+
+        rect = CGRectMake(0, 0, tintedWidth, tintedWidth);
+
+        UIGraphicsBeginImageContextWithOptions(rect.size, NO, [[UIScreen mainScreen] scale]);
+        context = UIGraphicsGetCurrentContext();
+
+        CGContextSetFillColorWithColor(context, [self.mapView.tintColor CGColor]);
+        CGContextFillEllipseInRect(context, CGRectMake((rect.size.width - tintedWidth) / 2.0, (rect.size.height - tintedWidth) / 2.0, tintedWidth, tintedWidth));
+
+        UIImage *tintedForeground = UIGraphicsGetImageFromCurrentImageContext();
+
+        UIGraphicsEndImageContext();
+
+        CALayer *dotLayer = [CALayer layer];
+        dotLayer.bounds = CGRectMake(0, 0, tintedForeground.size.width, tintedForeground.size.height);
+        dotLayer.contents = (id)[tintedForeground CGImage];
+        dotLayer.position = CGPointMake(super.layer.bounds.size.width / 2.0, super.layer.bounds.size.height / 2.0);
+
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
+        animation.repeatCount = MAXFLOAT;
+        animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1.0)];
+        animation.toValue   = [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.8, 0.8, 1.0)];
+        animation.removedOnCompletion = NO;
+        animation.autoreverses = YES;
+        animation.duration = 1.5;
+        animation.beginTime = CACurrentMediaTime() + 1.0;
+        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+
+        [dotLayer addAnimation:animation forKey:@"animateTransform"];
+
+        [super.layer addSublayer:dotLayer];
+    }
 }
 
 - (void)setLocation:(CLLocation *)newLocation

@@ -75,7 +75,10 @@
 
         NSData *metadataData = [NSData brandedDataWithContentsOfURL:metadataURL];
 
-        id metadata = [NSJSONSerialization JSONObjectWithData:metadataData options:0 error:nil];
+        if ( ! metadataData)
+            return nil;
+
+        id metadata = [NSJSONSerialization JSONObjectWithData:metadataData options:0 error:NULL];
 
         if (metadata && [metadata isKindOfClass:[NSDictionary class]] && [[metadata objectForKey:@"statusCode"] intValue] == 200)
         {
