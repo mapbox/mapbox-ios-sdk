@@ -176,11 +176,6 @@
     return [self initWithReferenceURL:[NSURL URLWithString:referenceURLString] enablingDataOnMapView:mapView];
 }
 
-- (void)dealloc
-{
-    dispatch_release(_dataQueue);
-}
-
 #pragma mark 
 
 - (NSURL *)tileJSONURL
