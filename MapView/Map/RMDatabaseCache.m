@@ -226,11 +226,13 @@
             [_queue inDatabase:^(FMDatabase *db)
              {
                  BOOL result = [db executeUpdate:@"DELETE FROM ZCACHE WHERE last_used < ?", [NSDate dateWithTimeIntervalSinceNow:-_expiryPeriod]];
+                 
+                 if (result)
+                     result = [db executeUpdate:@"VACUUM"];
 
                  if (result == NO)
                      RMLog(@"Error expiring cache");
 
-                 [[db executeQuery:@"VACUUM"] close];
              }];
 
             [_writeQueueLock unlock];
@@ -332,11 +334,13 @@
     [_queue inDatabase:^(FMDatabase *db)
      {
          BOOL result = [db executeUpdate:@"DELETE FROM ZCACHE WHERE tile_hash IN (SELECT tile_hash FROM ZCACHE ORDER BY last_used LIMIT ?)", [NSNumber numberWithUnsignedInt:count]];
-
+         
+         if (result)
+             result = [db executeUpdate:@"VACUUM"];
+         
          if (result == NO)
              RMLog(@"Error purging cache");
 
-         [[db executeQuery:@"VACUUM"] close];
      }];
 
     [_writeQueueLock unlock];
@@ -355,10 +359,12 @@
          {
              BOOL result = [db executeUpdate:@"DELETE FROM ZCACHE"];
 
+             if (result)
+                 result = [db executeUpdate:@"VACUUM"];
+
              if (result == NO)
                  RMLog(@"Error purging cache");
 
-             [[db executeQuery:@"VACUUM"] close];
          }];
 
         [_writeQueueLock unlock];
@@ -377,6 +383,9 @@
         [_queue inDatabase:^(FMDatabase *db)
          {
              BOOL result = [db executeUpdate:@"DELETE FROM ZCACHE WHERE cache_key = ?", cacheKey];
+             
+             if (result)
+                 result = [db executeUpdate:@"VACUUM"];
 
              if (result == NO)
                  RMLog(@"Error purging cache");
