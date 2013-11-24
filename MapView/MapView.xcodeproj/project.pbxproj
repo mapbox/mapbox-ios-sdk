@@ -87,8 +87,6 @@
 		DD1985C2165C5F6400DF667F /* RMTileMillSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DD1985C0165C5F6400DF667F /* RMTileMillSource.m */; };
 		DD1E3C6E161F954F004FC649 /* SMCalloutView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1E3C6C161F954F004FC649 /* SMCalloutView.h */; };
 		DD1E3C6F161F954F004FC649 /* SMCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD1E3C6D161F954F004FC649 /* SMCalloutView.m */; };
-		DD280D1416EFDDD30014B549 /* examples.map-z2effxa8.json in Resources */ = {isa = PBXBuildFile; fileRef = DD280D1216EFDDD30014B549 /* examples.map-z2effxa8.json */; };
-		DD280D1516EFDDD30014B549 /* examples.map-zswgei2n.json in Resources */ = {isa = PBXBuildFile; fileRef = DD280D1316EFDDD30014B549 /* examples.map-zswgei2n.json */; };
 		DD2B374514CF8041008DE8CB /* FMDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = DD2B373F14CF8041008DE8CB /* FMDatabase.h */; };
 		DD2B374614CF8041008DE8CB /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B374014CF8041008DE8CB /* FMDatabase.m */; };
 		DD2B374714CF8041008DE8CB /* FMDatabaseAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = DD2B374114CF8041008DE8CB /* FMDatabaseAdditions.h */; };
@@ -118,24 +116,6 @@
 		DD8CDB4B14E0507100B73EB9 /* RMMapQuestOSMSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DD8CDB4914E0507100B73EB9 /* RMMapQuestOSMSource.m */; };
 		DD8FD7541559E4A40044D96F /* RMUserLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = DD8FD7521559E4A40044D96F /* RMUserLocation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD8FD7551559E4A40044D96F /* RMUserLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = DD8FD7531559E4A40044D96F /* RMUserLocation.m */; };
-		DD932BB3165C287000D69D49 /* mapbox.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BA5165C287000D69D49 /* mapbox.png */; };
-		DD932BB4165C287000D69D49 /* mapbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BA6165C287000D69D49 /* mapbox@2x.png */; };
-		DD932BB5165C287000D69D49 /* TrackingDot.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BA7165C287000D69D49 /* TrackingDot.png */; };
-		DD932BB6165C287000D69D49 /* TrackingDot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BA8165C287000D69D49 /* TrackingDot@2x.png */; };
-		DD932BB7165C287000D69D49 /* HeadingAngleSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BA9165C287000D69D49 /* HeadingAngleSmall.png */; };
-		DD932BB8165C287000D69D49 /* HeadingAngleSmall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BAA165C287000D69D49 /* HeadingAngleSmall@2x.png */; };
-		DD932BB9165C287000D69D49 /* LoadingTile.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BAB165C287000D69D49 /* LoadingTile.png */; };
-		DD932BBA165C287000D69D49 /* LoadingTileZoom.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BAC165C287000D69D49 /* LoadingTileZoom.png */; };
-		DD932BBB165C287000D69D49 /* TrackingDotHalo.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BAD165C287000D69D49 /* TrackingDotHalo.png */; };
-		DD932BBC165C287000D69D49 /* TrackingDotHalo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BAE165C287000D69D49 /* TrackingDotHalo@2x.png */; };
-		DD932BBD165C287000D69D49 /* TrackingHeading.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BAF165C287000D69D49 /* TrackingHeading.png */; };
-		DD932BBE165C287000D69D49 /* TrackingHeading@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BB0165C287000D69D49 /* TrackingHeading@2x.png */; };
-		DD932BBF165C287000D69D49 /* TrackingLocation.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BB1165C287000D69D49 /* TrackingLocation.png */; };
-		DD932BC0165C287000D69D49 /* TrackingLocation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD932BB2165C287000D69D49 /* TrackingLocation@2x.png */; };
-		DD94D46A16C2E064003D5739 /* HeadingAngleLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = DD94D46616C2E064003D5739 /* HeadingAngleLarge.png */; };
-		DD94D46B16C2E064003D5739 /* HeadingAngleLarge@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD94D46716C2E064003D5739 /* HeadingAngleLarge@2x.png */; };
-		DD94D46C16C2E064003D5739 /* HeadingAngleMedium.png in Resources */ = {isa = PBXBuildFile; fileRef = DD94D46816C2E064003D5739 /* HeadingAngleMedium.png */; };
-		DD94D46D16C2E064003D5739 /* HeadingAngleMedium@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD94D46916C2E064003D5739 /* HeadingAngleMedium@2x.png */; };
 		DD97C11616489678007C4652 /* libProj4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD97C11516489678007C4652 /* libProj4.a */; };
 		DD98B6FA14D76B930092882F /* RMMapBoxSource.h in Headers */ = {isa = PBXBuildFile; fileRef = DD98B6F814D76B930092882F /* RMMapBoxSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD98B6FB14D76B930092882F /* RMMapBoxSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DD98B6F914D76B930092882F /* RMMapBoxSource.m */; };
@@ -152,16 +132,6 @@
 		DDE357F816522CD8001DB842 /* RMPolygonAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = DDE357F616522CD8001DB842 /* RMPolygonAnnotation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDE357F916522CD8001DB842 /* RMPolygonAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = DDE357F716522CD8001DB842 /* RMPolygonAnnotation.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		DD6A838F1644A2810097F31F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DD6A83741644A20C0097F31F;
-			remoteInfo = Resources;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1266929F0EB75C0A00E002D5 /* RMConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMConfiguration.h; sourceTree = "<group>"; };
@@ -204,6 +174,7 @@
 		17F31EFA1331050A00122B16 /* libMapBox.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMapBox.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		218B9D1618426CC800F89893 /* Resoruces.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Resoruces.bundle; sourceTree = "<group>"; };
 		23A0AAE80EB90A99003A4521 /* RMFoundation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RMFoundation.c; sourceTree = "<group>"; };
 		23A0AAEA0EB90AA6003A4521 /* RMFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFoundation.h; sourceTree = "<group>"; };
 		25757F4D1291C8640083D504 /* RMCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMCircle.h; sourceTree = "<group>"; };
@@ -272,7 +243,6 @@
 		DD5A200A15CAD09400FE4157 /* GRMustache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRMustache.h; path = GRMustache/include/GRMustache.h; sourceTree = "<group>"; };
 		DD5FA1E915E2B020004EB6C5 /* RMLoadingTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMLoadingTileView.h; sourceTree = "<group>"; };
 		DD5FA1EA15E2B020004EB6C5 /* RMLoadingTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMLoadingTileView.m; sourceTree = "<group>"; };
-		DD6A83751644A20C0097F31F /* MapBox.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MapBox.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD7C7E36164C894F0021CCA5 /* RMStaticMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMStaticMapView.h; sourceTree = "<group>"; };
 		DD7C7E37164C894F0021CCA5 /* RMStaticMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMStaticMapView.m; sourceTree = "<group>"; };
 		DD8CDB4814E0507100B73EB9 /* RMMapQuestOSMSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMMapQuestOSMSource.h; sourceTree = "<group>"; };
@@ -381,7 +351,6 @@
 			isa = PBXGroup;
 			children = (
 				17F31EFA1331050A00122B16 /* libMapBox.a */,
-				DD6A83751644A20C0097F31F /* MapBox.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -590,6 +559,7 @@
 				B8C974B30E8A23C5007D16AD /* Coordinate Systems */,
 				B83E64E20E80E73F001663B6 /* Projections */,
 				B83E64CE0E80E73F001663B6 /* Tile & Overlay Rendering */,
+				218B9D1618426CC800F89893 /* Resoruces.bundle */,
 			);
 			name = "Low-Level Details";
 			sourceTree = "<group>";
@@ -745,28 +715,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				DD6A83901644A2810097F31F /* PBXTargetDependency */,
 			);
 			name = MapView;
 			productName = MapView;
 			productReference = 17F31EFA1331050A00122B16 /* libMapBox.a */;
 			productType = "com.apple.product-type.library.static";
-		};
-		DD6A83741644A20C0097F31F /* Resources */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DD6A837E1644A20C0097F31F /* Build configuration list for PBXNativeTarget "Resources" */;
-			buildPhases = (
-				DD6A83711644A20C0097F31F /* Sources */,
-				DD6A83731644A20C0097F31F /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Resources;
-			productName = Resources;
-			productReference = DD6A83751644A20C0097F31F /* MapBox.bundle */;
-			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
 
@@ -792,40 +745,9 @@
 			projectRoot = "";
 			targets = (
 				B8C974130E8A19B2007D16AD /* MapView */,
-				DD6A83741644A20C0097F31F /* Resources */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXResourcesBuildPhase section */
-		DD6A83731644A20C0097F31F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DD932BB3165C287000D69D49 /* mapbox.png in Resources */,
-				DD932BB4165C287000D69D49 /* mapbox@2x.png in Resources */,
-				DD932BB7165C287000D69D49 /* HeadingAngleSmall.png in Resources */,
-				DD932BB8165C287000D69D49 /* HeadingAngleSmall@2x.png in Resources */,
-				DD932BB9165C287000D69D49 /* LoadingTile.png in Resources */,
-				DD932BBA165C287000D69D49 /* LoadingTileZoom.png in Resources */,
-				DD932BB5165C287000D69D49 /* TrackingDot.png in Resources */,
-				DD932BB6165C287000D69D49 /* TrackingDot@2x.png in Resources */,
-				DD932BBB165C287000D69D49 /* TrackingDotHalo.png in Resources */,
-				DD932BBC165C287000D69D49 /* TrackingDotHalo@2x.png in Resources */,
-				DD932BBD165C287000D69D49 /* TrackingHeading.png in Resources */,
-				DD932BBE165C287000D69D49 /* TrackingHeading@2x.png in Resources */,
-				DD932BBF165C287000D69D49 /* TrackingLocation.png in Resources */,
-				DD932BC0165C287000D69D49 /* TrackingLocation@2x.png in Resources */,
-				DD94D46A16C2E064003D5739 /* HeadingAngleLarge.png in Resources */,
-				DD94D46B16C2E064003D5739 /* HeadingAngleLarge@2x.png in Resources */,
-				DD94D46C16C2E064003D5739 /* HeadingAngleMedium.png in Resources */,
-				DD94D46D16C2E064003D5739 /* HeadingAngleMedium@2x.png in Resources */,
-				DD280D1416EFDDD30014B549 /* examples.map-z2effxa8.json in Resources */,
-				DD280D1516EFDDD30014B549 /* examples.map-zswgei2n.json in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B8C974340E8A19B2007D16AD /* Sources */ = {
@@ -890,22 +812,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DD6A83711644A20C0097F31F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		DD6A83901644A2810097F31F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DD6A83741644A20C0097F31F /* Resources */;
-			targetProxy = DD6A838F1644A2810097F31F /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		B8C974570E8A19B2007D16AD /* Debug */ = {
@@ -1019,56 +926,6 @@
 			};
 			name = Release;
 		};
-		DD6A837F1644A20C0097F31F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Resources/Resources-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = MapBox;
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Debug;
-		};
-		DD6A83801644A20C0097F31F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Resources/Resources-Prefix.pch";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				PRODUCT_NAME = MapBox;
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1086,15 +943,6 @@
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DD6A837E1644A20C0097F31F /* Build configuration list for PBXNativeTarget "Resources" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DD6A837F1644A20C0097F31F /* Debug */,
-				DD6A83801644A20C0097F31F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
