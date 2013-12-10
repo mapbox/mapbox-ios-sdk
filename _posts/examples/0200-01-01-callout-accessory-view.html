@@ -3,7 +3,7 @@ date: 0200-01-10
 category: examples
 layout: examples
 title: Custom accessory view in a marker callout
-description: Adding an accessory view to a marker callout. 
+description: Adding an accessory view to a marker callout.
 tags:
   - marker
   - point
@@ -20,7 +20,7 @@ tags:
 {
     [super viewDidLoad];
 
-    RMMapBoxSource *tileSource = [[RMMapBoxSource alloc] initWithMapID:@"examples.map-z2effxa8"];
+    RMMapboxSource *tileSource = [[RMMapboxSource alloc] initWithMapID:@"examples.map-z2effxa8"];
 
     RMMapView *mapView = [[RMMapView alloc] initWithFrame:self.view.bounds andTilesource:tileSource];
 
@@ -40,7 +40,7 @@ tags:
     if (annotation.isUserLocationAnnotation)
         return nil;
 
-    RMMarker *marker = [[RMMarker alloc] initWithMapBoxMarkerImage:@"rail" tintColor:[UIColor magentaColor]];
+    RMMarker *marker = [[RMMarker alloc] initWithMapboxMarkerImage:@"rail" tintColor:[UIColor magentaColor]];
 
     marker.canShowCallout = YES;
 

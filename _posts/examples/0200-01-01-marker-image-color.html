@@ -2,8 +2,8 @@
 date: 0200-01-07
 category: examples
 layout: examples
-title: Custom image and color on MapBox marker
-description: Creating a MapBox marker with a custom image and color. 
+title: Custom image and color on Mapbox marker
+description: Creating a Mapbox marker with a custom image and color.
 tags:
   - marker
   - point
@@ -21,7 +21,7 @@ tags:
 {
     [super viewDidLoad];
 
-    RMMapBoxSource *tileSource = [[RMMapBoxSource alloc] initWithMapID:@"examples.map-z2effxa8"];
+    RMMapboxSource *tileSource = [[RMMapboxSource alloc] initWithMapID:@"examples.map-z2effxa8"];
 
     RMMapView *mapView = [[RMMapView alloc] initWithFrame:self.view.bounds andTilesource:tileSource];
 
@@ -29,7 +29,7 @@ tags:
 
     [self.view addSubview:mapView];
 
-    RMAnnotation *annotation = [[RMAnnotation alloc] initWithMapView:mapView 
+    RMAnnotation *annotation = [[RMAnnotation alloc] initWithMapView:mapView
                                                           coordinate:mapView.centerCoordinate
                                                             andTitle:@"Bus Stop"];
 
@@ -41,7 +41,7 @@ tags:
     if (annotation.isUserLocationAnnotation)
         return nil;
 
-    RMMarker *marker = [[RMMarker alloc] initWithMapBoxMarkerImage:@"bus" tintColor:[UIColor blueColor]];
+    RMMarker *marker = [[RMMarker alloc] initWithMapboxMarkerImage:@"bus" tintColor:[UIColor blueColor]];
 
     marker.canShowCallout = YES;
 

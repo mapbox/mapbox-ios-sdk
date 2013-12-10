@@ -3,7 +3,7 @@ date: 0200-01-04
 category: examples
 layout: examples
 title: Layered styles
-description: Composite multiple styles client-side. 
+description: Composite multiple styles client-side.
 tags:
   - custom
   - style
@@ -17,11 +17,11 @@ tags:
 {
     [super viewDidLoad];
 
-    RMMapBoxSource *tileSource = [[RMMapBoxSource alloc] initWithMapID:@"examples.map-y7l23tes"];
+    RMMapboxSource *tileSource = [[RMMapboxSource alloc] initWithMapID:@"examples.map-y7l23tes"];
 
     RMMapView *mapView = [[RMMapView alloc] initWithFrame:self.view.bounds andTilesource:tileSource];
 
-    [mapView addTileSource:[[RMMapBoxSource alloc] initWithMapID:@"examples.location-formatter"]];
+    [mapView addTileSource:[[RMMapboxSource alloc] initWithMapID:@"examples.location-formatter"]];
 
     [self.view addSubview:mapView];
 }

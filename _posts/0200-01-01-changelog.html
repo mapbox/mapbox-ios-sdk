@@ -10,81 +10,81 @@ releases:
   date: 2013-06-28
 
   notes:
-  - Added support for the new SSL tile API. 
-  - Improved disk caching API. 
-  - Updated some API URLs to the latest preferred versions. 
-  - Made some documentation improvements. 
-  - Fixed a bug with MapBox markers that used custom colors. 
-  - Fixed several small potental crash bugs. 
+  - Added support for the new SSL tile API.
+  - Improved disk caching API.
+  - Updated some API URLs to the latest preferred versions.
+  - Made some documentation improvements.
+  - Fixed a bug with Mapbox markers that used custom colors.
+  - Fixed several small potental crash bugs.
 
 - version: 1.0.2
   date: 2013-03-29
 
   notes:
-  - Added locally-bundled metadata for basic `RMMapBoxSource` use so that apps can better work offline from first launch, including when using XIBs and storyboards. 
-  - Added a `fillPatternImage` property to `RMShape` and `RMCircle`. 
-  - Fixed a bug related to updating annotation clusters after removal of single annotations. 
-  - Fixed a bug related to comparisons of projected points on the map. 
+  - Added locally-bundled metadata for basic `RMMapboxSource` use so that apps can better work offline from first launch, including when using XIBs and storyboards.
+  - Added a `fillPatternImage` property to `RMShape` and `RMCircle`.
+  - Fixed a bug related to updating annotation clusters after removal of single annotations.
+  - Fixed a bug related to comparisons of projected points on the map.
 
 - version: 1.0.1
   date: 2013-03-05
 
   notes:
-  - Fixed a bug with `RMMapViewDelegate` callbacks for post-move and zoom events. 
+  - Fixed a bug with `RMMapViewDelegate` callbacks for post-move and zoom events.
 
 - version: 1.0.0
   date: 2013-03-04
 
   notes:
-  - Support for Automatic Reference Counting (ARC) for easier memory management. 
-  - Added delegate callbacks for annotation selection & deselection notification. 
-  - Improved documentation, especially for offline tile caching. 
-  - Added a new [code examples gallery](../examples). 
-  - Added a long press gesture recognizer for annotation layers. 
-  - Added an API for setting an SDK-wide custom user-agent string for network requests. 
-  - Added a convenience method for MBTiles tile sources to more easily find them in your app's bundle. 
-  - Allow selection of a `nil` annotation in order to deselect the current annotation. 
-  - Added an API for clearing MapBox marker local caching. 
-  - Map views now default to a watermarked MapBox Streets map instead of OpenStreetMap. 
-  - User location accuracy circle now bounces when first homing in on coordinate. 
-  - Compass heading path now adjusts width based on heading accuracy reading. 
-  - Annotation clustering API is now much simpler and easier to use. 
-  - Privatized some header files to reduce clutter during Xcode autocompletion. 
-  - Latest upstream improvements, including constraints, annotation z-ordering, and bounding box fixes. 
-  - Code cleanups, consistency tweaks, and bug fixes. 
+  - Support for Automatic Reference Counting (ARC) for easier memory management.
+  - Added delegate callbacks for annotation selection & deselection notification.
+  - Improved documentation, especially for offline tile caching.
+  - Added a new [code examples gallery](../examples).
+  - Added a long press gesture recognizer for annotation layers.
+  - Added an API for setting an SDK-wide custom user-agent string for network requests.
+  - Added a convenience method for MBTiles tile sources to more easily find them in your app's bundle.
+  - Allow selection of a `nil` annotation in order to deselect the current annotation.
+  - Added an API for clearing Mapbox marker local caching.
+  - Map views now default to a watermarked Mapbox Streets map instead of OpenStreetMap.
+  - User location accuracy circle now bounces when first homing in on coordinate.
+  - Compass heading path now adjusts width based on heading accuracy reading.
+  - Annotation clustering API is now much simpler and easier to use.
+  - Privatized some header files to reduce clutter during Xcode autocompletion.
+  - Latest upstream improvements, including constraints, annotation z-ordering, and bounding box fixes.
+  - Code cleanups, consistency tweaks, and bug fixes.
 
 - version: 0.5.2
   date: 2013-01-03
 
   notes:
-  - Added support for programmatic selection of annotations and display of callouts. 
-  - Added support for annotation `calloutOffset` like MapKit. 
-  - Fixed some bugs with callouts on circles and other shapes. 
-  - Better shape hit detection based on current `fillRule`. 
-  - Fixed a bug with shape clipping when map views were inset from the top of their superview. 
-  - Fixed a few memory reuse problems. 
-  - Allow silent re-add of already-added annotations. 
+  - Added support for programmatic selection of annotations and display of callouts.
+  - Added support for annotation `calloutOffset` like MapKit.
+  - Fixed some bugs with callouts on circles and other shapes.
+  - Better shape hit detection based on current `fillRule`.
+  - Fixed a bug with shape clipping when map views were inset from the top of their superview.
+  - Fixed a few memory reuse problems.
+  - Allow silent re-add of already-added annotations.
 
 - version: 0.5.1
   date: 2012-12-12
 
   notes:
-  - Added support for annotation callout subtitles. 
-  - Fixed a bug related to touch events in `UIControl` objects on the map view. 
-  - Fixed a bug with Bézier shape drawing on iOS 5. 
-  - Fixed a crash when passing a `nil` static map completion handler. 
-  - Added a CocoaPods `Podspec` directly to the repository for development use. 
-  - Corrected annotation layer delegate request behavior when using simplestyle. 
+  - Added support for annotation callout subtitles.
+  - Fixed a bug related to touch events in `UIControl` objects on the map view.
+  - Fixed a bug with Bézier shape drawing on iOS 5.
+  - Fixed a crash when passing a `nil` static map completion handler.
+  - Added a CocoaPods `Podspec` directly to the repository for development use.
+  - Corrected annotation layer delegate request behavior when using simplestyle.
 
 - version: 0.5.0
   date: 2012-11-29
 
   notes:
-  - Added a background tile downloader for pre-caching maps. 
-  - Added some annotation convenience classes for simple use cases. 
-  - Added annotation callouts that behave like MapKit. 
-  - Support for MapBox map ID alongside TileJSON for easier map tile source use.
-  - Support for the MapBox image quality API to save bandwidth.
+  - Added a background tile downloader for pre-caching maps.
+  - Added some annotation convenience classes for simple use cases.
+  - Added annotation callouts that behave like MapKit.
+  - Support for Mapbox map ID alongside TileJSON for easier map tile source use.
+  - Support for the Mapbox image quality API to save bandwidth.
   - Improved Interface Builder support for `RMMapView` and `RMUserTrackingBarButtonItem`.
   - New `RMStaticMapView` class for creating `UIImageView`-like one-shot map images.
   - New `RMTileMillSource` tile source for developing directly off of a TileMill instance.
@@ -95,9 +95,9 @@ releases:
   - Easier attribution of map tile source data in the map view.
   - MapKit-like support for a custom user location annotation layer.
   - New `RMCompositeSource` tile source to enabling caching of client-side composited map tile end products.
-  - Unified `MapBox.h` header with commonly-used classes for all install methods.
+  - Unified `Mapbox.h` header with commonly-used classes for all install methods.
   - Updated GRMustache library for more up-to-date Mustache template functionality in UTFGrid interactivity.
-  - SDK resources such as images now install in a single `MapBox.bundle` file instead of individually.
+  - SDK resources such as images now install in a single `Mapbox.bundle` file instead of individually.
   - Removed the dependent build of the Proj4 projection library to greatly speed up compilation time.
   - Improvements to asynchronous map tile render speed and reliability.
   - Improved z-index sorting of cluster, point, and shape annotation layers.
@@ -107,28 +107,28 @@ releases:
   date: 2012-09-17
 
   notes:
-  - Fixed a bug related to hiding & showing of the user location halo. 
+  - Fixed a bug related to hiding & showing of the user location halo.
 
 - version: 0.4.2
   date: 2012-09-05
 
   notes:
-  - Fixed a bug related to over-aggressive tile rendering for local tile sources. 
+  - Fixed a bug related to over-aggressive tile rendering for local tile sources.
 
 - version: 0.4.1
   date: 2012-08-27
 
   notes:
-  - Fixed a bug related to app location services permission changes. 
+  - Fixed a bug related to app location services permission changes.
 
 - version: 0.4.0
   date: 2012-08-23
 
   notes:
-  - First release in CocoaPods. 
-  - First release of Xcode documentation. 
+  - First release in CocoaPods.
+  - First release of Xcode documentation.
   - Improved the performance of network tile fetching and drawing.
-  - Added retina support for MapBox markers.
+  - Added retina support for Mapbox markers.
   - Added the ability to reload individual composited tile sources.
   - The map view background now behaves more like MapKit when loading tiles.
   - Added a single, unified header file for easier project inclusion.
@@ -147,22 +147,22 @@ releases:
   date: 2012-07-05
 
   notes:
-  - First release of the prepackaged binary. 
-  - Added support for MapBox markers. 
-  - Improved the performance of vector paths and shapes when panning and zooming. 
-  - Enhanced the performance and redrawing of multiple stacked tile layers. 
-  - Other refactorings and improvements. 
+  - First release of the prepackaged binary.
+  - Added support for Mapbox markers.
+  - Improved the performance of vector paths and shapes when panning and zooming.
+  - Enhanced the performance and redrawing of multiple stacked tile layers.
+  - Other refactorings and improvements.
 
 - version: 0.2.0
   date: 2012-06-08
 
   notes:
-  - Added user location services. 
-  - Added configurable cache expiration handling. 
-  - Enhancements for interactivity & composite sources. 
-  - Xcode 4.3 compatibility. 
-  - Minor bug fixes. 
-  - Various upstream enhancements. 
+  - Added user location services.
+  - Added configurable cache expiration handling.
+  - Enhancements for interactivity & composite sources.
+  - Xcode 4.3 compatibility.
+  - Minor bug fixes.
+  - Various upstream enhancements.
 
 - version: 0.1.0
   date: 2012-04-16

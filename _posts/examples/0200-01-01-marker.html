@@ -2,8 +2,8 @@
 date: 0200-01-06
 category: examples
 layout: examples
-title: Drawing a MapBox marker
-description: Creating a default marker with a callout and title at a point. 
+title: Drawing a Mapbox marker
+description: Creating a default marker with a callout and title at a point.
 tags:
   - marker
   - point
@@ -17,14 +17,14 @@ tags:
 {
     [super viewDidLoad];
 
-    RMMapBoxSource *tileSource = [[RMMapBoxSource alloc] initWithMapID:@"examples.map-z2effxa8"];
+    RMMapboxSource *tileSource = [[RMMapboxSource alloc] initWithMapID:@"examples.map-z2effxa8"];
 
     RMMapView *mapView = [[RMMapView alloc] initWithFrame:self.view.bounds andTilesource:tileSource];
 
     [self.view addSubview:mapView];
 
-    RMPointAnnotation *annotation = [[RMPointAnnotation alloc] initWithMapView:mapView 
-                                                                    coordinate:mapView.centerCoordinate 
+    RMPointAnnotation *annotation = [[RMPointAnnotation alloc] initWithMapView:mapView
+                                                                    coordinate:mapView.centerCoordinate
                                                                       andTitle:@"Hello, world!"];
 
     [mapView addAnnotation:annotation];

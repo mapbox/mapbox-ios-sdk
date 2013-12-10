@@ -3,7 +3,7 @@ date: 0200-01-09
 category: examples
 layout: examples
 title: Clustering points
-description: Clustering nearby markers to indicate data density. 
+description: Clustering nearby markers to indicate data density.
 tags:
   - marker
   - point
@@ -17,7 +17,7 @@ tags:
 {
     [super viewDidLoad];
 
-    RMMapBoxSource *tileSource = [[RMMapBoxSource alloc] initWithMapID:@"examples.map-z2effxa8"];
+    RMMapboxSource *tileSource = [[RMMapboxSource alloc] initWithMapID:@"examples.map-z2effxa8"];
 
     RMMapView *mapView = [[RMMapView alloc] initWithFrame:self.view.bounds andTilesource:tileSource];
 
@@ -57,7 +57,7 @@ tags:
     }
     else
     {
-        layer = [[RMMarker alloc] initWithMapBoxMarkerImage];
+        layer = [[RMMarker alloc] initWithMapboxMarkerImage];
     }
 
     return layer;

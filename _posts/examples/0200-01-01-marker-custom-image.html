@@ -3,7 +3,7 @@ date: 0200-01-08
 category: examples
 layout: examples
 title: Custom image marker
-description: Creating a marker with a completely custom image. 
+description: Creating a marker with a completely custom image.
 tags:
   - marker
   - point
@@ -20,7 +20,7 @@ tags:
 {
     [super viewDidLoad];
 
-    RMMapBoxSource *tileSource = [[RMMapBoxSource alloc] initWithMapID:@"examples.map-z2effxa8"];
+    RMMapboxSource *tileSource = [[RMMapboxSource alloc] initWithMapID:@"examples.map-z2effxa8"];
 
     RMMapView *mapView = [[RMMapView alloc] initWithFrame:self.view.bounds andTilesource:tileSource];
 

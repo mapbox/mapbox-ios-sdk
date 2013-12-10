@@ -3,7 +3,7 @@ date: 0200-01-11
 category: examples
 layout: examples
 title: Drawing a shape
-description: Drawing a vector polyline or polygon on the map. 
+description: Drawing a vector polyline or polygon on the map.
 tags:
   - shape
   - polyline
@@ -16,7 +16,7 @@ tags:
 {
     [super viewDidLoad];
 
-    RMMapBoxSource *tileSource = [[RMMapBoxSource alloc] initWithMapID:@"examples.map-z2effxa8"];
+    RMMapboxSource *tileSource = [[RMMapboxSource alloc] initWithMapID:@"examples.map-z2effxa8"];
 
     RMMapView *mapView = [[RMMapView alloc] initWithFrame:self.view.bounds andTilesource:tileSource];
 

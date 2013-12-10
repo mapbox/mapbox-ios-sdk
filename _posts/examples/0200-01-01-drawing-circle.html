@@ -3,7 +3,7 @@ date: 0200-01-12
 category: examples
 layout: examples
 title: Drawing a circle
-description: Drawing a perfect vector circle on the map. 
+description: Drawing a perfect vector circle on the map.
 tags:
   - shape
   - polygon
@@ -16,7 +16,7 @@ tags:
 {
     [super viewDidLoad];
 
-    RMMapBoxSource *tileSource = [[RMMapBoxSource alloc] initWithMapID:@"examples.map-z2effxa8"];
+    RMMapboxSource *tileSource = [[RMMapboxSource alloc] initWithMapID:@"examples.map-z2effxa8"];
 
     RMMapView *mapView = [[RMMapView alloc] initWithFrame:self.view.bounds andTilesource:tileSource];
 

@@ -4,13 +4,13 @@ HTMLTOP='<div id="header">'
 HTMLEND='<div class="main-navigation navigation-bottom">'
 YAML="\
 ---
-title: MapBox iOS SDK `git tag | sort -r | sed -n '1p'`
+title: Mapbox iOS SDK `git tag | sort -r | sed -n '1p'`
 layout: api
 permalink: /api
 categories: api
 navigation:"
 CONTENT="\
-<p>Welcome to the MapBox iOS SDK API documentation. Here you can find details on the classes, protocols, and other parts of the SDK. You might also be interested in the <a href='../Docs/publish/docset.atom'>Atom feed</a>, which allows <a href='https://developer.apple.com/library/ios/#recipes/xcode_help-documentation_preferences/SettingDocPreferencesHelp.html'>direct embedding</a> of the documentation into Xcode.</p>
+<p>Welcome to the Mapbox iOS SDK API documentation. Here you can find details on the classes, protocols, and other parts of the SDK. You might also be interested in the <a href='../Docs/publish/docset.atom'>Atom feed</a>, which allows <a href='https://developer.apple.com/library/ios/#recipes/xcode_help-documentation_preferences/SettingDocPreferencesHelp.html'>direct embedding</a> of the documentation into Xcode.</p>
 <p><img src='https://farm9.staticflickr.com/8532/8596722686_3edf70b878_z.jpg'/></p>
 "
 

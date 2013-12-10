@@ -3,7 +3,7 @@ date: 0200-01-05
 category: examples
 layout: examples
 title: Retina display support
-description: Determine retina support on-the-fly. 
+description: Determine retina support on-the-fly.
 tags:
   - custom
   - style
@@ -20,7 +20,7 @@ tags:
 
     NSString *mapID = ([[UIScreen mainScreen] scale] > 1.0 ? @"examples.map-zq0f1vuc" : @"examples.map-zgrqqx0w");
 
-    RMMapBoxSource *tileSource = [[RMMapBoxSource alloc] initWithMapID:mapID];
+    RMMapboxSource *tileSource = [[RMMapboxSource alloc] initWithMapID:mapID];
 
     RMMapView *mapView = [[RMMapView alloc] initWithFrame:self.view.bounds andTilesource:tileSource];
 
