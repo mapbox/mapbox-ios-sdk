@@ -256,11 +256,6 @@
 {
     if (self.isBackgroundCaching)
         return;
-
-    _activeTileSource = tileSource;
-    
-    _backgroundFetchQueue = [[NSOperationQueue alloc] init];
-    [_backgroundFetchQueue setMaxConcurrentOperationCount:6];
     
     int   minCacheZoom = (int)minZoom;
     int   maxCacheZoom = (int)maxZoom;
@@ -271,6 +266,11 @@
 
     if (maxCacheZoom < minCacheZoom || maxCacheLat <= minCacheLat || maxCacheLon <= minCacheLon)
         return;
+    
+    _activeTileSource = tileSource;
+    
+    _backgroundFetchQueue = [[NSOperationQueue alloc] init];
+    [_backgroundFetchQueue setMaxConcurrentOperationCount:6];
 
     int n, xMin, yMax, xMax, yMin;
 
