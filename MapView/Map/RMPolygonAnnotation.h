@@ -32,14 +32,14 @@
 *
 *   When creating a polygon, you can mask out portions of the polygon by specifying one or more interior polygons. Areas that are masked by an interior polygon are not considered part of the polygon’s occupied area. 
 *
-*   If you wish to customize the appearance, you should instead create an RMAnnotation and configure its layer directly. Providing a layer manually for instances of RMPolygonAnnotation will not have any effect. */
+*   If you wish to customize the layer appearance in more detail, you should instead create an RMAnnotation and configure its layer directly. Providing a layer manually for instances of RMPolygonAnnotation will not have any effect. */
 @interface RMPolygonAnnotation : RMShapeAnnotation
 
 /** Initialize a polygon annotation.
 *   @param aMapView The map view on which to place the annotation.
-*   @param points An array of CLLocation points defining the shape. The data in this array is copied to the new object.
+*   @param points An array of CLLocation points defining the polygon. The data in this array is copied to the new object.
 *   @param interiorPolygons An array of RMPolygonAnnotation objects that define one or more cutout regions for the receiver’s polygon.
-*   @return An initialized shape annotation object, or `nil` if an annotation was unable to be initialized. */
+*   @return An initialized polygon annotation object, or `nil` if an annotation was unable to be initialized. */
 - (id)initWithMapView:(RMMapView *)aMapView points:(NSArray *)points interiorPolygons:(NSArray *)interiorPolygons;
 
 /** The array of polygons nested inside the receiver. (read-only)

@@ -28,9 +28,12 @@
 
 #import "RMAnnotation.h"
 
-/** An RMPointAnnotation is used to represent a single point on a map. The annotation will automatically have a layer created when needed that displays an RMMarker with a default point icon. 
+/** An RMPointAnnotation is used to represent a single point on a map. The annotation will automatically have a layer created when needed that displays an RMMarker with either a default point icon or the supplied image.
 *
-*   If you wish to customize the appearance, you should instead create an RMAnnotation and configure its layer directly. Providing a layer manually for instances of RMPointAnnotation will not have any effect. */
+*   If you wish to customize the layer appearance in more detail, you should instead create an RMAnnotation and configure its layer directly. Providing a layer manually for instances of RMPointAnnotation will not have any effect. */
 @interface RMPointAnnotation : RMAnnotation
+
+/** An image for the annotation's point. */
+@property (nonatomic, strong) UIImage *image;
 
 @end

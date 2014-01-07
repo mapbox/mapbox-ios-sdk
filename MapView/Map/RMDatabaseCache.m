@@ -175,7 +175,7 @@
 {
     _expiryPeriod = theExpiryPeriod;
     
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
 }
 
 - (unsigned long long)fileSize
@@ -325,13 +325,13 @@
 
 - (void)purgeTiles:(NSUInteger)count
 {
-    RMLog(@"purging %u old tiles from the db cache", count);
+    RMLog(@"purging %lu old tiles from the db cache", (unsigned long)count);
 
     [_writeQueueLock lock];
 
     [_queue inDatabase:^(FMDatabase *db)
      {
-         BOOL result = [db executeUpdate:@"DELETE FROM ZCACHE WHERE tile_hash IN (SELECT tile_hash FROM ZCACHE ORDER BY last_used LIMIT ?)", [NSNumber numberWithUnsignedInt:count]];
+         BOOL result = [db executeUpdate:@"DELETE FROM ZCACHE WHERE tile_hash IN (SELECT tile_hash FROM ZCACHE ORDER BY last_used LIMIT ?)", [NSNumber numberWithUnsignedLongLong:count]];
 
          if (result == NO)
              RMLog(@"Error purging cache");

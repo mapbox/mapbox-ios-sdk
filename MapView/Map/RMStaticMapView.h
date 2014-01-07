@@ -40,7 +40,7 @@
 *
 *   The map ID is expected to provide initial center coordinate and zoom level information, and may optionally also include simplestyle marker data, which will automatically be added to the map view.
 *   @param frame The frame with which to initialize the map view.
-*   @param mapID The MapBox map ID string, typically in the format `<username>.map-<mapname>`.
+*   @param mapID The Mapbox map ID string, typically in the format `<username>.map-<mapname>`.
 *   @return An initialized map view, or `nil` if the map view was unable to be initialized. */
 - (id)initWithFrame:(CGRect)frame mapID:(NSString *)mapID;
 
@@ -48,7 +48,7 @@
 *
 *   The map ID is expected to provide initial center coordinate and zoom level information, and may optionally also include simplestyle marker data, which will automatically be added to the map view. The block will be performed upon completion of the load of both the map and of any simplestyle markers included with the map ID.
 *   @param frame The frame with which to initialize the map view.
-*   @param mapID The MapBox map ID string, typically in the format `<username>.map-<mapname>`.
+*   @param mapID The Mapbox map ID string, typically in the format `<username>.map-<mapname>`.
 *   @param handler A block to be performed upon map and marker load completion. An image of the map, including markers, is passed as an argument to the block in the event that you wish to use it elsewhere. The handler will be called on the main dispatch queue.
 *   @return An initialized map view, or `nil` if the map view was unable to be initialized. */
 - (id)initWithFrame:(CGRect)frame mapID:(NSString *)mapID completionHandler:(void (^)(UIImage *))handler;
@@ -57,7 +57,7 @@
 *
 *   The map ID may optionally also include simplestyle marker data, which will automatically be added to the map view.
 *   @param frame The frame with which to initialize the map view.
-*   @param mapID The MapBox map ID string, typically in the format `<username>.map-<mapname>`.
+*   @param mapID The Mapbox map ID string, typically in the format `<username>.map-<mapname>`.
 *   @param centerCoordinate The map center coordinate.
 *   @param zoomLevel The map zoom level.
 *   @return An initialized map view, or `nil` if the map view was unable to be initialized. */
@@ -67,7 +67,7 @@
 *
 *   The map ID may optionally also include simplestyle marker data, which will automatically be added to the map view. The block will be performed upon completion of the load of both the map and of any simplestyle markers included with the map ID. 
 *   @param frame The frame with which to initialize the map view.
-*   @param mapID The MapBox map ID string, typically in the format `<username>.map-<mapname>`.
+*   @param mapID The Mapbox map ID string, typically in the format `<username>.map-<mapname>`.
 *   @param centerCoordinate The map center coordinate.
 *   @param zoomLevel The map zoom level.
 *   @param handler A block to be performed upon map load completion. An image of the map, including markers, is passed as an argument to the block in the event that you wish to use it elsewhere. The handler will be called on the main dispatch queue.

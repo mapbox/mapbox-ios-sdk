@@ -1,8 +1,8 @@
 //
-//  RMMapBoxSource.h
+//  RMMapboxSource.h
 //
 //  Created by Justin R. Miller on 5/17/11.
-//  Copyright 2012 MapBox.
+//  Copyright 2012-2013 Mapbox.
 //  All rights reserved.
 //  
 //  Redistribution and use in source and binary forms, with or without
@@ -15,7 +15,7 @@
 //        notice, this list of conditions and the following disclaimer in the
 //        documentation and/or other materials provided with the distribution.
 //  
-//      * Neither the name of MapBox, nor the names of its contributors may be
+//      * Neither the name of Mapbox, nor the names of its contributors may be
 //        used to endorse or promote products derived from this software
 //        without specific prior written permission.
 //  
@@ -33,49 +33,48 @@
 
 #import "RMAbstractWebMapSource.h"
 
-#define kMapBoxDefaultTileSize 256
-#define kMapBoxDefaultMinTileZoom 0
-#define kMapBoxDefaultMaxTileZoom 18
-#define kMapBoxDefaultLatLonBoundingBox ((RMSphericalTrapezium){ .northEast = { .latitude =  90, .longitude =  180 }, \
+#define kMapboxDefaultTileSize 256
+#define kMapboxDefaultMinTileZoom 0
+#define kMapboxDefaultMaxTileZoom 18
+#define kMapboxDefaultLatLonBoundingBox ((RMSphericalTrapezium){ .northEast = { .latitude =  90, .longitude =  180 }, \
                                                                  .southWest = { .latitude = -90, .longitude = -180 } })
 
-#define kMapBoxPlaceholderNormalMapID @"examples.map-z2effxa8"
-#define kMapBoxPlaceholderRetinaMapID @"examples.map-zswgei2n"
+#define kMapboxPlaceholderMapID @"examples.map-z2effxa8"
 
 // constants for the image quality API (see http://mapbox.com/developers/api/#image_quality)
 typedef enum : NSUInteger {
-    RMMapBoxSourceQualityFull   = 0, // default
-    RMMapBoxSourceQualityPNG32  = 1, // 32 color indexed PNG
-    RMMapBoxSourceQualityPNG64  = 2, // 64 color indexed PNG
-    RMMapBoxSourceQualityPNG128 = 3, // 128 color indexed PNG
-    RMMapBoxSourceQualityPNG256 = 4, // 256 color indexed PNG
-    RMMapBoxSourceQualityJPEG70 = 5, // 70% quality JPEG
-    RMMapBoxSourceQualityJPEG80 = 6, // 80% quality JPEG
-    RMMapBoxSourceQualityJPEG90 = 7  // 90% quality JPEG
-} RMMapBoxSourceQuality;
+    RMMapboxSourceQualityFull   = 0, // default
+    RMMapboxSourceQualityPNG32  = 1, // 32 color indexed PNG
+    RMMapboxSourceQualityPNG64  = 2, // 64 color indexed PNG
+    RMMapboxSourceQualityPNG128 = 3, // 128 color indexed PNG
+    RMMapboxSourceQualityPNG256 = 4, // 256 color indexed PNG
+    RMMapboxSourceQualityJPEG70 = 5, // 70% quality JPEG
+    RMMapboxSourceQualityJPEG80 = 6, // 80% quality JPEG
+    RMMapboxSourceQualityJPEG90 = 7  // 90% quality JPEG
+} RMMapboxSourceQuality;
 
 @class RMMapView;
 
-/** An RMMapBoxSource is used to display map tiles from a network-based map hosted on [MapBox](http://mapbox.com/plans) or the open source [TileStream](https://github.com/mapbox/tilestream) software. Maps are referenced by their MapBox map ID or by a file or URL containing [TileJSON](http://mapbox.com/developers/tilejson/). */
-@interface RMMapBoxSource : RMAbstractWebMapSource
+/** An RMMapboxSource is used to display map tiles from a network-based map hosted on [Mapbox](http://mapbox.com/plans) or the open source [TileStream](https://github.com/mapbox/tilestream) software. Maps are referenced by their Mapbox map ID or by a file or URL containing [TileJSON](http://mapbox.com/developers/tilejson/). */
+@interface RMMapboxSource : RMAbstractWebMapSource
 
 /** @name Creating Tile Sources */
 
-/** Initialize a tile source using the MapBox map ID.
+/** Initialize a tile source using the Mapbox map ID.
 *
 *   This method requires a network connection in order to download the TileJSON used to define the tile source. 
 *
-*   @param mapID The MapBox map ID string, typically in the format `<username>.map-<random characters>`.
-*   @return An initialized MapBox tile source. */
+*   @param mapID The Mapbox map ID string, typically in the format `<username>.map-<random characters>`.
+*   @return An initialized Mapbox tile source. */
 - (id)initWithMapID:(NSString *)mapID;
 
-/** Initialize a tile source using the MapBox map ID, optionally enabling SSL.
+/** Initialize a tile source using the Mapbox map ID, optionally enabling SSL.
 *
 *   This method requires a network connection in order to download the TileJSON used to define the tile source.
 *
-*   @param mapID The MapBox map ID string, typically in the format `<username>.map-<random characters>`.
+*   @param mapID The Mapbox map ID string, typically in the format `<username>.map-<random characters>`.
 *   @param enableSSL Whether to use SSL-enabled HTTPS connections for map tiles and other related data. Defaults to `NO`. At some point in the future, this will default to `YES`. 
-*   @return An initialized MapBox tile source. */
+*   @return An initialized Mapbox tile source. */
 - (id)initWithMapID:(NSString *)mapID enablingSSL:(BOOL)enableSSL;
 
 /** Initialize a tile source with either a remote or local TileJSON structure.
@@ -85,37 +84,37 @@ typedef enum : NSUInteger {
 *   @see tileJSON
 *
 *   @param referenceURL A remote or file path URL pointing to a TileJSON structure.
-*   @return An initialized MapBox tile source. */
+*   @return An initialized Mapbox tile source. */
 - (id)initWithReferenceURL:(NSURL *)referenceURL;
 
 /** Initialize a tile source with TileJSON.
 *   @param tileJSON A string containing TileJSON. 
-*   @return An initialized MapBox tile source. */
+*   @return An initialized Mapbox tile source. */
 - (id)initWithTileJSON:(NSString *)tileJSON;
 
 /** For TileJSON 2.1.0+ layers, initialize a tile source and automatically find and add annotations from [simplestyle](http://mapbox.com/developers/simplestyle/) data.
 *
 *   This method requires a network connection in order to download the TileJSON used to define the tile source.
 *
-*   @param mapID The MapBox map ID string, typically in the format `<username>.map-<random characters>`.
+*   @param mapID The Mapbox map ID string, typically in the format `<username>.map-<random characters>`.
 *   @param mapView A map view on which to display the annotations.
-*   @return An initialized MapBox tile source. */
+*   @return An initialized Mapbox tile source. */
 - (id)initWithMapID:(NSString *)mapID enablingDataOnMapView:(RMMapView *)mapView;
 
 /** For TileJSON 2.1.0+ layers, initialize a tile source and automatically find and add annotations from [simplestyle](http://mapbox.com/developers/simplestyle/) data, optionally enabling SSL.
 *
 *   This method requires a network connection in order to download the TileJSON used to define the tile source.
 *
-*   @param mapID The MapBox map ID string, typically in the format `<username>.map-<random characters>`.
+*   @param mapID The Mapbox map ID string, typically in the format `<username>.map-<random characters>`.
 *   @param mapView A map view on which to display the annotations.
 *   @param enableSSL Whether to use SSL-enabled HTTPS connections for map tiles and other related data. Defaults to `NO`. At some point in the future, this will default to `YES`.
-*   @return An initialized MapBox tile source. */
+*   @return An initialized Mapbox tile source. */
 - (id)initWithMapID:(NSString *)mapID enablingDataOnMapView:(RMMapView *)mapView enablingSSL:(BOOL)enableSSL;
 
 /** For TileJSON 2.1.0+ layers, initialize a tile source and automatically find and add annotations from [simplestyle](http://mapbox.com/developers/simplestyle/) data.
 *   @param tileJSON A string containing TileJSON.
 *   @param mapView A map view on which to display the annotations. 
-*   @return An initialized MapBox tile source. */
+*   @return An initialized Mapbox tile source. */
 - (id)initWithTileJSON:(NSString *)tileJSON enablingDataOnMapView:(RMMapView *)mapView;
 
 /** For TileJSON 2.1.0+ layers, initialize a tile source and automatically find and add annotations from [simplestyle](http://mapbox.com/developers/simplestyle/) data.
@@ -126,12 +125,12 @@ typedef enum : NSUInteger {
 *
 *   @param referenceURL A remote or file path URL pointing to a TileJSON structure.
 *   @param mapView A map view on which to display the annotations.
-*   @return An initialized MapBox tile source. */
+*   @return An initialized Mapbox tile source. */
 - (id)initWithReferenceURL:(NSURL *)referenceURL enablingDataOnMapView:(RMMapView *)mapView;
 
 /** @name Querying Tile Source Information */
 
-/** Any available HTML-formatted map legend data for the tile source, suitable for display in a UIWebView. */
+/** Any available HTML-formatted map legend data for the tile source, suitable for display in a `UIWebView`. */
 - (NSString *)legend;
 
 /** A suggested starting center coordinate for the map layer. */
@@ -157,7 +156,7 @@ typedef enum : NSUInteger {
 /** Image quality that is retrieved from the network. Useful for lower-bandwidth environments. The default is to provide full-quality imagery. 
 *
 *   Note that you may want to clear the tile cache after changing this value in order to provide a consistent experience. */
-@property (nonatomic, assign) RMMapBoxSourceQuality imageQuality;
+@property (nonatomic, assign) RMMapboxSourceQuality imageQuality;
 
 @property (nonatomic, readonly, assign) dispatch_queue_t dataQueue;
 

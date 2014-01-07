@@ -6,4 +6,4 @@
 	url = https://github.com/groue/GRMustache.git
 [submodule "MapView/Map/SMCalloutView"]
 	path = MapView/Map/SMCalloutView
-	url = https://github.com/nfarina/calloutview.git
+	url = https://github.com/mapbox/SMCalloutView.git

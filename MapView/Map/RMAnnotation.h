@@ -30,7 +30,7 @@
 
 @class RMMapView, RMMapLayer, RMQuadTreeNode;
 
-/** An RMAnnotation defines a container for annotation data to be placed on a map. At a future point in time, depending on map use, a visible layer may be requested and displayed for the annotation. The layer can be set ahead of time using the annotation's layer property, or, in the recommended approach, can be provided by an RMMapView's delegate when first needed for display. 
+/** An RMAnnotation defines a container for annotation data to be placed on a map. At a future point in time, depending on map use, a visible layer may be requested and displayed for the annotation. The layer is provided by an RMMapView's delegate when first needed for display. 
 *
 *   Subclasses of RMAnnotation such as RMPointAnnotation, RMPolylineAnnotation, and RMPolygonAnnotation are useful for simple needs such as easily putting points and shapes onto a map view. They manage their own layer and don't require configuration in the map view delegate in order to be displayed. */
 @interface RMAnnotation : NSObject
@@ -76,7 +76,7 @@
 @property (nonatomic, strong) UIImage *badgeIcon;
 @property (nonatomic, assign) CGPoint anchorPoint;
 
-/** The annotation's current location on screen. Do not set this directly unless during temporary operations like annotation drags, but rather use the coordinate property to permanently change the annotation's location on the map. */
+/** The annotation's current location on screen. Do not set this directly unless during temporary operations such as animations, but rather use the coordinate property to permanently change the annotation's location on the map. */
 @property (nonatomic, assign) CGPoint position;
 
 @property (nonatomic, assign) RMProjectedPoint projectedLocation; // in projected meters
@@ -110,7 +110,9 @@
 
 /** @name Filtering Types of Annotations */
 
-/** Whether the annotation is related to display of the user's location. Useful for filtering purposes when providing annotation layers in the delegate. */
+/** Whether the annotation is related to display of the user's location. Useful for filtering purposes when providing annotation layers in the delegate. 
+*
+*   There are three possible user location annotations, depending on current conditions: the user dot, the pulsing halo, and the accuracy circle. All may have custom layers provided, but if you only want to customize the user dot, you should check that the annotation is a member of the RMUserLocation class in order to ensure that you are altering only the correct annotation layer. */
 @property (nonatomic, readonly) BOOL isUserLocationAnnotation;
 
 #pragma mark -
@@ -122,7 +124,7 @@
 *   @param aCoordinate The location for the annotation. 
 *   @param aTitle The annotation's title. 
 *   @return An annotation object, or `nil` if an annotation was unable to be created. */
-+ (id)annotationWithMapView:(RMMapView *)aMapView coordinate:(CLLocationCoordinate2D)aCoordinate andTitle:(NSString *)aTitle;
++ (instancetype)annotationWithMapView:(RMMapView *)aMapView coordinate:(CLLocationCoordinate2D)aCoordinate andTitle:(NSString *)aTitle;
 
 /** Initialize an annotation. 
 *   @param aMapView The map view on which to place the annotation. 

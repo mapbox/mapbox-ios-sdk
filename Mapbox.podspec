@@ -1,13 +1,13 @@
 Pod::Spec.new do |m|
 
-  m.name    = 'MapBox'
-  m.version = '1.0.3'
+  m.name    = 'Mapbox'
+  m.version = '1.1.0'
 
   m.summary     = 'Open source alternative to MapKit.'
   m.description = 'Open source alternative to MapKit supporting custom tile sources, offline use, and complete cache control.'
   m.homepage    = 'http://mapbox.com/mobile'
   m.license     = 'BSD'
-  m.author      = { 'MapBox' => 'ios@mapbox.com' }
+  m.author      = { 'Mapbox' => 'ios@mapbox.com' }
   m.screenshot  = 'https://raw.github.com/mapbox/mapbox-ios-sdk/packaging/screenshot.png'
 
   m.source = { :git => 'https://github.com/mapbox/mapbox-ios-sdk.git', :tag => m.version.to_s }
@@ -21,23 +21,22 @@ Pod::Spec.new do |m|
 
   m.prefix_header_file = 'MapView/MapView_Prefix.pch'
 
-  m.post_install do |library|
-    Dir.chdir File.join(library.sandbox_dir, 'MapBox') do
-      command = "xcodebuild -project MapView/MapView.xcodeproj -target Resources CONFIGURATION_BUILD_DIR=../../Resources 2>&1 > /dev/null"
+  m.pre_install do |pod, target_definition|
+    Dir.chdir(pod.root) do
+      command = "xcodebuild -project MapView/MapView.xcodeproj -target Resources CONFIGURATION_BUILD_DIR=../Resources 2>&1 > /dev/null"
       unless system(command)
-        raise ::Pod::Informative, "Failed to generate MapBox resources bundle"
+        raise ::Pod::Informative, "Failed to generate Mapbox resources bundle"
       end
     end
-    File.open(library.copy_resources_script_path, 'a') do |file|
-      file.puts "install_resource 'Resources/MapBox.bundle'"
-    end
   end
+
+  m.resource = 'Resources/Mapbox.bundle'
 
   m.documentation = {
     :html => 'http://mapbox.com/mapbox-ios-sdk/api/',
     :appledoc => [
-      '--project-company', 'MapBox',
-      '--docset-copyright', 'MapBox',
+      '--project-company', 'Mapbox',
+      '--docset-copyright', 'Mapbox',
       '--no-keep-undocumented-objects',
       '--no-keep-undocumented-members',
       '--ignore', '.c',
@@ -69,11 +68,13 @@ Pod::Spec.new do |m|
     ]
   }
 
+  m.documentation_url = 'https://www.mapbox.com/mapbox-ios-sdk/api/'
+
   m.frameworks = 'CoreGraphics', 'CoreLocation', 'Foundation', 'QuartzCore', 'UIKit'
 
   m.libraries = 'Proj4', 'sqlite3', 'z'
 
-  m.xcconfig = { 'OTHER_LDFLAGS' => '-ObjC', 'LIBRARY_SEARCH_PATHS' => '"${PODS_ROOT}/MapBox/Proj4"' }
+  m.xcconfig = { 'OTHER_LDFLAGS' => '-ObjC', 'LIBRARY_SEARCH_PATHS' => '"${PODS_ROOT}/Mapbox/Proj4"' }
 
   m.preserve_paths = 'Proj4/libProj4.a', 'MapView/MapView.xcodeproj', 'MapView/Map/Resources'
 

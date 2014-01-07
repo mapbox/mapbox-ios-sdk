@@ -50,7 +50,7 @@
     return self;
 }
 
-- (unsigned)sublayersCount
+- (NSUInteger)sublayersCount
 {
     return [self.layer.sublayers count];
 }

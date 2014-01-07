@@ -46,7 +46,7 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 
 @implementation NSData (RMUserAgent)
 
-+ (NSData *)brandedDataWithContentsOfURL:(NSURL *)aURL
++ (instancetype)brandedDataWithContentsOfURL:(NSURL *)aURL
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:aURL];
 
@@ -61,24 +61,16 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 
 @implementation NSString (RMUserAgent)
 
-+ (id)brandedStringWithContentsOfURL:(NSURL *)url encoding:(NSStringEncoding)enc error:(NSError **)error
++ (instancetype)brandedStringWithContentsOfURL:(NSURL *)url encoding:(NSStringEncoding)enc error:(NSError **)error
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
 
     [request setValue:[[RMConfiguration configuration] userAgent] forHTTPHeaderField:@"User-Agent"];
 
-    NSError *internalError = nil;
-
-    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&internalError];
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:error];
 
     if ( ! returnData)
-    {
-        if (error != NULL) {
-            *error = internalError;
-        }
-
         return nil;
-    }
 
     return [[[self class] alloc] initWithData:returnData encoding:enc];
 }
@@ -94,7 +86,7 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 
 @synthesize userAgent=_userAgent;
 
-+ (RMConfiguration *)configuration
++ (instancetype)configuration
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -109,7 +101,7 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
     if (!(self = [super init]))
         return nil;
 
-    _userAgent = [NSString stringWithFormat:@"MapBox iOS SDK (%@/%@)", [[UIDevice currentDevice] model], [[UIDevice currentDevice] systemVersion]];
+    _userAgent = [NSString stringWithFormat:@"Mapbox iOS SDK (%@/%@)", [[UIDevice currentDevice] model], [[UIDevice currentDevice] systemVersion]];
 
     if (path == nil)
     {
@@ -119,13 +111,13 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 
     RMLog(@"reading route-me configuration from %@", path);
 
-    NSString *error = nil;
+    NSError *error = nil;
     NSData *plistData = [NSData dataWithContentsOfFile:path];
 
-    _propertyList = [NSPropertyListSerialization propertyListFromData:plistData
-                                                     mutabilityOption:NSPropertyListImmutable
+    _propertyList = [NSPropertyListSerialization propertyListWithData:plistData
+                                                              options:NSPropertyListImmutable
                                                                format:NULL
-                                                     errorDescription:&error];
+                                                                error:&error];
 
     if ( ! _propertyList)
     {

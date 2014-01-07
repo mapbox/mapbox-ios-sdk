@@ -2,7 +2,7 @@
 //  RMMBTilesSource.h
 //
 //  Created by Justin R. Miller on 6/18/10.
-//  Copyright 2012 MapBox.
+//  Copyright 2012-2013 Mapbox.
 //  All rights reserved.
 //  
 //  Redistribution and use in source and binary forms, with or without
@@ -15,7 +15,7 @@
 //        notice, this list of conditions and the following disclaimer in the
 //        documentation and/or other materials provided with the distribution.
 //  
-//      * Neither the name of MapBox, nor the names of its contributors may be
+//      * Neither the name of Mapbox, nor the names of its contributors may be
 //        used to endorse or promote products derived from this software
 //        without specific prior written permission.
 //  
@@ -50,9 +50,16 @@
 
 /** @name Creating Tile Sources */
 
+/** Initialize and return a newly allocated MBTiles tile source based on a given bundle resource with the extension `.mbtiles`. 
+*
+*   @param name The name of the resource file. If name is an empty string or `nil`, uses the first file encountered with the extension `.mbtiles`. 
+*   @return An initialized MBTiles tile source. */
+- (id)initWithTileSetResource:(NSString *)name;
+
 /** Initialize and return a newly allocated MBTiles tile source based on a given bundle resource.
 *   @param name The name of the resource file. If name is an empty string or `nil`, uses the first file encountered of the supplied type.
-*   @param extension If extension is an empty string or `nil`, the extension is assumed not to exist and the file is the first file encountered that exactly matches name. */
+*   @param extension If extension is an empty string or `nil`, the extension is assumed not to exist and the file is the first file encountered that exactly matches name. 
+*   @return An initialized MBTiles tile source. */
 - (id)initWithTileSetResource:(NSString *)name ofType:(NSString *)extension;
 
 /** Initialize and return a newly allocated MBTiles tile source based on a given local database URL.
@@ -62,7 +69,7 @@
 
 /** @name Querying Tile Source Information */
 
-/** Any available HTML-formatted map legend data for the tile source, suitable for display in a UIWebView. */
+/** Any available HTML-formatted map legend data for the tile source, suitable for display in a `UIWebView`. */
 - (NSString *)legend;
 
 /** A suggested starting center coordinate for the map layer. */

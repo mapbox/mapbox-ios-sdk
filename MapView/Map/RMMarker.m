@@ -79,37 +79,37 @@
     return self;
 }
 
-- (id)initWithMapBoxMarkerImage
+- (id)initWithMapboxMarkerImage
 {
-    return [self initWithMapBoxMarkerImage:nil tintColor:nil size:RMMarkerMapBoxImageSizeMedium];
+    return [self initWithMapboxMarkerImage:nil tintColor:nil size:RMMarkerMapboxImageSizeMedium];
 }
 
-- (id)initWithMapBoxMarkerImage:(NSString *)symbolName
+- (id)initWithMapboxMarkerImage:(NSString *)symbolName
 {
-    return [self initWithMapBoxMarkerImage:symbolName tintColor:nil size:RMMarkerMapBoxImageSizeMedium];
+    return [self initWithMapboxMarkerImage:symbolName tintColor:nil size:RMMarkerMapboxImageSizeMedium];
 }
 
-- (id)initWithMapBoxMarkerImage:(NSString *)symbolName tintColor:(UIColor *)color
+- (id)initWithMapboxMarkerImage:(NSString *)symbolName tintColor:(UIColor *)color
 {
-    return [self initWithMapBoxMarkerImage:symbolName tintColor:color size:RMMarkerMapBoxImageSizeMedium];
+    return [self initWithMapboxMarkerImage:symbolName tintColor:color size:RMMarkerMapboxImageSizeMedium];
 }
 
-- (id)initWithMapBoxMarkerImage:(NSString *)symbolName tintColor:(UIColor *)color size:(RMMarkerMapBoxImageSize)size
+- (id)initWithMapboxMarkerImage:(NSString *)symbolName tintColor:(UIColor *)color size:(RMMarkerMapboxImageSize)size
 {
     NSString *sizeString = nil;
     
     switch (size)
     {
-        case RMMarkerMapBoxImageSizeSmall:
+        case RMMarkerMapboxImageSizeSmall:
             sizeString = @"small";
             break;
         
-        case RMMarkerMapBoxImageSizeMedium:
+        case RMMarkerMapboxImageSizeMedium:
         default:
             sizeString = @"medium";
             break;
         
-        case RMMarkerMapBoxImageSizeLarge:
+        case RMMarkerMapboxImageSizeLarge:
             sizeString = @"large";
             break;
     }
@@ -118,27 +118,33 @@
     
     if (color)
     {
-        CGFloat red, green, blue, alpha;
+        CGFloat white, red, green, blue, alpha;
 
         if ([color getRed:&red green:&green blue:&blue alpha:&alpha])
-            colorHex = [NSString stringWithFormat:@"%02x%02x%02x", (NSUInteger)(red * 255), (NSUInteger)(green * 255), (NSUInteger)(blue * 255)];
+        {
+            colorHex = [NSString stringWithFormat:@"%02lx%02lx%02lx", (unsigned long)(red * 255), (unsigned long)(green * 255), (unsigned long)(blue * 255)];
+        }
+        else if ([color getWhite:&white alpha:&alpha])
+        {
+            colorHex = [NSString stringWithFormat:@"%02lx%02lx%02lx", (unsigned long)(white * 255), (unsigned long)(white * 255), (unsigned long)(white * 255)];
+        }
     }
     
-    return [self initWithMapBoxMarkerImage:symbolName tintColorHex:colorHex sizeString:sizeString];
+    return [self initWithMapboxMarkerImage:symbolName tintColorHex:colorHex sizeString:sizeString];
 }
 
-- (id)initWithMapBoxMarkerImage:(NSString *)symbolName tintColorHex:(NSString *)colorHex
+- (id)initWithMapboxMarkerImage:(NSString *)symbolName tintColorHex:(NSString *)colorHex
 {
-    return [self initWithMapBoxMarkerImage:symbolName tintColorHex:colorHex sizeString:@"medium"];
+    return [self initWithMapboxMarkerImage:symbolName tintColorHex:colorHex sizeString:@"medium"];
 }
 
-- (id)initWithMapBoxMarkerImage:(NSString *)symbolName tintColorHex:(NSString *)colorHex sizeString:(NSString *)sizeString
+- (id)initWithMapboxMarkerImage:(NSString *)symbolName tintColorHex:(NSString *)colorHex sizeString:(NSString *)sizeString
 {
     BOOL useRetina = ([[UIScreen mainScreen] scale] > 1.0);
     
     NSURL *imageURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://api.tiles.mapbox.com/v3/marker/pin-%@%@%@%@.png",
                                                (sizeString ? [sizeString substringToIndex:1] : @"m"), 
-                                               (symbolName ? [@"-" stringByAppendingString:symbolName] : @"-star"),
+                                               (symbolName ? [@"-" stringByAppendingString:symbolName] : @""),
                                                (colorHex   ? [@"+" stringByAppendingString:[colorHex stringByReplacingOccurrencesOfString:@"#" withString:@""]] : @"+ff0000"),
                                                (useRetina  ? @"@2x" : @"")]];
 
@@ -154,7 +160,7 @@
     return [self initWithUIImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:cachePath] scale:(useRetina ? 2.0 : 1.0)]];
 }
 
-+ (void)clearCachedMapBoxMarkers
++ (void)clearCachedMapboxMarkers
 {
     for (NSString *filePath in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:kCachesPath error:nil])
         if ([[filePath lastPathComponent] hasPrefix:@"pin-"] && [[filePath lastPathComponent] hasSuffix:@".png"])
@@ -239,10 +245,7 @@
     [aLabel setBackgroundColor:backgroundColor];
     [aLabel setTextColor:textColor];
     [aLabel setFont:font];
-    #pragma clang diagnostic push
-    #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    [aLabel setTextAlignment:UITextAlignmentCenter];
-    #pragma clang diagnostic pop
+    [aLabel setTextAlignment:NSTextAlignmentCenter];
     [aLabel setText:text];
 
     [self setLabel:aLabel];
@@ -276,6 +279,44 @@
         // Using removeFromSuperlayer will animate hiding the label, whereas setHidden is not animated
         [[self.label layer] removeFromSuperlayer];
         [self.label setHidden:YES];
+    }
+}
+
+- (void)setDragState:(RMMapLayerDragState)dragState animated:(BOOL)animated
+{
+    if (dragState == RMMapLayerDragStateStarting)
+    {
+        [CATransaction begin];
+        [CATransaction setAnimationDuration:(animated ? 0.3 : 0)];
+
+        self.opacity -= 0.1;
+        self.transform = CATransform3DScale(self.transform, 1.3, 1.3, 1.0);
+
+        [CATransaction setCompletionBlock:^(void)
+        {
+            [super setDragState:RMMapLayerDragStateDragging animated:animated];
+        }];
+
+        [CATransaction commit];
+    }
+    else if (dragState == RMMapLayerDragStateCanceling || dragState == RMMapLayerDragStateEnding)
+    {
+        [CATransaction begin];
+        [CATransaction setAnimationDuration:(animated ? 0.3 : 0)];
+
+        self.opacity += 0.1;
+        self.transform = CATransform3DScale(self.transform, 1.0/1.3, 1.0/1.3, 1.0);
+
+        [CATransaction setCompletionBlock:^(void)
+        {
+             [super setDragState:RMMapLayerDragStateNone animated:animated];
+        }];
+
+        [CATransaction commit];
+    }
+    else
+    {
+        [super setDragState:dragState animated:animated];
     }
 }
 

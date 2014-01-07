@@ -32,6 +32,14 @@
 @class RMUserLocation;
 
 typedef enum : NSUInteger {
+    RMMapLayerDragStateNone = 0,
+    RMMapLayerDragStateStarting,
+    RMMapLayerDragStateDragging,
+    RMMapLayerDragStateCanceling,
+    RMMapLayerDragStateEnding
+} RMMapLayerDragState;
+
+typedef enum : NSUInteger {
     RMUserTrackingModeNone              = 0,
     RMUserTrackingModeFollow            = 1,
     RMUserTrackingModeFollowWithHeading = 2
@@ -168,25 +176,19 @@ typedef enum : NSUInteger {
 - (void)tapOnCalloutAccessoryControl:(UIControl *)control forAnnotation:(RMAnnotation *)annotation onMap:(RMMapView *)map;
 
 /** Asks the delegate whether the user should be allowed to drag the layer for an annotation. 
-*   @param map The map view. 
+*   @param mapView The map view.
 *   @param annotation The annotation the user is attempting to drag. 
-*   @return A Boolean value indicating whether the user should be allowed to drag the annotation layer. */
-- (BOOL)mapView:(RMMapView *)map shouldDragAnnotation:(RMAnnotation *)annotation;
+*   @return A Boolean value indicating whether the user should be allowed to drag the annotation's layer. */
+- (BOOL)mapView:(RMMapView *)mapView shouldDragAnnotation:(RMAnnotation *)annotation;
 
-/** Tells the delegate that the user is dragging an annotation layer. 
+/** Tells the delegate that the drag state of one of its annotations changed.
 *
-*   If the screen location of the annotation layer should be changed, you are responsible for adjusting it.
-*   @param map The map view. 
-*   @param annotation The annotation being dragged. 
-*   @param delta The delta of movement since the last drag notification. */
-- (void)mapView:(RMMapView *)map didDragAnnotation:(RMAnnotation *)annotation withDelta:(CGPoint)delta;
-
-/** Tells the delegate that the user has finished dragging an annotation layer. 
-*
-*   If the screen position of the annotation layer has been changed since the drag operation started, you should update its coordinate to the final location in order to ensure that the annotation is displayed there going forward. Otherwise, the next time the annotations are adjusted, it will revert to its original position from before the drag. 
-*   @param map The map view. 
-*   @param annotation The annotation that was dragged. */
-- (void)mapView:(RMMapView *)map didEndDragAnnotation:(RMAnnotation *)annotation;
+*   The drag state typically changes in response to user interactions with the annotation layer. However, the annotation layer itself is responsible for changing that state as well.
+*   @param mapView The map view containing the annotation layer.
+*   @param annotation The annotation whose drag state changed.
+*   @param newState The new drag state of the annotation layer. 
+*   @param oldState The previous drag state of the annotation layer. */
+- (void)mapView:(RMMapView *)mapView annotation:(RMAnnotation *)annotation didChangeDragState:(RMMapLayerDragState)newState fromOldState:(RMMapLayerDragState)oldState;
 
 /** @name Tracking the User Location */
 

@@ -1,4 +1,4 @@
-MapBox iOS SDK copyright (c) 2012, MapBox. 
+Mapbox iOS SDK copyright (c) 2012-2013, Mapbox. 
 
 The Route-Me library is copyright (c) 2008-2012, Route-Me Contributors
 All rights reserved.

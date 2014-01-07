@@ -269,8 +269,9 @@
     float minCacheLon  = southWest.longitude;
     float maxCacheLon  = northEast.longitude;
 
-    if (maxCacheZoom < minCacheZoom || maxCacheLat <= minCacheLat || maxCacheLon <= minCacheLon)
-        return;
+    NSAssert(minCacheZoom <= maxCacheZoom, @"Minimum zoom should be less than or equal to maximum zoom");
+    NSAssert(maxCacheLat  >  minCacheLat,  @"Northernmost bounds should exceed southernmost bounds");
+    NSAssert(maxCacheLon  >  minCacheLon,  @"Easternmost bounds should exceed westernmost bounds");
 
     int n, xMin, yMax, xMax, yMin;
 
@@ -287,7 +288,8 @@
         totalTiles += (xMax + 1 - xMin) * (yMax + 1 - yMin);
     }
 
-    [_backgroundCacheDelegate tileCache:self didBeginBackgroundCacheWithCount:totalTiles forTileSource:_activeTileSource];
+    if ([_backgroundCacheDelegate respondsToSelector:@selector(tileCache:didBeginBackgroundCacheWithCount:forTileSource:)])
+        [_backgroundCacheDelegate tileCache:self didBeginBackgroundCacheWithCount:totalTiles forTileSource:_activeTileSource];
 
     __block int progTile = 0;
 
@@ -317,7 +319,8 @@
                         {
                             progTile++;
 
-                            [_backgroundCacheDelegate tileCache:self didBackgroundCacheTile:RMTileMake(x, y, zoom) withIndex:progTile ofTotalTileCount:totalTiles];
+                            if ([_backgroundCacheDelegate respondsToSelector:@selector(tileCache:didBackgroundCacheTile:withIndex:ofTotalTileCount:)])
+                                [_backgroundCacheDelegate tileCache:self didBackgroundCacheTile:RMTileMake(x, y, zoom) withIndex:progTile ofTotalTileCount:totalTiles];
 
                             if (progTile == totalTiles)
                             {
@@ -325,7 +328,8 @@
 
                                  _activeTileSource = nil;
 
-                                [_backgroundCacheDelegate tileCacheDidFinishBackgroundCache:self];
+                                if ([_backgroundCacheDelegate respondsToSelector:@selector(tileCacheDidFinishBackgroundCache:)])
+                                    [_backgroundCacheDelegate tileCacheDidFinishBackgroundCache:self];
                             }
                         }
 
@@ -363,7 +367,8 @@
             {
                 dispatch_sync(dispatch_get_main_queue(), ^(void)
                 {
-                    [_backgroundCacheDelegate tileCacheDidCancelBackgroundCache:self];
+                    if ([_backgroundCacheDelegate respondsToSelector:@selector(tileCacheDidCancelBackgroundCache:)])
+                        [_backgroundCacheDelegate tileCacheDidCancelBackgroundCache:self];
                 });
             }
         }
@@ -449,7 +454,7 @@ static NSMutableDictionary *predicateValues = nil;
         }
     }
 
-    RMLog(@"Memory cache configuration: {capacity : %d}", capacity);
+    RMLog(@"Memory cache configuration: {capacity : %lu}", (unsigned long)capacity);
 
 	return [[RMMemoryCache alloc] initWithCapacity:capacity];
 }
@@ -519,7 +524,7 @@ static NSMutableDictionary *predicateValues = nil;
         }
         else
         {
-            RMLog(@"illegal value for capacity: %d", value);
+            RMLog(@"illegal value for capacity: %ld", (long)value);
         }
     }
 
@@ -549,7 +554,7 @@ static NSMutableDictionary *predicateValues = nil;
     if (expiryPeriodNumber != nil)
         _expiryPeriod = [expiryPeriodNumber doubleValue];
 
-    RMLog(@"Database cache configuration: {capacity : %d, strategy : %@, minimalPurge : %d, expiryPeriod: %.0f, useCacheDir : %@}", capacity, strategyStr, minimalPurge, _expiryPeriod, useCacheDir ? @"YES" : @"NO");
+    RMLog(@"Database cache configuration: {capacity : %lu, strategy : %@, minimalPurge : %lu, expiryPeriod: %.0f, useCacheDir : %@}", (unsigned long)capacity, strategyStr, (unsigned long)minimalPurge, _expiryPeriod, useCacheDir ? @"YES" : @"NO");
 
     RMDatabaseCache *dbCache = [[RMDatabaseCache alloc] initUsingCacheDir:useCacheDir];
     [dbCache setCapacity:capacity];

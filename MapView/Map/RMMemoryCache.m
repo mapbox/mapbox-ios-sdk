@@ -40,7 +40,7 @@
     if (!(self = [super init]))
         return nil;
 
-    RMLog(@"initializing memory cache %@ with capacity %d", self, aCapacity);
+    RMLog(@"initializing memory cache %@ with capacity %lu", self, (unsigned long)aCapacity);
 
     _memoryCache = [[NSMutableDictionary alloc] initWithCapacity:aCapacity];
     _memoryCacheQueue = dispatch_queue_create("routeme.memoryCacheQueue", DISPATCH_QUEUE_CONCURRENT);

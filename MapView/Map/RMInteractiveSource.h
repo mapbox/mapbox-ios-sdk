@@ -2,7 +2,7 @@
 //  RMInteractiveSource.h
 //
 //  Created by Justin R. Miller on 6/22/11.
-//  Copyright 2012 MapBox.
+//  Copyright 2012-2013 Mapbox.
 //  All rights reserved.
 //  
 //  Redistribution and use in source and binary forms, with or without
@@ -15,7 +15,7 @@
 //        notice, this list of conditions and the following disclaimer in the
 //        documentation and/or other materials provided with the distribution.
 //  
-//      * Neither the name of MapBox, nor the names of its contributors may be
+//      * Neither the name of Mapbox, nor the names of its contributors may be
 //        used to endorse or promote products derived from this software
 //        without specific prior written permission.
 //  
@@ -35,14 +35,14 @@
 
 #import "RMMapView.h"
 #import "RMMBTilesSource.h"
-#import "RMMapBoxSource.h"
+#import "RMMapboxSource.h"
 
-typedef enum {
+typedef enum : NSUInteger {
     RMInteractiveSourceOutputTypeTeaser = 0,
     RMInteractiveSourceOutputTypeFull   = 1,
 } RMInteractiveSourceOutputType;
 
-/** Developers can import RMInteractiveSource in order to enable embedded interactivity in their RMMapView, RMMBTilesSource, and RMMapBoxSource objects. Interactivity is based on the UTFGrid specification, which is a space-efficient way to encode many arbitrary values for pixel coordinates at every zoom level, allowing later retrieval based on user events on those coordinates. For example, the user touching a pixel in Spain could trigger retrieval of Spain's flag image for display. 
+/** Developers can import RMInteractiveSource in order to enable embedded interactivity in their RMMapView, RMMBTilesSource, and RMMapboxSource objects. Interactivity is based on the UTFGrid specification, which is a space-efficient way to encode many arbitrary values for pixel coordinates at every zoom level, allowing later retrieval based on user events on those coordinates. For example, the user touching a pixel in Spain could trigger retrieval of Spain's flag image for display. 
 *
 *   Interactive map views adopt the RMInteractiveMapView protocol.
 *
@@ -75,7 +75,7 @@ typedef enum {
 
 #pragma mark -
 
-/** Developers can import RMInteractiveSource in order to enable embedded interactivity in their RMMapView, RMMBTilesSource, and RMMapBoxSource objects. Interactivity is based on the [UTFGrid specification](https://github.com/mapbox/utfgrid-spec) and is best described by [this web demo](http://mapbox.com/demo/visiblemap/).
+/** Developers can import RMInteractiveSource in order to enable embedded interactivity in their RMMapView, RMMBTilesSource, and RMMapboxSource objects. Interactivity is based on the [UTFGrid specification](https://github.com/mapbox/utfgrid-spec) and is best described by [this web demo](http://mapbox.com/demo/visiblemap/).
 *
 *   Interactive tile sources adopt the RMInteractiveSource protocol.
 *
@@ -109,7 +109,7 @@ typedef enum {
 
 #pragma mark -
 
-@interface RMMapBoxSource (RMInteractiveSource) <RMInteractiveSource>
+@interface RMMapboxSource (RMInteractiveSource) <RMInteractiveSource>
 
 - (BOOL)supportsInteractivity;
 - (NSString *)formattedOutputOfType:(RMInteractiveSourceOutputType)outputType forPoint:(CGPoint)point inMapView:(RMMapView *)mapView;

@@ -1,9 +1,9 @@
-MapBox iOS SDK
+Mapbox iOS SDK
 --------------
 
-Based on the Route-Me iOS map library (Alpstein fork) with [MapBox][mapbox] customizations. 
+Based on the Route-Me iOS map library (Alpstein fork) with [Mapbox][mapbox] customizations. 
 
-Requires iOS 5, Xcode 4.3 or greater, and ARC. 
+Requires iOS 5, Xcode 5.0 or greater, and ARC.
 
 [![](https://raw.github.com/mapbox/mapbox-ios-sdk/packaging/screenshot.png)]()
 
@@ -11,8 +11,8 @@ Major differences from [Alpstein fork of Route-Me](https://github.com/Alpstein/r
 
  * Requires iOS 5.0 and above. 
  * Supports Automatic Reference Counting (ARC). 
- * [MapBox](http://mapbox.com) & [MBTiles](http://mbtiles.org) tile source integration code. 
- * [MapBox Markers](http://mapbox.com/blog/markers/) support. 
+ * [Mapbox](http://mapbox.com) & [MBTiles](http://mbtiles.org) tile source integration code. 
+ * [Mapbox Markers](http://mapbox.com/blog/markers/) support. 
  * [UTFGrid interactivity](http://mapbox.com/mbtiles-spec/utfgrid/). 
  * Improved network tile loading performance. 
  * A bulk, background map tile downloader for cache pre-population. 
@@ -35,7 +35,7 @@ Route-Me
 
 Route-Me is an open source map library that runs natively on iOS.  It's designed to look and feel much like the built-in iOS map library, but it's entirely open, and works with any map source using a pluggable backend system. 
 
-Supported map tile sources include [MapBox][1]/[TileStream][2], the offline-capable, database-backed format [MBTiles][3], [OpenStreetMap][4], and several others. 
+Supported map tile sources include [Mapbox][1]/[TileStream][2], the offline-capable, database-backed format [MBTiles][3], [OpenStreetMap][4], and several others. 
 
 Please note that you are responsible for getting permission to use the map data, and for ensuring your use adheres to the relevant terms of use.
 
@@ -50,7 +50,7 @@ Installation
 There are three ways that you can install the SDK, depending upon your needs: 
 
  1. Clone from GitHub and integrate as a dependent Xcode project. 
- 1. Use the [binary framework](http://mapbox-ios-sdk.s3.amazonaws.com/index.html). Use like regular frameworks, linking it in your project, adding `#import <MapBox/MapBox.h>`, and additionally, including the `-ObjC` linker flag. 
+ 1. Use the [binary framework](http://mapbox-ios-sdk.s3.amazonaws.com/index.html). Use like regular frameworks, linking it in your project, adding `#import <Mapbox/Mapbox.h>`, and additionally, including the `-ObjC` linker flag. 
  1. Install via [CocoaPods](http://cocoapods.org). 
 
 More detailed information on the installation options is available in the [SDK guide](http://mapbox.com/mapbox-ios-sdk/). 
@@ -63,8 +63,8 @@ Then, update the submodules:
 
 Some example apps showing usage of the SDK (with screenshots):
 
- * [MapBox iOS Example](https://github.com/mapbox/mapbox-ios-example) - online, offline, and interactive tile sources
- * [MapBox Me](https://github.com/mapbox/mapbox-me) - user location services and terrain toggling
+ * [Mapbox iOS Example](https://github.com/mapbox/mapbox-ios-example) - online, offline, and interactive tile sources
+ * [Mapbox Me](https://github.com/mapbox/mapbox-me) - user location services and terrain toggling
  * [Weekend Picks](https://github.com/mapbox/weekend-picks-template-ios) - markers and data
 
 More documentation is available: 
@@ -73,25 +73,25 @@ More documentation is available:
 
 There are two subdirectories - MapView and Proj4. Proj4 is a support library used to do map projections. The MapView project contains only the Route-Me map library. 
 
-See License.txt for license details. In any app that uses this SDK, include the following text on your "preferences" or "about" screen: "Uses MapBox iOS SDK, (c) 2008-2013 MapBox and Route-Me Contributors". Your data provider will have additional attribution requirements.
+See License.txt for license details. In any app that uses this SDK, include the following text on your "preferences" or "about" screen: "Uses Mapbox iOS SDK, (c) 2008-2013 Mapbox and Route-Me Contributors". Your data provider will have additional attribution requirements.
 
 News, Support and Contributing
 ------------------------------
 
 Complete API documentation is available [online](http://mapbox.com/mapbox-ios-sdk/api/) or as an [Xcode docset Atom feed](http://mapbox.com/mapbox-ios-sdk/Docs/publish/docset.atom). 
 
-The MapBox iOS SDK has a [support resource](http://support.mapbox.com/discussions/mapbox-ios-sdk) where you can open cases and browse other developers' discussions about use of the SDK. 
+The Mapbox iOS SDK has a [support resource](http://support.mapbox.com/discussions/mapbox-ios-sdk) where you can open cases and browse other developers' discussions about use of the SDK. 
 
 We have a [basic technical overview](http://mapbox.com/mapbox-ios-sdk/) along with the installation instructions. 
 
-MapBox has an IRC channel on `irc.freenode.net` in `#mapbox`. 
+Mapbox has an IRC channel on `irc.freenode.net` in `#mapbox`. 
 
 To report bugs and help fix them, please use the [issue tracker](https://github.com/mapbox/mapbox-ios-sdk/issues). 
 
 Dependent Libraries
 -------------------
 
-The MapBox iOS SDK makes use of several sub-libraries, listed below. See License.txt for more detailed information about Route-Me and Proj4 and see the individual license files in the sub-libraries for more information on each. 
+The Mapbox iOS SDK makes use of several sub-libraries, listed below. See License.txt for more detailed information about Route-Me and Proj4 and see the individual license files in the sub-libraries for more information on each. 
 
  * [FMDB](https://github.com/ccgus/fmdb) by Gus Mueller (SQLite for caching and MBTiles)
  * [GRMustache](https://github.com/groue/GRMustache) by Gwendal Roué (Mustache templates)

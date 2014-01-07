@@ -33,6 +33,7 @@
 {
     NSString *_mapsKey;
     NSString *_imageURLString;
+    NSString *_uniqueTilecacheKey;
     RMBingImagerySet _imagerySet;
 }
 
@@ -48,6 +49,8 @@
         _mapsKey = mapsKey;
 
         _imagerySet = imagerySet;
+
+        _uniqueTilecacheKey = [NSString stringWithFormat:@"Bing%lu", (unsigned long)_imagerySet];
 
         self.minZoom = 1;
         self.maxZoom = 21;
@@ -75,7 +78,10 @@
 
         NSData *metadataData = [NSData brandedDataWithContentsOfURL:metadataURL];
 
-        id metadata = [NSJSONSerialization JSONObjectWithData:metadataData options:0 error:nil];
+        if ( ! metadataData)
+            return nil;
+
+        id metadata = [NSJSONSerialization JSONObjectWithData:metadataData options:0 error:NULL];
 
         if (metadata && [metadata isKindOfClass:[NSDictionary class]] && [[metadata objectForKey:@"statusCode"] intValue] == 200)
         {
@@ -120,7 +126,7 @@
 
 - (NSString *)uniqueTilecacheKey
 {
-	return [NSString stringWithFormat:@"Bing%i", _imagerySet];
+	return _uniqueTilecacheKey;
 }
 
 - (NSString *)shortName

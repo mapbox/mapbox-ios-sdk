@@ -42,7 +42,7 @@
 @synthesize tile = _tile;
 @synthesize timestamp = _timestamp;
 
-+ (id)cacheObject:(id)anObject forTile:(RMTile)aTile withCacheKey:(NSString *)aCacheKey
++ (instancetype)cacheObject:(id)anObject forTile:(RMTile)aTile withCacheKey:(NSString *)aCacheKey
 {
     return [[self alloc] initWithObject:anObject forTile:aTile withCacheKey:aCacheKey];
 }

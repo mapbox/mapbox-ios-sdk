@@ -28,9 +28,9 @@
 
 #import "RMShapeAnnotation.h"
 
-/** An RMPolylineAnnotation is a concrete subclass of RMShapeAnnotation that is used to represent a shape consisting of one or more points that define connecting line segments. The points are connected end-to-end in the order they are provided. The first and last points are not connected to each other. The annotation will automatically have a layer created when needed that displays an RMShape. 
- *
- *   If you wish to customize the appearance, you should instead create an RMAnnotation and configure its layer directly. Providing a layer manually for instances of RMPolylineAnnotation will not have any effect. */
+/** An RMPolylineAnnotation is a concrete subclass of RMShapeAnnotation that is used to represent a shape consisting of one or more points that define connecting line segments. The points are connected end-to-end in the order they are provided. The first and last points are not connected to each other. The annotation will automatically have a layer created when needed that displays an RMShape.
+*
+*   If you wish to customize the layer appearance in more detail, you should instead create an RMAnnotation and configure its layer directly. Providing a layer manually for instances of RMPolylineAnnotation will not have any effect. */
 @interface RMPolylineAnnotation : RMShapeAnnotation
 
 @end

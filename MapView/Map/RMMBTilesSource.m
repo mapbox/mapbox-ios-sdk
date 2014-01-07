@@ -2,7 +2,7 @@
 //  RMMBTilesSource.m
 //
 //  Created by Justin R. Miller on 6/18/10.
-//  Copyright 2012 MapBox.
+//  Copyright 2012-2013 Mapbox.
 //  All rights reserved.
 //  
 //  Redistribution and use in source and binary forms, with or without
@@ -15,7 +15,7 @@
 //        notice, this list of conditions and the following disclaimer in the
 //        documentation and/or other materials provided with the distribution.
 //  
-//      * Neither the name of MapBox, nor the names of its contributors may be
+//      * Neither the name of Mapbox, nor the names of its contributors may be
 //        used to endorse or promote products derived from this software
 //        without specific prior written permission.
 //  
@@ -42,9 +42,15 @@
 @implementation RMMBTilesSource
 {
     RMFractalTileProjection *tileProjection;
+    NSString *_uniqueTilecacheKey;
 }
 
 @synthesize cacheable = _cacheable, opaque = _opaque;
+
+- (id)initWithTileSetResource:(NSString *)name
+{
+    return [self initWithTileSetResource:name ofType:([[[name pathExtension] lowercaseString] isEqualToString:@"mbtiles"] ? @"" : @"mbtiles")];
+}
 
 - (id)initWithTileSetResource:(NSString *)name ofType:(NSString *)extension
 {
@@ -65,6 +71,8 @@
 
     if ( ! queue)
         return nil;
+
+    _uniqueTilecacheKey = [NSString stringWithFormat:@"MBTiles%@", [queue.path lastPathComponent]];
 
     [queue inDatabase:^(FMDatabase *db) {
         [db setShouldCacheStatements:YES];
@@ -92,9 +100,9 @@
 			  @"%@ tried to retrieve tile with zoomLevel %d, outside source's defined range %f to %f", 
 			  self, tile.zoom, self.minZoom, self.maxZoom);
 
-    NSInteger zoom = tile.zoom;
-    NSInteger x    = tile.x;
-    NSInteger y    = pow(2, zoom) - tile.y - 1;
+    NSUInteger zoom = tile.zoom;
+    NSUInteger x    = tile.x;
+    NSUInteger y    = pow(2, zoom) - tile.y - 1;
 
     dispatch_async(dispatch_get_main_queue(), ^(void)
     {
@@ -106,9 +114,9 @@
     [queue inDatabase:^(FMDatabase *db)
     {
         FMResultSet *results = [db executeQuery:@"select tile_data from tiles where zoom_level = ? and tile_column = ? and tile_row = ?", 
-                                   [NSNumber numberWithShort:zoom], 
-                                   [NSNumber numberWithUnsignedInt:x], 
-                                   [NSNumber numberWithUnsignedInt:y]];
+                                   [NSNumber numberWithUnsignedLongLong:zoom],
+                                   [NSNumber numberWithUnsignedLongLong:x],
+                                   [NSNumber numberWithUnsignedLongLong:y]];
 
         if ([db hadError])
             image = [RMTileImage errorTile];
@@ -325,7 +333,7 @@
 
 - (NSString *)uniqueTilecacheKey
 {
-    return [NSString stringWithFormat:@"MBTiles%@", [queue.path lastPathComponent]];
+    return _uniqueTilecacheKey;
 }
 
 - (NSString *)shortName

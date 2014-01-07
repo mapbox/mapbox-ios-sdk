@@ -29,6 +29,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "RMFoundation.h"
+#import "RMMapViewDelegate.h"
 
 @class RMAnnotation;
 
@@ -54,8 +55,18 @@
 /** The current projected location of the layer on the map. */
 @property (nonatomic, assign) RMProjectedPoint projectedLocation;
 
-/** When set to YES, the layer can be dragged by the user. */
-@property (nonatomic, assign) BOOL draggingEnabled;
+/** The current drag state of the annotation layer. 
+*
+*   To support drag operations, you must override the implementation of this property and update the drag state at the following times:
+*
+*   When the drag state changes to `RMMapLayerDragStateStarting`, you should set the state to `RMMapLayerDragStateDragging`. If you perform an animation to indicate the beginning of a drag, you should perform that animation before changing the state. Changing the state to the new value lets the map know that your animations are done.
+*
+*   When the state changes to either `RMMapLayerDragStateCanceling` or `RMMapLayerDragStateEnding`, set the state to `RMMapLayerDragStateNone`. If you perform an animation at the end of a drag, you should perform that animation before changing the state.
+*
+*   Changing the state to the `RMMapLayerDragStateDragging` or `RMMapLayerDragStateNone` value is the way to signal to the map view that you are done with any animations you wanted to perform. For example, when a drag operation begins for a marker, the RMMarker class executes an animation to lift the marker off the map. Similarly, when the marker is dropped, the class performs a drop animation. Even if you do not perform any animations, you should still change the value of this property to reflect the correct state.
+*
+*   You must not try to abort a new drag operation by changing the state from `RMMapLayerDragStateStarting` to `RMMapLayerDragStateNone`. If you do not want your annotation layer to be draggable, return `NO` from the map view delegate's implementation of mapView:shouldDragAnnotation:. */
+@property (nonatomic, assign) RMMapLayerDragState dragState;
 
 /** Storage for arbitrary data. */
 @property (nonatomic, strong) id userInfo;
@@ -90,7 +101,9 @@
 
 /** Set the screen position of the layer.
 *   @param position The desired screen position.
-*   @param animated If set to YES, any position change is animated. */
+*   @param animated If set to `YES`, any position change is animated. */
 - (void)setPosition:(CGPoint)position animated:(BOOL)animated;
+
+- (void)setDragState:(RMMapLayerDragState)dragState animated:(BOOL)animated;
 
 @end

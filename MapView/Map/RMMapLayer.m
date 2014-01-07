@@ -28,12 +28,21 @@
 #import "RMMapLayer.h"
 #import "RMPixel.h"
 #import "RMAnnotation.h"
+#import "RMMapView.h"
+
+@interface RMMapView (PrivateMethods)
+
+- (void)annotation:(RMAnnotation *)annotation didChangeDragState:(RMMapLayerDragState)newState fromOldState:(RMMapLayerDragState)oldState;
+
+@end
+
+#pragma mark -
 
 @implementation RMMapLayer
 
 @synthesize annotation;
 @synthesize projectedLocation;
-@synthesize draggingEnabled;
+@synthesize dragState=_dragState;
 @synthesize userInfo;
 @synthesize canShowCallout=_canShowCallout;
 @synthesize calloutOffset;
@@ -46,7 +55,6 @@
 		return nil;
 
     self.annotation = nil;
-    self.draggingEnabled = NO;
     self.calloutOffset = CGPointZero;
 
 	return self;
@@ -73,6 +81,36 @@
 - (void)setPosition:(CGPoint)position animated:(BOOL)animated
 {
     [self setPosition:position];
+}
+
+- (void)setDragState:(RMMapLayerDragState)dragState
+{
+    [self setDragState:dragState animated:NO];
+}
+
+- (void)setDragState:(RMMapLayerDragState)dragState animated:(BOOL)animated
+{
+    RMMapLayerDragState oldDragState = _dragState;
+
+    if (dragState == RMMapLayerDragStateStarting)
+    {
+        _dragState = RMMapLayerDragStateDragging;
+    }
+    else if (dragState == RMMapLayerDragStateDragging)
+    {
+        _dragState = RMMapLayerDragStateDragging;
+    }
+    else if (dragState == RMMapLayerDragStateCanceling || dragState == RMMapLayerDragStateEnding)
+    {
+        _dragState = RMMapLayerDragStateNone;
+    }
+    else if (dragState == RMMapLayerDragStateNone)
+    {
+        _dragState = RMMapLayerDragStateNone;
+    }
+
+    if (_dragState != oldDragState)
+        [self.annotation.mapView annotation:self.annotation didChangeDragState:_dragState fromOldState:oldDragState];
 }
 
 /// return nil for certain animation keys to block core animation

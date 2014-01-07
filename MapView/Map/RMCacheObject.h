@@ -49,7 +49,7 @@
 *   @param aTile The tile key for the object.
 *   @param aCacheKey The unique identifier for the cache.
 *   @return A newly created cache object. */
-+ (id)cacheObject:(id)anObject forTile:(RMTile)aTile withCacheKey:(NSString *)aCacheKey;
++ (instancetype)cacheObject:(id)anObject forTile:(RMTile)aTile withCacheKey:(NSString *)aCacheKey;
 
 /** Initializes and returns a newly allocated cache object for a given key and object to store in a given cache.
 *   @param anObject The object to cache, typically a UIImage.

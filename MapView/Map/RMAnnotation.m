@@ -34,6 +34,14 @@
 #import "RMMapLayer.h"
 #import "RMQuadTree.h"
 
+@interface RMQuadTreeNode (RMAnnotation)
+
+- (void)annotationDidChangeBoundingBox:(RMAnnotation *)annotation;
+
+@end
+
+#pragma mark -
+
 @implementation RMAnnotation
 
 @synthesize coordinate;
@@ -55,7 +63,7 @@
 @synthesize clusteredAnnotations;
 @synthesize isUserLocationAnnotation;
 
-+ (id)annotationWithMapView:(RMMapView *)aMapView coordinate:(CLLocationCoordinate2D)aCoordinate andTitle:(NSString *)aTitle
++ (instancetype)annotationWithMapView:(RMMapView *)aMapView coordinate:(CLLocationCoordinate2D)aCoordinate andTitle:(NSString *)aTitle
 {
     return [[self alloc] initWithMapView:aMapView coordinate:aCoordinate andTitle:aTitle];
 }
