@@ -170,6 +170,8 @@
 		DDE357F816522CD8001DB842 /* RMPolygonAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = DDE357F616522CD8001DB842 /* RMPolygonAnnotation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDE357F916522CD8001DB842 /* RMPolygonAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = DDE357F716522CD8001DB842 /* RMPolygonAnnotation.m */; };
 		DDE68E5A17D94C0500F1E869 /* mapbox-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE68E5917D94C0500F1E869 /* mapbox-logo.png */; };
+		F955E100187C202A00031F00 /* RMOpenMapSurferSource.h in Headers */ = {isa = PBXBuildFile; fileRef = F955E0FE187C202A00031F00 /* RMOpenMapSurferSource.h */; };
+		F955E101187C202A00031F00 /* RMOpenMapSurferSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F955E0FF187C202A00031F00 /* RMOpenMapSurferSource.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -350,6 +352,8 @@
 		DDE357F616522CD8001DB842 /* RMPolygonAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMPolygonAnnotation.h; sourceTree = "<group>"; };
 		DDE357F716522CD8001DB842 /* RMPolygonAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMPolygonAnnotation.m; sourceTree = "<group>"; };
 		DDE68E5917D94C0500F1E869 /* mapbox-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "mapbox-logo.png"; path = "Map/Resources/mapbox-logo.png"; sourceTree = "<group>"; };
+		F955E0FE187C202A00031F00 /* RMOpenMapSurferSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMOpenMapSurferSource.h; sourceTree = "<group>"; };
+		F955E0FF187C202A00031F00 /* RMOpenMapSurferSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMOpenMapSurferSource.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -383,6 +387,8 @@
 		16EC85CB133CA69A00219947 /* Map Sources */ = {
 			isa = PBXGroup;
 			children = (
+				F955E0FE187C202A00031F00 /* RMOpenMapSurferSource.h */,
+				F955E0FF187C202A00031F00 /* RMOpenMapSurferSource.m */,
 				16E5A63815E531F200C92A5A /* RMCompositeSource.h */,
 				16E5A63915E531F200C92A5A /* RMCompositeSource.m */,
 				1656665315A1DF7900EF3DC7 /* RMCoordinateGridSource.h */,
@@ -736,6 +742,7 @@
 				B8800FF30EC3A23D003E9CDD /* RMConfiguration.h in Headers */,
 				25757F4F1291C8640083D504 /* RMCircle.h in Headers */,
 				16EC85D2133CA6C300219947 /* RMAbstractMercatorTileSource.h in Headers */,
+				F955E100187C202A00031F00 /* RMOpenMapSurferSource.h in Headers */,
 				16EC85D4133CA6C300219947 /* RMAbstractWebMapSource.h in Headers */,
 				16EC85D6133CA6C300219947 /* RMCacheObject.h in Headers */,
 				160EEDAF13D41DEC007C5501 /* RMAnnotation.h in Headers */,
@@ -938,6 +945,7 @@
 				DD2B374A14CF8041008DE8CB /* FMResultSet.m in Sources */,
 				DD2B375014CF814F008DE8CB /* FMDatabasePool.m in Sources */,
 				DD2B375214CF814F008DE8CB /* FMDatabaseQueue.m in Sources */,
+				F955E101187C202A00031F00 /* RMOpenMapSurferSource.m in Sources */,
 				DD2B375614CF8197008DE8CB /* RMMBTilesSource.m in Sources */,
 				DD98B6FB14D76B930092882F /* RMMapboxSource.m in Sources */,
 				DD8CDB4B14E0507100B73EB9 /* RMMapQuestOSMSource.m in Sources */,
