@@ -353,6 +353,11 @@
     [self setNeedsUpdateConstraints];
 }
 
+- (id)initWithCoder:(NSCoder *)decoder{
+    self = [super initWithCoder:decoder];
+    return [self initWithFrame: [self frame] andTilesource:[RMMapboxSource new]];
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
     return [self initWithFrame:frame andTilesource:[RMMapboxSource new]];
@@ -536,7 +541,7 @@
         }
     }
 
-    if (_logoBug)
+    if (_logoBug && _showLogoBug)
     {
         if ( ! [[viewController.view valueForKeyPath:@"constraints.firstItem"]  containsObject:_logoBug] &&
              ! [[viewController.view valueForKeyPath:@"constraints.secondItem"] containsObject:_logoBug])
