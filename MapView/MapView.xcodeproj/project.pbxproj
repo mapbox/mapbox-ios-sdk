@@ -1004,6 +1004,7 @@
 					"\"$(SRCROOT)/Map/GRMustache/lib\"",
 					"\"$(SRCROOT)/../Proj4\"",
 				);
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Mapbox;
 				RUN_CLANG_STATIC_ANALYZER = NO;
