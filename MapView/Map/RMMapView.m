@@ -1975,6 +1975,12 @@
 
 - (NSTimeInterval)calloutView:(SMCalloutView *)calloutView delayForRepositionWithSize:(CGSize)offset
 {
+    if (self.userTrackingMode != RMUserTrackingModeNone)
+    {
+        // prevent buggy repositioning of the user location
+        return 0.0;
+    }
+    
     [self registerMoveEventByUser:NO];
 
     CGPoint contentOffset = _mapScrollView.contentOffset;
