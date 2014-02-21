@@ -431,10 +431,11 @@
 {
     [self.delegate mapViewWillStartLoadingMap];
     
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        RMMapboxSource *mapboxSource = [[RMMapboxSource alloc] initWithMapID:self.mapID];
+    [RMMapboxSource sendAsynchronousRequestForTileJSONWithMapID:self.mapID enablingSSL:NO callback:^(NSString *tileJSON, NSError *error) {
+        RMMapboxSource *mapboxSource = [[RMMapboxSource alloc] initWithTileJSON:tileJSON];
         [self setUpWithTileSource:mapboxSource zoomLevel:initialZoomLevel maxZoomLevel:maxZoomLevel minZoomLevel:minZoomLevel];
         [self setCenterCoordinate:initialCenterCoordinate animated:NO];
+        
         [self.delegate mapViewDidFinishLoadingMap];
     }];
 }
