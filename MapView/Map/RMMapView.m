@@ -429,10 +429,14 @@
                          maxZoomLevel:(float)maxZoomLevel
                          minZoomLevel:(float)minZoomLevel
 {
-    RMMapboxSource *mapboxSource = [[RMMapboxSource alloc] initWithMapID:self.mapID];
+    [self.delegate mapViewWillStartLoadingMap];
     
-    [self setUpWithTileSource:mapboxSource zoomLevel:initialZoomLevel maxZoomLevel:maxZoomLevel minZoomLevel:minZoomLevel];
-    [self setCenterCoordinate:initialCenterCoordinate animated:NO];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        RMMapboxSource *mapboxSource = [[RMMapboxSource alloc] initWithMapID:self.mapID];
+        [self setUpWithTileSource:mapboxSource zoomLevel:initialZoomLevel maxZoomLevel:maxZoomLevel minZoomLevel:minZoomLevel];
+        [self setCenterCoordinate:initialCenterCoordinate animated:NO];
+        [self.delegate mapViewDidFinishLoadingMap];
+    }];
 }
 
 - (void)setFrame:(CGRect)frame
