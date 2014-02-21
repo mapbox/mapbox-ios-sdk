@@ -429,9 +429,10 @@
                          maxZoomLevel:(float)maxZoomLevel
                          minZoomLevel:(float)minZoomLevel
 {
-    [self setCenterCoordinate:initialCenterCoordinate animated:NO];
     RMMapboxSource *mapboxSource = [[RMMapboxSource alloc] initWithMapID:self.mapID];
+    
     [self setUpWithTileSource:mapboxSource zoomLevel:initialZoomLevel maxZoomLevel:maxZoomLevel minZoomLevel:minZoomLevel];
+    [self setCenterCoordinate:initialCenterCoordinate animated:NO];
 }
 
 - (void)setFrame:(CGRect)frame
@@ -2477,7 +2478,7 @@
 - (void)setMinZoom:(float)newMinZoom
 {
     float boundingDimension = fmaxf(self.bounds.size.width, self.bounds.size.height);
-    float tileSideLength    = _tileSourcesContainer.tileSideLength;
+    float tileSideLength    = MAX(_tileSourcesContainer.tileSideLength, 1);
     float clampedMinZoom    = log2(boundingDimension / tileSideLength);
 
     if (newMinZoom < clampedMinZoom)
