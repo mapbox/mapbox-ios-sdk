@@ -119,7 +119,7 @@
             {
                 for (int y=y1; y<=y2; ++y)
                 {
-                    UIImage *tileImage = [_tileSource imageForTile:RMTileMake(x, y, zoom) inCache:[_mapView tileCache]];
+                    UIImage *tileImage = [self imageForTile:RMTileMake(x, y, zoom)];
 
                     if (IS_VALID_TILE_IMAGE(tileImage))
                         [tileImage drawInRect:CGRectMake(x * rectSize, y * rectSize, rectSize, rectSize)];
@@ -158,8 +158,7 @@
             if ( ! [_tileSource isKindOfClass:[RMAbstractWebMapSource class]] || ! databaseCache || ! databaseCache.capacity)
             {
                 // for non-web tiles, query the source directly since trivial blocking
-                //
-                tileImage = [_tileSource imageForTile:RMTileMake(x, y, zoom) inCache:[_mapView tileCache]];
+                tileImage = [self imageForTile:RMTileMake(x, y, zoom)];
             }
             else
             {
@@ -213,8 +212,7 @@
                     float nextTileX = floor(nextX),
                           nextTileY = floor(nextY);
 
-                    tileImage = [_tileSource imageForTile:RMTileMake((int)nextTileX, (int)nextTileY, currentZoom) inCache:[_mapView tileCache]];
-
+                    tileImage = [self imageForTile:RMTileMake((int)nextTileX, (int)nextTileY, currentZoom)];
                     if (IS_VALID_TILE_IMAGE(tileImage))
                     {
                         // crop
@@ -304,4 +302,106 @@
     }
 }
 
+-(UIImage *)imageForTile:(RMTile)tile
+{
+    UIImage *tileImage = [_tileSource imageForTile:tile inCache:[_mapView tileCache]];
+    return [self maskTileImage:tileImage forTile:tile];
+}
+
+-(UIImage *) maskTileImage:(UIImage *)tileImage forTile:(RMTile)aTile
+{
+    if (!tileImage || (tileImage.size.height == 0) || (tileImage.size.width == 0)) return tileImage;
+    
+    RMSphericalTrapezium tileBoundingBox   = [_mapView latitudeLongitudeBoundingBoxForTile:aTile];
+    RMSphericalTrapezium sourceBoundingBox = [_tileSource latitudeLongitudeBoundingBox];
+
+    double tileNorth   = tileBoundingBox  .northEast.latitude ;
+    double tileEast    = tileBoundingBox  .northEast.longitude;
+    double tileSouth   = tileBoundingBox  .southWest.latitude ;
+    double tileWest    = tileBoundingBox  .southWest.longitude;
+    
+    double sourceNorth = sourceBoundingBox.northEast.latitude ;
+    double sourceEast  = sourceBoundingBox.northEast.longitude;
+    double sourceSouth = sourceBoundingBox.southWest.latitude ;
+    double sourceWest  = sourceBoundingBox.southWest.longitude;
+    
+    //Return the tile we were given if no masking is necessary:
+    if (!((tileNorth > sourceNorth) ||
+          (tileEast  > sourceEast ) ||
+          (tileSouth < sourceSouth) ||
+          (tileWest  < sourceWest ))) return tileImage;
+    
+    //Return nil if this tile is completely outside the map's bounds:
+    if ((tileSouth > sourceNorth ) ||
+        (tileWest  > sourceEast  ) ||
+        (tileNorth < sourceSouth ) ||
+        (tileEast  < sourceWest )) return nil;
+    
+    NSMutableArray *rects = [[NSMutableArray alloc]init];
+    
+    if (tileNorth > sourceNorth)
+    {
+        //Create rect for North mask.
+        CGFloat height = ((tileNorth - sourceNorth)/(tileNorth - tileSouth))*tileImage.size.height;
+        CGRect rect = CGRectMake(0, 0, tileImage.size.width, height);
+        [rects addObject:[NSValue valueWithCGRect:rect]];
+    }
+    
+    if (tileEast > sourceEast)
+    {
+        //Create rect for East mask.
+        CGFloat width = ((tileEast - sourceEast)/(tileEast - tileWest))*tileImage.size.width;
+        CGRect rect = CGRectMake(tileImage.size.width-width, 0, width, tileImage.size.height);
+        [rects addObject:[NSValue valueWithCGRect:rect]];
+    }
+    
+    if (tileSouth < sourceSouth)
+    {
+        //Create rect for South mask.
+        CGFloat height = ((sourceSouth - tileSouth)/(tileNorth - tileSouth))*tileImage.size.height;
+        CGRect rect = CGRectMake(0, tileImage.size.height-height, tileImage.size.width, height);
+        [rects addObject:[NSValue valueWithCGRect:rect]];
+    }
+    
+    if (tileWest < sourceWest)
+    {
+        //Create rect for West mask.
+        CGFloat width = ((sourceWest - tileWest)/(tileEast - tileWest))*tileImage.size.width;
+        CGRect rect = CGRectMake(0, 0, width, tileImage.size.height);
+        [rects addObject:[NSValue valueWithCGRect:rect]];
+    }
+    
+    return [self applyMaskFromRects:rects toImage:tileImage];
+}
+
+///Applies a mask defined by an array of CGRects to the specified UIImage and returns the masked UIImage.
+- (UIImage *)applyMaskFromRects:(NSArray *)rects toImage:(UIImage *)image
+{
+    //Draw rectangles to use for the mask:
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(image.size.width, image.size.height), YES, 1.0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    for (NSValue *v in rects) CGContextAddRect(context, v.CGRectValue);
+    CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
+    CGContextFillPath(context);
+    UIImage* maskImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    //Create the transparency mask:
+    CGImageRef mask = CGImageMaskCreate(CGImageGetWidth             (maskImage.CGImage),
+                                        CGImageGetHeight            (maskImage.CGImage),
+                                        CGImageGetBitsPerComponent  (maskImage.CGImage),
+                                        CGImageGetBitsPerPixel      (maskImage.CGImage),
+                                        CGImageGetBytesPerRow       (maskImage.CGImage),
+                                        CGImageGetDataProvider      (maskImage.CGImage),
+                                        NULL,
+                                        NO);
+    
+    //Apply the mask to the image provided:
+    CGImageRef maskedReference = CGImageCreateWithMask(image.CGImage, mask);
+    CGImageRelease(mask);
+    image = [UIImage imageWithCGImage:maskedReference];
+    CGImageRelease(maskedReference);
+    
+    return image;
+}
 @end

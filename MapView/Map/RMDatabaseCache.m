@@ -134,6 +134,8 @@
 
     _tileCount = [self countTiles];
 
+    [[NSURL.alloc initFileURLWithPath:path] setResourceValue:@(YES) forKey:NSURLIsExcludedFromBackupKey error:nil];
+    
 	return self;	
 }
 
