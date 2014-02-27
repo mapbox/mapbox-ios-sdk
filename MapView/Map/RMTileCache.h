@@ -163,4 +163,8 @@ typedef enum : short {
 *   This method returns immediately so as to not block the calling thread. If you wish to be notified of the actual cancellation completion, implement the tileCacheDidCancelBackgroundCache: delegate method. */
 - (void)cancelBackgroundCache;
 
+/** Tells a tile cache whether or not to include database cache file(s) in iCloud backups. (The default when a tile cache is initiailized is to not backup.)
+*   @param include Boolean value indicating whether or not to include the database cache file(s) in iCloud backups. */
+- (void)includeDatabaseCachesInBackup:(BOOL)include;
+
 @end

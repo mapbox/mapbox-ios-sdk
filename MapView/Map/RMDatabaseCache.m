@@ -130,11 +130,17 @@
         [db setShouldCacheStatements:TRUE];
     }];
 
+    [self includeInBackup:NO];
 	[self configureDBForFirstUse];
 
     _tileCount = [self countTiles];
 
 	return self;	
+}
+
+- (void)includeInBackup:(BOOL)include
+{
+    [[NSURL.alloc initFileURLWithPath:self.databasePath] setResourceValue:@(!include) forKey:NSURLIsExcludedFromBackupKey error:nil];
 }
 
 - (id)initUsingCacheDir:(BOOL)useCacheDir
