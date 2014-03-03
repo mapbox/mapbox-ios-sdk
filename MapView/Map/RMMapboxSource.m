@@ -154,17 +154,12 @@
 
 - (id)initWithReferenceURL:(NSURL *)referenceURL enablingDataOnMapView:(RMMapView *)mapView
 {
-    id dataObject = nil;
-    
-    if ([[referenceURL pathExtension] isEqualToString:@"jsonp"])
-        referenceURL = [NSURL URLWithString:[[referenceURL absoluteString] stringByReplacingOccurrencesOfString:@".jsonp" 
-                                                                                                     withString:@".json"
-                                                                                                        options:NSAnchoredSearch & NSBackwardsSearch
-                                                                                                          range:NSMakeRange(0, [[referenceURL absoluteString] length])]];
-    
-    if ([[referenceURL pathExtension] isEqualToString:@"json"] && (dataObject = [NSString brandedStringWithContentsOfURL:referenceURL encoding:NSUTF8StringEncoding error:nil]) && dataObject)
+    referenceURL = [RMMapboxSource normalizeURLPathExtension:referenceURL];
+    NSString *dataObject = [NSString brandedStringWithContentsOfURL:referenceURL encoding:NSUTF8StringEncoding error:nil];
+    if ([[referenceURL pathExtension] isEqualToString:@"json"] && dataObject) {
         return [self initWithTileJSON:dataObject enablingDataOnMapView:mapView];
-
+        
+    }
     return nil;
 }
 
@@ -175,9 +170,37 @@
 
 - (id)initWithMapID:(NSString *)mapID enablingDataOnMapView:(RMMapView *)mapView enablingSSL:(BOOL)enableSSL
 {
-    NSString *referenceURLString = [NSString stringWithFormat:@"http%@://api.tiles.mapbox.com/v3/%@.json%@", (enableSSL ? @"s" : @""), mapID, (enableSSL ? @"?secure" : @"")];
-
+    NSString *referenceURLString = [RMMapboxSource referenceURLStringForMapID:mapID enableSSL:enableSSL];
     return [self initWithReferenceURL:[NSURL URLWithString:referenceURLString] enablingDataOnMapView:mapView];
+}
+
++ (void)createSourceAsynchronouslyWithMapID:(NSString *)mapID enableSSL:(BOOL)enableSSL callback:(tileSourceCreationCallback)callBack
+{
+    NSString *referenceURLString = [RMMapboxSource referenceURLStringForMapID:mapID enableSSL:enableSSL];
+    NSURL *referenceURL = [RMMapboxSource normalizeURLPathExtension:[NSURL URLWithString:referenceURLString]];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:referenceURL];
+    
+    [request setValue:[[RMConfiguration configuration] userAgent] forHTTPHeaderField:@"User-Agent"];
+    
+    [NSURLConnection sendAsynchronousRequest:[request copy] queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        
+        NSString *tileJSON = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        if (connectionError) {
+            callBack(nil, connectionError);
+            return;
+        }
+        
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        if (httpResponse.statusCode >= 400) {
+            NSError *applicationError = [NSError errorWithDomain:@"com.mapbox" code:1 userInfo:@{NSLocalizedDescriptionKey: @"Server returned 400 reponse when attempting to get tile JSON."}];
+            callBack(nil, applicationError);
+            return;
+        }
+        
+        RMMapboxSource *source = [[RMMapboxSource alloc] initWithTileJSON:tileJSON];
+        callBack(source, nil);
+    }];
 }
 
 - (void)dealloc
@@ -191,8 +214,10 @@
 - (NSURL *)tileJSONURL
 {
     BOOL useSSL = [[[self.infoDictionary objectForKey:@"tiles"] objectAtIndex:0] hasPrefix:@"https"];
-
-    return [NSURL URLWithString:[NSString stringWithFormat:@"http%@://api.tiles.mapbox.com/v3/%@.json%@", (useSSL ? @"s" : @""), [self.infoDictionary objectForKey:@"id"], (useSSL ? @"?secure" : @"")]];
+    NSString *mapID = [self.infoDictionary objectForKey:@"id"];
+    NSString *urlString = [RMMapboxSource referenceURLStringForMapID:mapID enableSSL:useSSL];
+    return [NSURL URLWithString:urlString];
+    
 }
 
 - (NSURL *)URLForTile:(RMTile)tile
@@ -379,6 +404,23 @@
 - (NSString *)longAttribution
 {
 	return [self shortAttribution];
+}
+
+#pragma mark - Internal
+
++ (NSString *)referenceURLStringForMapID:(NSString *)mapID enableSSL:(BOOL)enableSSL
+{
+    return [NSString stringWithFormat:@"http%@://api.tiles.mapbox.com/v3/%@.json%@", (enableSSL ? @"s" : @""), mapID, (enableSSL ? @"?secure" : @"")];
+}
+
++ (NSURL *)normalizeURLPathExtension:(NSURL *)url {
+    if ([[url pathExtension] isEqualToString:@"jsonp"]) {
+        url = [NSURL URLWithString:[[url absoluteString] stringByReplacingOccurrencesOfString:@".jsonp"
+                                                                                   withString:@".json"
+                                                                                      options:NSAnchoredSearch & NSBackwardsSearch
+                                                                                        range:NSMakeRange(0, [[url absoluteString] length])]];
+    }
+    return url;
 }
 
 @end

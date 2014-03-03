@@ -54,11 +54,23 @@ typedef enum : NSUInteger {
 } RMMapboxSourceQuality;
 
 @class RMMapView;
+@class RMMapboxSource;
+
+typedef void(^tileSourceCreationCallback)(RMMapboxSource *source, NSError *error);
 
 /** An RMMapboxSource is used to display map tiles from a network-based map hosted on [Mapbox](http://mapbox.com/plans) or the open source [TileStream](https://github.com/mapbox/tilestream) software. Maps are referenced by their Mapbox map ID or by a file or URL containing [TileJSON](http://mapbox.com/developers/tilejson/). */
 @interface RMMapboxSource : RMAbstractWebMapSource
 
 /** @name Creating Tile Sources */
+
+/** Initialize a tile source asynchronously and return it in a
+callback method.
+
+@param mapID The Mapbox map ID string, typically in the format `<username>.map-<random characters>`.
+@param enableSSL Whether to use SSL-enabled HTTPS connections for map tiles and other related data.
+@param callback The callback block to execute. */
++ (void)createSourceAsynchronouslyWithMapID:(NSString *)mapID enableSSL: (BOOL)enableSSL callback:(tileSourceCreationCallback)callBack;
+
 
 /** Initialize a tile source using the Mapbox map ID.
 *
