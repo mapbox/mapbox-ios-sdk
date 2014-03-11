@@ -120,50 +120,55 @@ typedef enum : NSUInteger {
 
 /** Tells the delegate when the user double-taps a map view. 
 *   @param map The map that was double-tapped. 
-*   @param point The point at which the map was double-tapped. */
-- (void)doubleTapOnMap:(RMMapView *)map at:(CGPoint)point;
+*   @param recognizer The gesture recognizer. */
+- (void)doubleTapOnMap:(RMMapView *)map recognizer:(UIGestureRecognizer*)recognizer;
 
 /** Tells the delegate when the user taps a map view.
 *   @param map The map that was tapped.
-*   @param point The point at which the map was tapped. */
-- (void)singleTapOnMap:(RMMapView *)map at:(CGPoint)point;
+*   @param recognizer The gesture recognizer. */
+- (void)singleTapOnMap:(RMMapView *)map recognizer:(UIGestureRecognizer*)recognizer;
 
 /** Tells the delegate when the user taps a map view with two fingers.
 *   @param map The map that was tapped.
-*   @param point The center point at which the map was tapped. */
-- (void)singleTapTwoFingersOnMap:(RMMapView *)map at:(CGPoint)point;
+*   @param recognizer The gesture recognizer. */
+- (void)singleTapTwoFingersOnMap:(RMMapView *)map recognizer:(UIGestureRecognizer*)recognizer;
 
 /** Tells the delegate when the user long-presses a map view.
 *   @param map The map that was long-pressed.
-*   @param point The point at which the map was long-pressed. */
-- (void)longPressOnMap:(RMMapView *)map at:(CGPoint)point;
+*   @param recognizer The gesture recognizer. */
+- (void)longPressOnMap:(RMMapView *)map recognizer:(UIGestureRecognizer*)recognizer;
 
 /** @name Responding to User Annotation Gestures */
 
 /** Tells the delegate when the user taps the layer for an annotation. 
 *   @param annotation The annotation that was tapped. 
-*   @param map The map view. */
-- (void)tapOnAnnotation:(RMAnnotation *)annotation onMap:(RMMapView *)map;
+*   @param map The map view. *
+*   @param recognizer The gesture recognizer. */
+- (void)tapOnAnnotation:(RMAnnotation *)annotation onMap:(RMMapView *)map recognizer:(UIGestureRecognizer *)recognizer;
 
 /** Tells the delegate when the user double-taps the layer for an annotation.
 *   @param annotation The annotation that was double-tapped.
-*   @param map The map view. */
-- (void)doubleTapOnAnnotation:(RMAnnotation *)annotation onMap:(RMMapView *)map;
+ *   @param map The map view. *
+ *   @param recognizer The gesture recognizer. */
+- (void)doubleTapOnAnnotation:(RMAnnotation *)annotation onMap:(RMMapView *)map recognizer:(UIGestureRecognizer *)recognizer;
 
 /** Tells the delegate when the user long-presses the layer for an annotation. 
 *   @param annotation The annotation that was long-pressed. 
-*   @param map The map view. */
-- (void)longPressOnAnnotation:(RMAnnotation *)annotation onMap:(RMMapView *)map;
+ *   @param map The map view. *
+ *   @param recognizer The gesture recognizer. */
+- (void)longPressOnAnnotation:(RMAnnotation *)annotation onMap:(RMMapView *)map recognizer:(UIGestureRecognizer *)recognizer;
 
 /** Tells the delegate when the user taps the label for an annotation.
 *   @param annotation The annotation whose label was was tapped.
-*   @param map The map view. */
-- (void)tapOnLabelForAnnotation:(RMAnnotation *)annotation onMap:(RMMapView *)map;
+ *   @param map The map view. *
+ *   @param recognizer The gesture recognizer. */
+- (void)tapOnLabelForAnnotation:(RMAnnotation *)annotation onMap:(RMMapView *)map recognizer:(UIGestureRecognizer *)recognizer;
 
 /** Tells the delegate when the user double-taps the label for an annotation.
 *   @param annotation The annotation whose label was was double-tapped.
-*   @param map The map view. */
-- (void)doubleTapOnLabelForAnnotation:(RMAnnotation *)annotation onMap:(RMMapView *)map;
+ *   @param map The map view. *
+ *   @param recognizer The gesture recognizer. */
+- (void)doubleTapOnLabelForAnnotation:(RMAnnotation *)annotation onMap:(RMMapView *)map recognizer:(UIGestureRecognizer *)recognizer;
 
 /** Tells the delegate that the user tapped one of the annotation layer's accessory buttons.
 *
@@ -172,8 +177,9 @@ typedef enum : NSUInteger {
 *   If your custom accessory views are not descendants of the UIControl class, the map view does not call this method.
 *   @param control The control that was tapped. 
 *   @param annotation The annotation whose callout control was tapped. 
-*   @param map The map view containing the specified annotation. */
-- (void)tapOnCalloutAccessoryControl:(UIControl *)control forAnnotation:(RMAnnotation *)annotation onMap:(RMMapView *)map;
+ *   @param map The map view containing the specified annotation. *
+ *   @param recognizer The gesture recognizer. */
+- (void)tapOnCalloutAccessoryControl:(UIControl *)control forAnnotation:(RMAnnotation *)annotation onMap:(RMMapView *)map recognizer:(UIGestureRecognizer *)recognizer;
 
 /** Asks the delegate whether the user should be allowed to drag the layer for an annotation. 
 *   @param mapView The map view.

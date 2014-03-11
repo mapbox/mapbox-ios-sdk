@@ -675,17 +675,17 @@
 
     _delegateHasMapViewRegionDidChange = [_delegate respondsToSelector:@selector(mapViewRegionDidChange:)];
 
-    _delegateHasDoubleTapOnMap = [_delegate respondsToSelector:@selector(doubleTapOnMap:at:)];
-    _delegateHasSingleTapOnMap = [_delegate respondsToSelector:@selector(singleTapOnMap:at:)];
-    _delegateHasSingleTapTwoFingersOnMap = [_delegate respondsToSelector:@selector(singleTapTwoFingersOnMap:at:)];
-    _delegateHasLongPressOnMap = [_delegate respondsToSelector:@selector(longPressOnMap:at:)];
+    _delegateHasDoubleTapOnMap = [_delegate respondsToSelector:@selector(doubleTapOnMap:recognizer:)];
+    _delegateHasSingleTapOnMap = [_delegate respondsToSelector:@selector(singleTapOnMap:recognizer:)];
+    _delegateHasSingleTapTwoFingersOnMap = [_delegate respondsToSelector:@selector(singleTapTwoFingersOnMap:recognizer:)];
+    _delegateHasLongPressOnMap = [_delegate respondsToSelector:@selector(longPressOnMap:recognizer:)];
 
-    _delegateHasTapOnAnnotation = [_delegate respondsToSelector:@selector(tapOnAnnotation:onMap:)];
-    _delegateHasDoubleTapOnAnnotation = [_delegate respondsToSelector:@selector(doubleTapOnAnnotation:onMap:)];
-    _delegateHasLongPressOnAnnotation = [_delegate respondsToSelector:@selector(longPressOnAnnotation:onMap:)];
-    _delegateHasTapOnCalloutAccessoryControlForAnnotation = [_delegate respondsToSelector:@selector(tapOnCalloutAccessoryControl:forAnnotation:onMap:)];
-    _delegateHasTapOnLabelForAnnotation = [_delegate respondsToSelector:@selector(tapOnLabelForAnnotation:onMap:)];
-    _delegateHasDoubleTapOnLabelForAnnotation = [_delegate respondsToSelector:@selector(doubleTapOnLabelForAnnotation:onMap:)];
+    _delegateHasTapOnAnnotation = [_delegate respondsToSelector:@selector(tapOnAnnotation:onMap:recognizer:)];
+    _delegateHasDoubleTapOnAnnotation = [_delegate respondsToSelector:@selector(doubleTapOnAnnotation:onMap:recognizer:)];
+    _delegateHasLongPressOnAnnotation = [_delegate respondsToSelector:@selector(longPressOnAnnotation:onMap:recognizer:)];
+    _delegateHasTapOnCalloutAccessoryControlForAnnotation = [_delegate respondsToSelector:@selector(tapOnCalloutAccessoryControl:forAnnotation:onMap:recognizer:)];
+    _delegateHasTapOnLabelForAnnotation = [_delegate respondsToSelector:@selector(tapOnLabelForAnnotation:onMap:recognizer:)];
+    _delegateHasDoubleTapOnLabelForAnnotation = [_delegate respondsToSelector:@selector(doubleTapOnLabelForAnnotation:onMap:recognizer:)];
 
     _delegateHasShouldDragAnnotation = [_delegate respondsToSelector:@selector(mapView:shouldDragAnnotation:)];
     _delegateHasDidChangeDragState = [_delegate respondsToSelector:@selector(mapView:annotation:didChangeDragState:fromOldState:)];
@@ -1638,10 +1638,10 @@
     return nil;
 }
 
-- (void)singleTapAtPoint:(CGPoint)aPoint
+- (void)singleTapWithGesture:(UIGestureRecognizer *)recognizer
 {
     if (_delegateHasSingleTapOnMap)
-        [_delegate singleTapOnMap:self at:aPoint];
+        [_delegate singleTapOnMap:self recognizer:recognizer];
 }
 
 - (void)handleSingleTap:(UIGestureRecognizer *)recognizer
@@ -1655,7 +1655,7 @@
 
     if ( ! hit)
     {
-        [self singleTapAtPoint:[recognizer locationInView:self]];
+        [self singleTapWithGesture:recognizer];
         return;
     }
 
@@ -1664,27 +1664,28 @@
     // See if tap was on an annotation layer or marker label and send delegate protocol method
     if ([hit isKindOfClass:[RMMapLayer class]])
     {
-        [self tapOnAnnotation:[((RMMapLayer *)hit) annotation] atPoint:[recognizer locationInView:self]];
+        [self tapOnAnnotation:[((RMMapLayer *)hit) annotation] recognizer:recognizer];
     }
     else if (superlayer != nil && [superlayer isKindOfClass:[RMMarker class]])
     {
-        [self tapOnLabelForAnnotation:[((RMMarker *)superlayer) annotation] atPoint:[recognizer locationInView:self]];
+        [self tapOnLabelForAnnotation:[((RMMarker *)superlayer) annotation] recognizer:recognizer];
     }
     else if ([superlayer superlayer] != nil && [[superlayer superlayer] isKindOfClass:[RMMarker class]])
     {
-        [self tapOnLabelForAnnotation:[((RMMarker *)[superlayer superlayer]) annotation] atPoint:[recognizer locationInView:self]];
+        [self tapOnLabelForAnnotation:[((RMMarker *)[superlayer superlayer]) annotation] recognizer:recognizer];
     }
     else
     {
-        [self singleTapAtPoint:[recognizer locationInView:self]];
+        [self singleTapWithGesture:recognizer];
     }
 }
 
-- (void)doubleTapAtPoint:(CGPoint)aPoint
+- (void)doubleTapWithGesture:(UIGestureRecognizer *)recognizer
 {
     if (self.zoom < self.maxZoom)
     {
         [self registerZoomEventByUser:YES];
+        CGPoint aPoint = [recognizer locationInView:self];
 
         if (self.zoomingInPivotsAroundCenter)
         {
@@ -1703,16 +1704,15 @@
     }
 
     if (_delegateHasDoubleTapOnMap)
-        [_delegate doubleTapOnMap:self at:aPoint];
+        [_delegate doubleTapOnMap:self recognizer:recognizer];
 }
 
 - (void)handleDoubleTap:(UIGestureRecognizer *)recognizer
 {
     CALayer *hit = [_overlayView overlayHitTest:[recognizer locationInView:self]];
-
     if ( ! hit)
     {
-        [self doubleTapAtPoint:[recognizer locationInView:self]];
+        [self doubleTapWithGesture:recognizer];
         return;
     }
 
@@ -1721,19 +1721,19 @@
     // See if tap was on a marker or marker label and send delegate protocol method
     if ([hit isKindOfClass:[RMMarker class]])
     {
-        [self doubleTapOnAnnotation:[((RMMarker *)hit) annotation] atPoint:[recognizer locationInView:self]];
+        [self doubleTapOnAnnotation:[((RMMarker *)hit) annotation] recognizer:recognizer];
     }
     else if (superlayer != nil && [superlayer isKindOfClass:[RMMarker class]])
     {
-        [self doubleTapOnLabelForAnnotation:[((RMMarker *)superlayer) annotation] atPoint:[recognizer locationInView:self]];
+        [self doubleTapOnLabelForAnnotation:[((RMMarker *)superlayer) annotation] recognizer:recognizer];
     }
     else if ([superlayer superlayer] != nil && [[superlayer superlayer] isKindOfClass:[RMMarker class]])
     {
-        [self doubleTapOnLabelForAnnotation:[((RMMarker *)[superlayer superlayer]) annotation] atPoint:[recognizer locationInView:self]];
+        [self doubleTapOnLabelForAnnotation:[((RMMarker *)[superlayer superlayer]) annotation]  recognizer:recognizer];
     }
     else
     {
-        [self doubleTapAtPoint:[recognizer locationInView:self]];
+        [self doubleTapWithGesture:recognizer];
     }
 }
 
@@ -1752,7 +1752,7 @@
     }
 
     if (_delegateHasSingleTapTwoFingersOnMap)
-        [_delegate singleTapTwoFingersOnMap:self at:[recognizer locationInView:self]];
+        [_delegate singleTapTwoFingersOnMap:self recognizer:recognizer];
 }
 
 - (void)handleLongPress:(UILongPressGestureRecognizer *)recognizer
@@ -1834,17 +1834,19 @@
             _draggedAnnotation = nil;
         }
     }
-    else if ([hit isKindOfClass:[RMMapLayer class]] && _delegateHasLongPressOnAnnotation)
-    {
-        // pass annotation long-press to delegate
-        //
-        [_delegate longPressOnAnnotation:[((RMMapLayer *)hit) annotation] onMap:self];
-    }
-    else if (_delegateHasLongPressOnMap)
-    {
-        // pass map long-press to delegate
-        //
-        [_delegate longPressOnMap:self at:[recognizer locationInView:self]];
+    else if(recognizer.state == UIGestureRecognizerStateBegan) {
+        if ([hit isKindOfClass:[RMMapLayer class]] && _delegateHasLongPressOnAnnotation)
+        {
+            // pass annotation long-press to delegate
+            //
+            [_delegate longPressOnAnnotation:[((RMMapLayer *)hit) annotation] onMap:self recognizer:recognizer];
+        }
+        else if (_delegateHasLongPressOnMap)
+        {
+            // pass map long-press to delegate
+            //
+            [_delegate longPressOnMap:self recognizer:recognizer];
+        }
     }
 }
 
@@ -1858,19 +1860,19 @@
 
 // Overlay
 
-- (void)tapOnAnnotation:(RMAnnotation *)anAnnotation atPoint:(CGPoint)aPoint
+- (void)tapOnAnnotation:(RMAnnotation *)anAnnotation recognizer:(UIGestureRecognizer*)recognizer
 {
     if (anAnnotation.isEnabled && ! [anAnnotation isEqual:_currentAnnotation])
         [self selectAnnotation:anAnnotation animated:YES];
 
     if (_delegateHasTapOnAnnotation && anAnnotation)
     {
-        [_delegate tapOnAnnotation:anAnnotation onMap:self];
+        [_delegate tapOnAnnotation:anAnnotation onMap:self recognizer:recognizer];
     }
     else
     {
         if (_delegateHasSingleTapOnMap)
-            [_delegate singleTapOnMap:self at:aPoint];
+            [_delegate singleTapOnMap:self recognizer:recognizer];
     }
 }
 
@@ -1999,51 +2001,51 @@
 - (void)tapOnCalloutAccessoryWithGestureRecognizer:(UIGestureRecognizer *)recognizer
 {
     if (_delegateHasTapOnCalloutAccessoryControlForAnnotation)
-        [_delegate tapOnCalloutAccessoryControl:(UIControl *)recognizer.view forAnnotation:_currentAnnotation onMap:self];
+        [_delegate tapOnCalloutAccessoryControl:(UIControl *)recognizer.view forAnnotation:_currentAnnotation onMap:self recognizer:recognizer];
 }
 
-- (void)doubleTapOnAnnotation:(RMAnnotation *)anAnnotation atPoint:(CGPoint)aPoint
+- (void)doubleTapOnAnnotation:(RMAnnotation *)anAnnotation recognizer:(UIGestureRecognizer*)recognizer
 {
     if (_delegateHasDoubleTapOnAnnotation && anAnnotation)
     {
-        [_delegate doubleTapOnAnnotation:anAnnotation onMap:self];
+        [_delegate doubleTapOnAnnotation:anAnnotation onMap:self recognizer:recognizer];
     }
     else
     {
-        [self doubleTapAtPoint:aPoint];
+        [self doubleTapWithGesture:recognizer];
     }
 }
 
-- (void)tapOnLabelForAnnotation:(RMAnnotation *)anAnnotation atPoint:(CGPoint)aPoint
+- (void)tapOnLabelForAnnotation:(RMAnnotation *)anAnnotation recognizer:(UIGestureRecognizer*)recognizer
 {
     if (_delegateHasTapOnLabelForAnnotation && anAnnotation)
     {
-        [_delegate tapOnLabelForAnnotation:anAnnotation onMap:self];
+        [_delegate tapOnLabelForAnnotation:anAnnotation onMap:self recognizer:recognizer];
     }
     else if (_delegateHasTapOnAnnotation && anAnnotation)
     {
-        [_delegate tapOnAnnotation:anAnnotation onMap:self];
+        [_delegate tapOnAnnotation:anAnnotation onMap:self recognizer:recognizer];
     }
     else
     {
         if (_delegateHasSingleTapOnMap)
-            [_delegate singleTapOnMap:self at:aPoint];
+            [_delegate singleTapOnMap:self recognizer:recognizer];
     }
 }
 
-- (void)doubleTapOnLabelForAnnotation:(RMAnnotation *)anAnnotation atPoint:(CGPoint)aPoint
+- (void)doubleTapOnLabelForAnnotation:(RMAnnotation *)anAnnotation recognizer:(UIGestureRecognizer*)recognizer
 {
     if (_delegateHasDoubleTapOnLabelForAnnotation && anAnnotation)
     {
-        [_delegate doubleTapOnLabelForAnnotation:anAnnotation onMap:self];
+        [_delegate doubleTapOnLabelForAnnotation:anAnnotation onMap:self recognizer:recognizer];
     }
     else if (_delegateHasDoubleTapOnAnnotation && anAnnotation)
     {
-        [_delegate doubleTapOnAnnotation:anAnnotation onMap:self];
+        [_delegate doubleTapOnAnnotation:anAnnotation onMap:self recognizer:recognizer];
     }
     else
     {
-        [self doubleTapAtPoint:aPoint];
+        [self doubleTapWithGesture:recognizer];
     }
 }
 
