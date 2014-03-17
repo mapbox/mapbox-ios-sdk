@@ -742,25 +742,23 @@
     {
         BOOL flag = wasUserEvent;
 
-        if ([_zoomDelegateQueue operationCount] == 0)
+        if ([_zoomDelegateQueue operationCount] == 0 && _delegateHasBeforeMapZoom)
         {
             dispatch_async(dispatch_get_main_queue(), ^(void)
             {
-                if (_delegateHasBeforeMapZoom)
-                    [_delegate beforeMapZoom:self byUser:flag];
+                [_delegate beforeMapZoom:self byUser:flag];
             });
         }
 
         [_zoomDelegateQueue setSuspended:YES];
 
-        if ([_zoomDelegateQueue operationCount] == 0)
+        if ([_zoomDelegateQueue operationCount] == 0 && _delegateHasAfterMapZoom)
         {
             [_zoomDelegateQueue addOperationWithBlock:^(void)
             {
                 dispatch_async(dispatch_get_main_queue(), ^(void)
                 {
-                    if (_delegateHasAfterMapZoom)
-                        [_delegate afterMapZoom:self byUser:flag];
+                    [_delegate afterMapZoom:self byUser:flag];
                 });
             }];
         }
