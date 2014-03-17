@@ -434,11 +434,18 @@
     if ([self.fillColor isEqual:[UIColor clearColor]])
     {
         // if shape is not filled with a color, do a simple "point on path" test
-        //
-        UIGraphicsBeginImageContext(self.bounds.size);
-        CGContextAddPath(UIGraphicsGetCurrentContext(), shapeLayer.path);
-        containsPoint = CGContextPathContainsPoint(UIGraphicsGetCurrentContext(), thePoint, kCGPathStroke);
-        UIGraphicsEndImageContext();
+        // macawm: I found this solution here http://oleb.net/blog/2012/02/cgpath-hit-testing/
+        CGPathRef tapTargetPath = CGPathCreateCopyByStrokingPath(shapeLayer.path, nil, fmaxf(35.0f, shapeLayer.lineWidth), 0, 0, 0);
+        // 35 points seems like a reasonably tappable size
+        if (tapTargetPath) {
+            // It would be more efficient to store this bezier path in the RMShape object when it is created,
+            // but that requires the developer to understand that they'd have to create it if they wanted the
+            // path to be tappable. I think this is a better solution.
+            UIBezierPath *tapTarget = [UIBezierPath bezierPathWithCGPath:tapTargetPath];
+            containsPoint = [tapTarget containsPoint:thePoint];
+        }
+        CGPathRetain(tapTargetPath);
+
     }
     else
     {
