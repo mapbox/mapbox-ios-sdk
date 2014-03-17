@@ -53,10 +53,15 @@ typedef enum : NSUInteger {
     RMMapboxSourceQualityJPEG90 = 7  // 90% quality JPEG
 } RMMapboxSourceQuality;
 
+typedef void(^tileJSONRequestCallback)(NSString *tileJSON, NSError *error);
+
 @class RMMapView;
 
 /** An RMMapboxSource is used to display map tiles from a network-based map hosted on [Mapbox](http://mapbox.com/plans) or the open source [TileStream](https://github.com/mapbox/tilestream) software. Maps are referenced by their Mapbox map ID or by a file or URL containing [TileJSON](http://mapbox.com/developers/tilejson/). */
 @interface RMMapboxSource : RMAbstractWebMapSource
+
+/** XXX: add copy */
++ (void)sendAsynchronousRequestForTileJSONWithMapID:(NSString *)mapID enablingSSL:(BOOL)enableSSL callback:(tileJSONRequestCallback)callback;
 
 /** @name Creating Tile Sources */
 

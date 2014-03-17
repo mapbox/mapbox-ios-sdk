@@ -82,6 +82,7 @@
 
 @property (nonatomic, assign) UIViewController *viewControllerPresentingAttribution;
 @property (nonatomic, retain) RMUserLocation *userLocation;
+@property (nonatomic, copy, readwrite) NSString *mapID;
 
 - (void)createMapView;
 
@@ -247,32 +248,51 @@
                                minZoomLevel:(float)initialTileSourceMinZoomLevel
                             backgroundImage:(UIImage *)backgroundImage
 {
+    [self performCommonInitializationWithCenterCoordinate:(CLLocationCoordinate2D)initialCenterCoordinate
+                                          backgroundImage:backgroundImage];
+    [self setUpWithTileSource:newTilesource zoomLevel:initialTileSourceZoomLevel maxZoomLevel:initialTileSourceMaxZoomLevel minZoomLevel:initialTileSourceMinZoomLevel];
+    RMLog(@"Map initialised at {%f,%f}", initialCenterCoordinate.longitude, initialCenterCoordinate.latitude);
+}
+
+- (void)performInitializationWithCenterCoordinate:(CLLocationCoordinate2D)initialCenterCoordinate
+                                  backgroundImage:(UIImage *)backgroundImage
+                                            mapID:(NSString *)mapID
+{
+    _mapID = mapID;
+    [self performCommonInitializationWithCenterCoordinate:(CLLocationCoordinate2D)initialCenterCoordinate
+                                          backgroundImage:backgroundImage];
+    RMLog(@"Map initialised at {%f,%f}", initialCenterCoordinate.longitude, initialCenterCoordinate.latitude);
+}
+
+- (void)performCommonInitializationWithCenterCoordinate:(CLLocationCoordinate2D)initialCenterCoordinate
+                                        backgroundImage:(UIImage *)backgroundImage
+{
     _constrainMovement = _constrainMovementByUser = _bouncingEnabled = _zoomingInPivotsAroundCenter = NO;
     _draggingEnabled = YES;
-
+    
     _draggedAnnotation = nil;
-
+    
     self.backgroundColor = (RMPostVersion6 ? [UIColor colorWithRed:0.970 green:0.952 blue:0.912 alpha:1.000] : [UIColor grayColor]);
-
+    
     self.clipsToBounds = YES;
-
+    
     _tileSourcesContainer = [RMTileSourcesContainer new];
     _tiledLayersSuperview = nil;
-
+    
     _projection = nil;
     _mercatorToTileProjection = nil;
     _mapScrollView = nil;
     _overlayView = nil;
-
+    
     _screenScale = [UIScreen mainScreen].scale;
-
+    
     _adjustTilesForRetinaDisplay = NO;
     _missingTilesDepth = 1;
     _debugTiles = NO;
-
+    
     _orderMarkersByYPosition = YES;
     _orderClusterMarkersAboveOthers = YES;
-
+    
     _annotations = [NSMutableSet new];
     _visibleAnnotations = [NSMutableSet new];
     [self setQuadTree:[[RMQuadTree alloc] initWithMapView:self]];
@@ -280,15 +300,15 @@
     _positionClusterMarkersAtTheGravityCenter = YES;
     _clusterMarkerSize = CGSizeMake(100.0, 100.0);
     _clusterAreaSize = CGSizeMake(150.0, 150.0);
-
+    
     _moveDelegateQueue = [NSOperationQueue new];
     [_moveDelegateQueue setMaxConcurrentOperationCount:1];
-
+    
     _zoomDelegateQueue = [NSOperationQueue new];
     [_zoomDelegateQueue setMaxConcurrentOperationCount:1];
-
+    
     [self setTileCache:[RMTileCache new]];
-
+    
     if (backgroundImage)
     {
         [self setBackgroundView:[[UIView alloc] initWithFrame:[self bounds]]];
@@ -298,20 +318,14 @@
     {
         [self setBackgroundView:nil];
     }
-
-    if (initialTileSourceMinZoomLevel < newTilesource.minZoom) initialTileSourceMinZoomLevel = newTilesource.minZoom;
-    if (initialTileSourceMaxZoomLevel > newTilesource.maxZoom) initialTileSourceMaxZoomLevel = newTilesource.maxZoom;
-    [self setTileSourcesMinZoom:initialTileSourceMinZoomLevel];
-    [self setTileSourcesMaxZoom:initialTileSourceMaxZoomLevel];
-    [self setTileSourcesZoom:initialTileSourceZoomLevel];
-
-    [self setTileSource:newTilesource];
+    self.displayHeadingCalibration = YES;
+    _mapTransform = CGAffineTransformIdentity;
+    _annotationTransform = CATransform3DIdentity;
+    
     [self setCenterCoordinate:initialCenterCoordinate animated:NO];
-
     [self setDecelerationMode:RMMapDecelerationFast];
-
     self.showLogoBug = YES;
-
+    
     if (RMPostVersion7)
     {
         _compassButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -325,30 +339,39 @@
         [container addSubview:_compassButton];
         [self addSubview:container];
     }
-
-    self.displayHeadingCalibration = YES;
-
-    _mapTransform = CGAffineTransformIdentity;
-    _annotationTransform = CATransform3DIdentity;
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleMemoryWarningNotification:)
                                                  name:UIApplicationDidReceiveMemoryWarningNotification
                                                object:nil];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleWillChangeOrientationNotification:)
                                                  name:UIApplicationWillChangeStatusBarOrientationNotification
                                                object:nil];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleDidChangeOrientationNotification:)
                                                  name:UIApplicationDidChangeStatusBarOrientationNotification
                                                object:nil];
-
-    RMLog(@"Map initialised. tileSource:%@, minZoom:%f, maxZoom:%f, zoom:%f at {%f,%f}", newTilesource, self.minZoom, self.maxZoom, self.zoom, initialCenterCoordinate.longitude, initialCenterCoordinate.latitude);
-
+    
     [self setNeedsUpdateConstraints];
+}
+
+- (void)setUpWithTileSource:(id <RMTileSource>)newTilesource
+                  zoomLevel:(float)initialTileSourceZoomLevel
+               maxZoomLevel:(float)initialTileSourceMaxZoomLevel
+               minZoomLevel:(float)initialTileSourceMinZoomLevel
+{
+    if (initialTileSourceMinZoomLevel < newTilesource.minZoom) initialTileSourceMinZoomLevel = newTilesource.minZoom;
+    if (initialTileSourceMaxZoomLevel > newTilesource.maxZoom) initialTileSourceMaxZoomLevel = newTilesource.maxZoom;
+    
+    [self setTileSourcesMinZoom:initialTileSourceMinZoomLevel];
+    [self setTileSourcesMaxZoom:initialTileSourceMaxZoomLevel];
+    [self setTileSourcesZoom:initialTileSourceZoomLevel];
+    [self setTileSource:newTilesource];
+    
+    RMLog(@"Map set up with tileSource:%@, minZoom:%f, maxZoom:%f, zoom:%f", newTilesource, self.minZoom, self.maxZoom, self.zoom);
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -377,15 +400,42 @@
 {
     if (!newTilesource || !(self = [super initWithFrame:frame]))
         return nil;
-
+    
     [self performInitializationWithTilesource:newTilesource
                              centerCoordinate:initialCenterCoordinate
                                     zoomLevel:initialZoomLevel
                                  maxZoomLevel:maxZoomLevel
                                  minZoomLevel:minZoomLevel
                               backgroundImage:backgroundImage];
-
+    
     return self;
+}
+
+- (id)initWithFrame:(CGRect)frame mapID:(NSString *)mapID backgroundImage:(UIImage *)backgroundImage
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self performInitializationWithCenterCoordinate:CLLocationCoordinate2DMake(kDefaultInitialLatitude, kDefaultInitialLongitude)
+                                        backgroundImage:backgroundImage
+                                                  mapID:mapID];
+    }
+    return self;
+}
+
+- (void)loadTilesWithCenterCoordinate:(CLLocationCoordinate2D)initialCenterCoordinate
+                            zoomLevel:(float)initialZoomLevel
+                         maxZoomLevel:(float)maxZoomLevel
+                         minZoomLevel:(float)minZoomLevel
+{
+    [self.delegate mapViewWillStartLoadingMap];
+    
+    [RMMapboxSource sendAsynchronousRequestForTileJSONWithMapID:self.mapID enablingSSL:NO callback:^(NSString *tileJSON, NSError *error) {
+        RMMapboxSource *mapboxSource = [[RMMapboxSource alloc] initWithTileJSON:tileJSON];
+        [self setUpWithTileSource:mapboxSource zoomLevel:initialZoomLevel maxZoomLevel:maxZoomLevel minZoomLevel:minZoomLevel];
+        [self setCenterCoordinate:initialCenterCoordinate animated:NO];
+        
+        [self.delegate mapViewDidFinishLoadingMap];
+    }];
 }
 
 - (void)setFrame:(CGRect)frame
@@ -2443,7 +2493,7 @@
 - (void)setMinZoom:(float)newMinZoom
 {
     float boundingDimension = fmaxf(self.bounds.size.width, self.bounds.size.height);
-    float tileSideLength    = _tileSourcesContainer.tileSideLength;
+    float tileSideLength    = MAX(_tileSourcesContainer.tileSideLength, 1);
     float clampedMinZoom    = log2(boundingDimension / tileSideLength);
 
     if (newMinZoom < clampedMinZoom)

@@ -183,6 +183,29 @@
     return [self initWithReferenceURL:[NSURL URLWithString:referenceURLString] enablingDataOnMapView:mapView];
 }
 
++ (void)sendAsynchronousRequestForTileJSONWithMapID:(NSString *)mapID enablingSSL:(BOOL)enableSSL callback:(tileJSONRequestCallback)callback;
+{
+    NSString *referenceURLString = [NSString stringWithFormat:@"http%@://api.tiles.mapbox.com/v3/%@.json%@", (enableSSL ? @"s" : @""), mapID, (enableSSL ? @"?secure" : @"")];
+    
+    NSURL *referenceURL = [NSURL URLWithString:referenceURLString];
+    
+    if ([[referenceURL pathExtension] isEqualToString:@"jsonp"]) {
+        referenceURL = [NSURL URLWithString:[[referenceURL absoluteString] stringByReplacingOccurrencesOfString:@".jsonp"
+                                                                                                     withString:@".json"
+                                                                                                        options:NSAnchoredSearch & NSBackwardsSearch
+                                                                                                          range:NSMakeRange(0, [[referenceURL absoluteString] length])]];
+    }
+    
+    if ([[referenceURL pathExtension] isEqualToString:@"json"]) {
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:referenceURL];
+        [request setValue:[[RMConfiguration configuration] userAgent] forHTTPHeaderField:@"User-Agent"];
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+            NSString *tileJSON = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            callback(tileJSON, connectionError);
+        }];
+    }
+}
+
 - (void)dealloc
 {
     if (_dataQueue)
