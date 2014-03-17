@@ -42,6 +42,9 @@
 /** The network timeout for each attempt to download a tile image. */
 @property (nonatomic, assign) NSTimeInterval requestTimeoutSeconds;
 
+/** This block defines a condition, under which tile downloading is allowed. */
+@property (nonatomic, copy) BOOL (^tileDownloadCondition)(void);
+
 /** @name Providing Tile Images */
 
 /** Provide the URL for a given tile.

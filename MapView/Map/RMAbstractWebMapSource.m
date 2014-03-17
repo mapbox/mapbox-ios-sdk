@@ -43,6 +43,9 @@
 
     self.retryCount = RMAbstractWebMapSourceDefaultRetryCount;
     self.requestTimeoutSeconds = RMAbstractWebMapSourceDefaultWaitSeconds;
+    self.tileDownloadCondition = ^BOOL {
+        return YES;
+    };
 
     return self;
 }
@@ -108,11 +111,14 @@
             {
                 NSData *tileData = nil;
 
-                for (NSUInteger try = 0; tileData == nil && try < self.retryCount; ++try)
+                if (self.tileDownloadCondition())
                 {
-                    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:currentURL];
-                    [request setTimeoutInterval:(self.requestTimeoutSeconds / (CGFloat)self.retryCount)];
-                    tileData = [NSURLConnection sendBrandedSynchronousRequest:request returningResponse:nil error:nil];
+                    for (NSUInteger try = 0; tileData == nil && try < self.retryCount; ++try)
+                    {
+                        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:currentURL];
+                        [request setTimeoutInterval:(self.requestTimeoutSeconds / (CGFloat)self.retryCount)];
+                        tileData = [NSURLConnection sendBrandedSynchronousRequest:request returningResponse:nil error:nil];
+                    }
                 }
 
                 if (tileData)
@@ -154,7 +160,7 @@
             }
         }
     }
-    else
+    else if (self.tileDownloadCondition())
     {
         for (NSUInteger try = 0; image == nil && try < self.retryCount; ++try)
         {
