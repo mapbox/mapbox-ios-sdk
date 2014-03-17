@@ -182,6 +182,7 @@
     CGPoint _lastContentOffset, _accumulatedDelta;
     CGSize _lastContentSize;
     BOOL _mapScrollViewIsZooming;
+    BOOL _ignoreZoomEvent;
 
     BOOL _draggingEnabled, _bouncingEnabled;
 
@@ -1044,7 +1045,7 @@
                                  ((planetBounds.size.height - normalizedProjectedPoint.y - boundsRect.size.height) / _metersPerPixel) / zoomScale,
                                  (boundsRect.size.width / _metersPerPixel) / zoomScale,
                                  (boundsRect.size.height / _metersPerPixel) / zoomScale);
-    [_mapScrollView zoomToRect:zoomRect animated:animated];
+    [self zoomToRect:zoomRect animated:animated];
 }
 
 - (BOOL)shouldZoomToTargetZoom:(float)targetZoom withZoomFactor:(float)zoomFactor
@@ -1070,17 +1071,20 @@
 
 - (void)setZoom:(float)newZoom atCoordinate:(CLLocationCoordinate2D)newCenter animated:(BOOL)animated
 {
+    _ignoreZoomEvent = YES;
     [UIView animateWithDuration:(animated ? 0.3 : 0.0)
                           delay:0.0
                         options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut
                      animations:^(void)
                      {
-                         [self setZoom:newZoom];
                          [self setCenterCoordinate:newCenter animated:NO];
+                         [self setZoom:newZoom];
 
                          self.userTrackingMode = RMUserTrackingModeNone;
                      }
                      completion:nil];
+    [self correctPositionOfAllAnnotationsIncludingInvisibles:YES animated:YES];
+    _ignoreZoomEvent = NO;
 }
 
 - (void)zoomByFactor:(float)zoomFactor near:(CGPoint)pivot animated:(BOOL)animated
@@ -1121,7 +1125,7 @@
                                      ((_mapScrollView.contentOffset.y + pivot.y) - (newZoomSize.height * factorY)) / zoomScale,
                                      newZoomSize.width / zoomScale,
                                      newZoomSize.height / zoomScale);
-        [_mapScrollView zoomToRect:zoomRect animated:animated];
+        [self zoomToRect:zoomRect animated:animated];
     }
     else
     {
@@ -1130,6 +1134,16 @@
         if ([self zoom] < [self minZoom])
             [self setZoom:[self minZoom]];
     }
+}
+
+- (void)zoomToRect:(CGRect)rect animated:(BOOL)animated {
+    _ignoreZoomEvent = YES;
+    [UIView animateWithDuration:animated ? 0.3 : 0 delay:0
+            options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+        [_mapScrollView zoomToRect:rect animated:NO];
+    } completion:nil];
+    [self correctPositionOfAllAnnotationsIncludingInvisibles:YES animated:animated];
+    _ignoreZoomEvent = NO;
 }
 
 - (float)nextNativeZoomFactor
@@ -1453,6 +1467,10 @@
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
+    if (_ignoreZoomEvent) {
+        return;
+    }
+
     BOOL wasUserAction = (scrollView.pinchGestureRecognizer.state == UIGestureRecognizerStateChanged);
 
     [self registerZoomEventByUser:wasUserAction];
@@ -1581,19 +1599,24 @@
         if (fabsf(_accumulatedDelta.x) < kZoomRectPixelBuffer && fabsf(_accumulatedDelta.y) < kZoomRectPixelBuffer)
         {
             [_overlayView moveLayersBy:_accumulatedDelta];
-            [self performSelector:@selector(correctPositionOfAllAnnotations) withObject:nil afterDelay:0.1];
-        }
-        else
-        {
-            if (_mapScrollViewIsZooming)
+            if (!_ignoreZoomEvent) {
+                [self performSelector:@selector(correctPositionOfAllAnnotations) withObject:nil
+                        afterDelay:0.1];
+            }
+        } else if (!_ignoreZoomEvent) {
+            if (_mapScrollViewIsZooming) {
                 [self correctPositionOfAllAnnotationsIncludingInvisibles:NO animated:YES];
-            else
+            } else {
                 [self correctPositionOfAllAnnotations];
+            }
         }
     }
     else
     {
-        [self correctPositionOfAllAnnotationsIncludingInvisibles:NO animated:(_mapScrollViewIsZooming && !_mapScrollView.zooming)];
+        if (!_ignoreZoomEvent) {
+            [self correctPositionOfAllAnnotationsIncludingInvisibles:NO
+                    animated:(_mapScrollViewIsZooming && !_mapScrollView.zooming)];
+        }
 
         if (_currentAnnotation && ! [_currentAnnotation isKindOfClass:[RMMarker class]])
         {
