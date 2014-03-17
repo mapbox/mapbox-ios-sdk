@@ -1071,18 +1071,26 @@
 
 - (void)setZoom:(float)newZoom atCoordinate:(CLLocationCoordinate2D)newCenter animated:(BOOL)animated
 {
-    [UIView animateWithDuration:(animated ? 0.3 : 0.0)
-                          delay:0.0
-                        options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut
-                     animations:^(void)
-                     {
-                         [self setZoom:newZoom];
-                         [self setCenterCoordinate:newCenter animated:NO];
+    if (animated) {
+        [UIView animateWithDuration:(0.3)
+                              delay:0.0
+                            options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut
+                         animations:^(void)
+                         {
+                             [self setZoom:newZoom];
+                             [self setCenterCoordinate:newCenter animated:NO];
 
-                         self.userTrackingMode = RMUserTrackingModeNone;
-                     }
-                     completion:nil];
+                             self.userTrackingMode = RMUserTrackingModeNone;
+                         }
+                         completion:nil];
+    } else {
+        [self setZoom:newZoom];
+        [self setCenterCoordinate:newCenter animated:NO];
+        
+        self.userTrackingMode = RMUserTrackingModeNone;
+    }
 }
+
 
 - (void)zoomByFactor:(float)zoomFactor near:(CGPoint)pivot animated:(BOOL)animated
 {
