@@ -46,6 +46,10 @@
 		23A0AAEB0EB90AA6003A4521 /* RMFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 23A0AAEA0EB90AA6003A4521 /* RMFoundation.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		25757F4F1291C8640083D504 /* RMCircle.h in Headers */ = {isa = PBXBuildFile; fileRef = 25757F4D1291C8640083D504 /* RMCircle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		25757F501291C8640083D504 /* RMCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 25757F4E1291C8640083D504 /* RMCircle.m */; };
+		9534ACEC18D8D4B000231153 /* SMCalloutView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9534ACE818D8D4B000231153 /* SMCalloutView.h */; };
+		9534ACED18D8D4B000231153 /* SMCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9534ACE918D8D4B000231153 /* SMCalloutView.m */; };
+		9534ACEE18D8D4B000231153 /* SMClassicCalloutView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9534ACEA18D8D4B000231153 /* SMClassicCalloutView.h */; };
+		9534ACEF18D8D4B000231153 /* SMClassicCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9534ACEB18D8D4B000231153 /* SMClassicCalloutView.m */; };
 		96492C400FA8AD3400EBA6D2 /* RMGlobalConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 96492C3F0FA8AD3400EBA6D2 /* RMGlobalConstants.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		B1EB26C610B5D8E6009F8658 /* RMNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = B1EB26C510B5D8E6009F8658 /* RMNotifications.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		B8474BA40EB40094006A0BC1 /* RMDatabaseCache.h in Headers */ = {isa = PBXBuildFile; fileRef = B8474B980EB40094006A0BC1 /* RMDatabaseCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -229,6 +233,10 @@
 		25757F4E1291C8640083D504 /* RMCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMCircle.m; sourceTree = "<group>"; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* MapView_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapView_Prefix.pch; sourceTree = SOURCE_ROOT; };
+		9534ACE818D8D4B000231153 /* SMCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMCalloutView.h; sourceTree = "<group>"; };
+		9534ACE918D8D4B000231153 /* SMCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMCalloutView.m; sourceTree = "<group>"; };
+		9534ACEA18D8D4B000231153 /* SMClassicCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMClassicCalloutView.h; sourceTree = "<group>"; };
+		9534ACEB18D8D4B000231153 /* SMClassicCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMClassicCalloutView.m; sourceTree = "<group>"; };
 		96492C3F0FA8AD3400EBA6D2 /* RMGlobalConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMGlobalConstants.h; sourceTree = "<group>"; };
 		B1EB26C510B5D8E6009F8658 /* RMNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMNotifications.h; sourceTree = "<group>"; };
 		B83E64B60E80E73F001663B6 /* RMPixel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMPixel.h; sourceTree = "<group>"; };
@@ -605,6 +613,10 @@
 		DD76E12E161E347B00F60F43 /* SMCallout */ = {
 			isa = PBXGroup;
 			children = (
+				9534ACE818D8D4B000231153 /* SMCalloutView.h */,
+				9534ACE918D8D4B000231153 /* SMCalloutView.m */,
+				9534ACEA18D8D4B000231153 /* SMClassicCalloutView.h */,
+				9534ACEB18D8D4B000231153 /* SMClassicCalloutView.m */,
 			);
 			name = SMCallout;
 			path = Map;
@@ -762,6 +774,8 @@
 				B8C9742A0E8A19B2007D16AD /* RMTileImage.h in Headers */,
 				B8C9742D0E8A19B2007D16AD /* RMFractalTileProjection.h in Headers */,
 				23A0AAEB0EB90AA6003A4521 /* RMFoundation.h in Headers */,
+				9534ACEE18D8D4B000231153 /* SMClassicCalloutView.h in Headers */,
+				9534ACEC18D8D4B000231153 /* SMCalloutView.h in Headers */,
 				96492C400FA8AD3400EBA6D2 /* RMGlobalConstants.h in Headers */,
 				B1EB26C610B5D8E6009F8658 /* RMNotifications.h in Headers */,
 				D1437B37122869E400888DAE /* RMDBMapSource.h in Headers */,
@@ -917,11 +931,13 @@
 				DD63176417D15EB5008CA79B /* RMCircleAnnotation.m in Sources */,
 				B8C9744A0E8A19B2007D16AD /* RMProjection.m in Sources */,
 				B8C9746C0E8A1A50007D16AD /* RMMapView.m in Sources */,
+				9534ACED18D8D4B000231153 /* SMCalloutView.m in Sources */,
 				B8F3FC610EA2B382004D8F85 /* RMMapLayer.m in Sources */,
 				B8F3FC650EA2E792004D8F85 /* RMMarker.m in Sources */,
 				B8474BA50EB40094006A0BC1 /* RMDatabaseCache.m in Sources */,
 				126693040EB76C0B00E002D5 /* RMConfiguration.m in Sources */,
 				23A0AAE90EB90A99003A4521 /* RMFoundation.c in Sources */,
+				9534ACEF18D8D4B000231153 /* SMClassicCalloutView.m in Sources */,
 				D1437B36122869E400888DAE /* RMDBMapSource.m in Sources */,
 				25757F501291C8640083D504 /* RMCircle.m in Sources */,
 				16EC85D3133CA6C300219947 /* RMAbstractMercatorTileSource.m in Sources */,
