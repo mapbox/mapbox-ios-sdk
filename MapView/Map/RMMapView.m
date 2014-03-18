@@ -53,7 +53,6 @@
 
 #import "RMAttributionViewController.h"
 
-#import "SMCalloutView.h"
 
 #pragma mark --- begin constants ----
 
@@ -210,7 +209,7 @@
     UIButton *_compassButton;
 
     RMAnnotation *_currentAnnotation;
-    SMCalloutView *_currentCallout;
+
 
     BOOL _rotateAtMinZoom;
 }
@@ -236,6 +235,8 @@
 @synthesize debugTiles = _debugTiles;
 @synthesize hideAttribution = _hideAttribution;
 @synthesize showLogoBug = _showLogoBug;
+
+@synthesize currentCallout=_currentCallout;
 
 #pragma mark -
 #pragma mark Initialization
