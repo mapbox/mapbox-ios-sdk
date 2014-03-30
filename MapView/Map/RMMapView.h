@@ -282,8 +282,6 @@ typedef enum : NSUInteger {
 *   @param northEast The northeast point to constrain to. */
 - (void)setConstraintsSouthWest:(CLLocationCoordinate2D)southWest northEast:(CLLocationCoordinate2D)northEast;
 
-- (void)setProjectedConstraintsSouthWest:(RMProjectedPoint)southWest northEast:(RMProjectedPoint)northEast;
-
 #pragma mark - Snapshots
 
 /** @name Capturing Snapshots of the Map View */

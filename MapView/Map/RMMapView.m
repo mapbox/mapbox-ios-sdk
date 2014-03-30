@@ -174,7 +174,8 @@
 
     BOOL _constrainMovement, _constrainMovementByUser;
     RMProjectedRect _constrainingProjectedBounds, _constrainingProjectedBoundsByUser;
-
+    RMSphericalTrapezium _tilesConstrainingBox, _userConstrainingBox, _constrainingBox;
+    
     double _metersPerPixel;
     float _zoom, _lastZoom;
     CGPoint _lastContentOffset, _accumulatedDelta;
@@ -251,6 +252,7 @@
     _draggingEnabled = YES;
 
     _draggedAnnotation = nil;
+    _constrainingBox = _tilesConstrainingBox = _userConstrainingBox = kMapboxDefaultLatLonBoundingBox;
 
     self.backgroundColor = (RMPostVersion6 ? [UIColor colorWithRed:0.970 green:0.952 blue:0.912 alpha:1.000] : [UIColor grayColor]);
 
@@ -391,6 +393,7 @@
 - (void)setFrame:(CGRect)frame
 {
     CGRect r = self.frame;
+    RMProjectedRect projection = [self projectedBounds];
     [super setFrame:frame];
 
     // only change if the frame changes and not during initialization
@@ -402,6 +405,9 @@
         _backgroundView.frame = bounds;
         _mapScrollView.frame = bounds;
         _overlayView.frame = bounds;
+        
+        [self updateConstrainingProjectedBounds];
+        [self setProjectedBounds:projection];
 
         [self setCenterProjectedPoint:centerPoint animated:NO];
 
@@ -885,48 +891,32 @@
 
 // ===
 
-- (void)setConstraintsSouthWest:(CLLocationCoordinate2D)southWest northEast:(CLLocationCoordinate2D)northEast
+-(void)updateConstrainingProjectedBounds
 {
-    RMProjectedPoint projectedSouthWest = [_projection coordinateToProjectedPoint:southWest];
-    RMProjectedPoint projectedNorthEast = [_projection coordinateToProjectedPoint:northEast];
-
-    [self setProjectedConstraintsSouthWest:projectedSouthWest northEast:projectedNorthEast];
+    _constrainingProjectedBounds = [self projectedRectFromLatitudeLongitudeBounds:_constrainingBox];
+    if (RMProjectedRectIsZero(_constrainingProjectedBounds)) {
+        RMLog(@"The constraining bounds from tilesources and user don't intersect!");
+        _constrainingProjectedBounds = _projection.planetBounds;
+    }
 }
 
-- (void)setProjectedConstraintsSouthWest:(RMProjectedPoint)southWest northEast:(RMProjectedPoint)northEast
+- (void)setConstraintsSouthWest:(CLLocationCoordinate2D)southWest northEast:(CLLocationCoordinate2D)northEast
 {
-    _constrainMovement = _constrainMovementByUser = YES;
-    _constrainingProjectedBounds = RMProjectedRectMake(southWest.x, southWest.y, northEast.x - southWest.x, northEast.y - southWest.y);
-    _constrainingProjectedBoundsByUser = RMProjectedRectMake(southWest.x, southWest.y, northEast.x - southWest.x, northEast.y - southWest.y);
+    _userConstrainingBox = ((RMSphericalTrapezium) {
+        .northEast = northEast,
+        .southWest = southWest
+    });
+    _constrainingBox = RMSphericalTrapeziumIntersection(_tilesConstrainingBox, _userConstrainingBox);
+    [self updateConstrainingProjectedBounds];
 }
 
 - (void)setTileSourcesConstraintsFromLatitudeLongitudeBoundingBox:(RMSphericalTrapezium)bounds
 {
-    BOOL tileSourcesConstrainMovement = !(bounds.northEast.latitude == 90.0 && bounds.northEast.longitude == 180.0 && bounds.southWest.latitude == -90.0 && bounds.southWest.longitude == -180.0);
+    _constrainMovement = _constrainMovementByUser || !(bounds.northEast.latitude == 90.0 && bounds.northEast.longitude == 180.0 && bounds.southWest.latitude == -90.0 && bounds.southWest.longitude == -180.0);
 
-    if (tileSourcesConstrainMovement)
-    {
-        _constrainMovement = YES;
-        RMProjectedRect tileSourcesConstrainingProjectedBounds = [self projectedRectFromLatitudeLongitudeBounds:bounds];
-
-        if (_constrainMovementByUser)
-        {
-            _constrainingProjectedBounds = RMProjectedRectIntersection(_constrainingProjectedBoundsByUser, tileSourcesConstrainingProjectedBounds);
-
-            if (RMProjectedRectIsZero(_constrainingProjectedBounds))
-                RMLog(@"The constraining bounds from tilesources and user don't intersect!");
-        }
-        else
-            _constrainingProjectedBounds = tileSourcesConstrainingProjectedBounds;
-    }
-    else if (_constrainMovementByUser)
-    {
-        _constrainingProjectedBounds = _constrainingProjectedBoundsByUser;
-    }
-    else
-    {
-        _constrainingProjectedBounds = _projection.planetBounds;
-    }
+    _tilesConstrainingBox = bounds;
+    _constrainingBox = RMSphericalTrapeziumIntersection(_tilesConstrainingBox, _userConstrainingBox);
+    [self updateConstrainingProjectedBounds];
 }
 
 #pragma mark -
@@ -1032,6 +1022,9 @@
 
 - (void)setProjectedBounds:(RMProjectedRect)boundsRect animated:(BOOL)animated
 {
+    if (RMProjectedRectEqualToProjectedRect(boundsRect, [self projectedBounds]))
+        return;
+    
     if (_constrainMovement)
         boundsRect = [self fitProjectedRect:boundsRect intoRect:_constrainingProjectedBounds];
 
