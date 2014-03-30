@@ -56,8 +56,8 @@
     _mercatorToTileProjection = nil;
 
     _latitudeLongitudeBoundingBox = ((RMSphericalTrapezium) {
-        .northEast = {.latitude = 90.0, .longitude = 180.0},
-        .southWest = {.latitude = -90.0, .longitude = -180.0}
+        .northEast = {.latitude = INT_MIN, .longitude = INT_MIN},
+        .southWest = {.latitude = INT_MAX, .longitude = INT_MAX}
     });
 
     _minZoom = kRMTileSourcesContainerMaxZoom;
@@ -74,8 +74,8 @@
     [_tileSourcesLock lock];
 
     _latitudeLongitudeBoundingBox = ((RMSphericalTrapezium) {
-        .northEast = {.latitude = 90.0, .longitude = 180.0},
-        .southWest = {.latitude = -90.0, .longitude = -180.0}
+        .northEast = {.latitude = INT_MIN, .longitude = INT_MIN},
+        .southWest = {.latitude = INT_MAX, .longitude = INT_MAX}
     });
 
     for (id <RMTileSource>tileSource in _tileSources)
@@ -84,11 +84,11 @@
 
         _latitudeLongitudeBoundingBox = ((RMSphericalTrapezium) {
             .northEast = {
-                .latitude = MIN(_latitudeLongitudeBoundingBox.northEast.latitude, newLatitudeLongitudeBoundingBox.northEast.latitude),
-                .longitude = MIN(_latitudeLongitudeBoundingBox.northEast.longitude, newLatitudeLongitudeBoundingBox.northEast.longitude)},
+                .latitude = MAX(_latitudeLongitudeBoundingBox.northEast.latitude, newLatitudeLongitudeBoundingBox.northEast.latitude),
+                .longitude = MAX(_latitudeLongitudeBoundingBox.northEast.longitude, newLatitudeLongitudeBoundingBox.northEast.longitude)},
             .southWest = {
-                .latitude = MAX(_latitudeLongitudeBoundingBox.southWest.latitude, newLatitudeLongitudeBoundingBox.southWest.latitude),
-                .longitude = MAX(_latitudeLongitudeBoundingBox.southWest.longitude, newLatitudeLongitudeBoundingBox.southWest.longitude)
+                .latitude = MIN(_latitudeLongitudeBoundingBox.southWest.latitude, newLatitudeLongitudeBoundingBox.southWest.latitude),
+                .longitude = MIN(_latitudeLongitudeBoundingBox.southWest.longitude, newLatitudeLongitudeBoundingBox.southWest.longitude)
             }
         });
     }
@@ -231,7 +231,7 @@
     BOOL intersects = (((minX1 <= minX2 && minX2 <= maxX1) || (minX2 <= minX1 && minX1 <= maxX2)) &&
                        ((minY1 <= minY2 && minY2 <= maxY1) || (minY2 <= minY1 && minY1 <= maxY2)));
 
-    if ( ! intersects)
+    if ([_tileSources count] > 0 &&  ! intersects)
     {
         NSLog(@"The bounding box from tilesource '%@' doesn't intersect with the tilesource containers' bounding box", [tileSource shortName]);
         [_tileSourcesLock unlock];
@@ -240,11 +240,11 @@
 
     _latitudeLongitudeBoundingBox = ((RMSphericalTrapezium) {
         .northEast = {
-            .latitude = MIN(_latitudeLongitudeBoundingBox.northEast.latitude, newLatitudeLongitudeBoundingBox.northEast.latitude),
-            .longitude = MIN(_latitudeLongitudeBoundingBox.northEast.longitude, newLatitudeLongitudeBoundingBox.northEast.longitude)},
+            .latitude = MAX(_latitudeLongitudeBoundingBox.northEast.latitude, newLatitudeLongitudeBoundingBox.northEast.latitude),
+            .longitude = MAX(_latitudeLongitudeBoundingBox.northEast.longitude, newLatitudeLongitudeBoundingBox.northEast.longitude)},
         .southWest = {
-            .latitude = MAX(_latitudeLongitudeBoundingBox.southWest.latitude, newLatitudeLongitudeBoundingBox.southWest.latitude),
-            .longitude = MAX(_latitudeLongitudeBoundingBox.southWest.longitude, newLatitudeLongitudeBoundingBox.southWest.longitude)
+            .latitude = MIN(_latitudeLongitudeBoundingBox.southWest.latitude, newLatitudeLongitudeBoundingBox.southWest.latitude),
+            .longitude = MIN(_latitudeLongitudeBoundingBox.southWest.longitude, newLatitudeLongitudeBoundingBox.southWest.longitude)
         }
     });
 
@@ -337,8 +337,8 @@
      _mercatorToTileProjection = nil;
 
     _latitudeLongitudeBoundingBox = ((RMSphericalTrapezium) {
-        .northEast = {.latitude = 90.0, .longitude = 180.0},
-        .southWest = {.latitude = -90.0, .longitude = -180.0}
+        .northEast = {.latitude = INT_MIN, .longitude = INT_MIN},
+        .southWest = {.latitude = INT_MAX, .longitude = INT_MAX}
     });
 
     _minZoom = kRMTileSourcesContainerMaxZoom;
