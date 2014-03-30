@@ -53,13 +53,24 @@ typedef struct {
 	RMProjectedSize size;
 } RMProjectedRect;
 
-#if __OBJC__
+#ifdef __OBJC__
 /*! \struct RMSphericalTrapezium
  \brief a rectangle, specified by two corner coordinates */
 typedef struct {
 	CLLocationCoordinate2D southWest;
 	CLLocationCoordinate2D northEast;
 } RMSphericalTrapezium;
+static inline RMSphericalTrapezium RMSphericalTrapeziumIntersection(RMSphericalTrapezium box1, RMSphericalTrapezium box2){
+    return ((RMSphericalTrapezium) {
+        .northEast = {
+            .latitude = MIN(box1.northEast.latitude, box2.northEast.latitude),
+            .longitude = MIN(box1.northEast.longitude, box2.northEast.longitude)},
+        .southWest = {
+            .latitude = MAX(box1.southWest.latitude, box2.southWest.latitude),
+            .longitude = MAX(box1.southWest.longitude, box2.southWest.longitude)
+        }
+    });
+}
 #endif
 
 #pragma mark -
