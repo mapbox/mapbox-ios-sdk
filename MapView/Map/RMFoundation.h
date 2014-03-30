@@ -72,6 +72,7 @@ RMProjectedRect  RMTranslateProjectedRectBy(RMProjectedRect rect, RMProjectedSiz
 #pragma mark -
 
 bool RMProjectedPointEqualToProjectedPoint(RMProjectedPoint point1, RMProjectedPoint point2);
+bool RMProjectedRectEqualToProjectedRect(RMProjectedRect rect1, RMProjectedRect rect2);
 
 bool RMProjectedRectIntersectsProjectedRect(RMProjectedRect rect1, RMProjectedRect rect2);
 bool RMProjectedRectContainsProjectedRect(RMProjectedRect rect1, RMProjectedRect rect2);
