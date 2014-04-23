@@ -2337,6 +2337,16 @@
 
 #pragma mark - Properties
 
+- (RMMapScrollView *)mapScrollView
+{
+    return _mapScrollView;
+}
+
+- (RMMapOverlayView *)overlayView
+{
+    return _overlayView;
+}
+
 - (UIView *)backgroundView
 {
     return _backgroundView;
