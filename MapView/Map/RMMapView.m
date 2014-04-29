@@ -3602,7 +3602,10 @@
     if (_delegateHasDidUpdateUserLocation)
         [_delegate mapView:self didUpdateUserLocation:self.userLocation];
 
-    if (newHeading.trueHeading != 0 && self.userTrackingMode == RMUserTrackingModeFollowWithHeading)
+    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ?
+                                       newHeading.trueHeading : newHeading.magneticHeading);
+    
+    if (theHeading != 0 && self.userTrackingMode == RMUserTrackingModeFollowWithHeading)
     {
         if (_userHeadingTrackingView.alpha < 1.0)
             [UIView animateWithDuration:0.5 animations:^(void) { _userHeadingTrackingView.alpha = 1.0; }];
@@ -3616,7 +3619,7 @@
                             options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut
                          animations:^(void)
                          {
-                             CGFloat angle = (M_PI / -180) * newHeading.trueHeading;
+                             CGFloat angle = (M_PI / -180) * theHeading;
 
                              _mapTransform = CGAffineTransformMakeRotation(angle);
                              _annotationTransform = CATransform3DMakeAffineTransform(CGAffineTransformMakeRotation(-angle));
