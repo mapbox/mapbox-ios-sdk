@@ -70,7 +70,7 @@
     _tileSource = aTileSource;
 
     self.useSnapshotRenderer = NO;
-    _queue = dispatch_queue_create([[NSString stringWithFormat:@"tileLayer.%@", [_tileSource uniqueTilecacheKey]] UTF8String], NULL);
+    _queue = dispatch_queue_create([[NSString stringWithFormat:@"tileLayer.%@", [_tileSource uniqueTilecacheKey]] UTF8String], DISPATCH_QUEUE_CONCURRENT);
 
     CATiledLayer *tiledLayer = [self tiledLayer];
     size_t levelsOf2xMagnification = _mapView.tileSourcesMaxZoom;

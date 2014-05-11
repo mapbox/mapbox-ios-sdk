@@ -46,7 +46,7 @@
 
     self.retryCount = RMAbstractWebMapSourceDefaultRetryCount;
     self.requestTimeoutSeconds = RMAbstractWebMapSourceDefaultWaitSeconds;
-    _queue = dispatch_queue_create(nil, DISPATCH_QUEUE_SERIAL);
+    _queue = dispatch_queue_create(nil, DISPATCH_QUEUE_CONCURRENT);
 
     return self;
 }
