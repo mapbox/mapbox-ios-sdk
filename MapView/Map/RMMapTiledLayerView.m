@@ -43,6 +43,7 @@
 {
     __weak RMMapView *_mapView;
     id <RMTileSource> _tileSource;
+    dispatch_queue_t _queue;
 }
 
 @synthesize useSnapshotRenderer = _useSnapshotRenderer;
@@ -69,6 +70,7 @@
     _tileSource = aTileSource;
 
     self.useSnapshotRenderer = NO;
+    _queue = dispatch_queue_create([[NSString stringWithFormat:@"tileLayer.%@", [_tileSource uniqueTilecacheKey]] UTF8String], NULL);
 
     CATiledLayer *tiledLayer = [self tiledLayer];
     size_t levelsOf2xMagnification = _mapView.tileSourcesMaxZoom;
@@ -84,6 +86,8 @@
     [_tileSource cancelAllDownloads];
     self.layer.contents = nil;
      _mapView = nil;
+    if (_queue)
+        dispatch_release(_queue);
 }
 
 - (void)didMoveToWindow
@@ -172,7 +176,7 @@
                 {
                     // fire off an asynchronous retrieval
                     //
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
+                    dispatch_async(_queue, ^(void)
                     {
                         // ensure only one request for a URL at a time
                         //

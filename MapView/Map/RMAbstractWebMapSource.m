@@ -33,6 +33,9 @@
 #define HTTP_404_NOT_FOUND 404
 
 @implementation RMAbstractWebMapSource
+{
+    dispatch_queue_t _queue;
+}
 
 @synthesize retryCount, requestTimeoutSeconds;
 
@@ -43,8 +46,15 @@
 
     self.retryCount = RMAbstractWebMapSourceDefaultRetryCount;
     self.requestTimeoutSeconds = RMAbstractWebMapSourceDefaultWaitSeconds;
+    _queue = dispatch_queue_create(nil, DISPATCH_QUEUE_SERIAL);
 
     return self;
+}
+
+-(void)dealloc
+{
+    if (_queue)
+        dispatch_release(_queue);
 }
 
 - (NSURL *)URLForTile:(RMTile)tile
@@ -96,7 +106,7 @@
         {
             NSURL *currentURL = [URLs objectAtIndex:u];
 
-            dispatch_group_async(fetchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
+            dispatch_group_async(fetchGroup, _queue, ^(void)
             {
                 NSData *tileData = nil;
 
