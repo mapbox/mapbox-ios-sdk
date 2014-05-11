@@ -70,14 +70,6 @@
     if ( ! [self tileSourceHasTile:tile])
         return (UIImage *)[NSNull null];
 
-    if (self.isCacheable)
-    {
-        image = [tileCache cachedImage:tile withCacheKey:[self uniqueTilecacheKey]];
-
-        if (image)
-            return image;
-    }
-
     dispatch_async(dispatch_get_main_queue(), ^(void)
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:RMTileRequested object:[NSNumber numberWithUnsignedLongLong:RMTileKey(tile)]];
@@ -162,13 +154,14 @@
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[URLs objectAtIndex:0]];
             [request setTimeoutInterval:(self.requestTimeoutSeconds / (CGFloat)self.retryCount)];
             image = [UIImage imageWithData:[NSURLConnection sendBrandedSynchronousRequest:request returningResponse:&response error:nil]];
-
-            if (response.statusCode == HTTP_404_NOT_FOUND)
+            
+            if (image || response.statusCode == HTTP_404_NOT_FOUND)
                 break;
         }
     }
-
-    if (image && self.isCacheable)
+    if (image == nil) {
+        return (UIImage *)[NSNull null];
+    } else if (self.isCacheable)
         [tileCache addImage:image forTile:tile withCacheKey:[self uniqueTilecacheKey]];
 
     dispatch_async(dispatch_get_main_queue(), ^(void)
