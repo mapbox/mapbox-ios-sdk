@@ -201,7 +201,7 @@
             {
                 tileImage = [RMTileImage errorTile];
             }
-            else
+            else if (_tileSource.isCacheable)
             {
                 NSUInteger currentTileDepth = 1, currentZoom = zoom - currentTileDepth;
 
@@ -212,8 +212,8 @@
                           nextY = y / powf(2.0, (float)currentTileDepth);
                     float nextTileX = floor(nextX),
                           nextTileY = floor(nextY);
-
-                    tileImage = [_tileSource imageForTile:RMTileMake((int)nextTileX, (int)nextTileY, currentZoom) inCache:[_mapView tileCache]];
+                    
+                    tileImage = [[_mapView tileCache] cachedImage:RMTileMake((int)nextTileX, (int)nextTileY, currentZoom) withCacheKey:[_tileSource uniqueTilecacheKey]];
 
                     if (IS_VALID_TILE_IMAGE(tileImage))
                     {
