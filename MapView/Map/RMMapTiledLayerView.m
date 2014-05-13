@@ -49,7 +49,6 @@
 {
     __weak RMMapView *_mapView;
     id <RMTileSource> _tileSource;
-    //    dispatch_queue_t _queue;
     NSOperationQueue* _backgroundFetchQueue;
 }
 
@@ -103,25 +102,7 @@
 - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)context {
     CGRect rect = CGContextGetClipBoundingBox(context);
     CGRect bounds = self.bounds;
-    // get the scale from the context by getting the current transform matrix, then asking for
-    // its "a" component, which is one of the two scale components. We could also ask for "d".
-    // This assumes (safely) that the view is being scaled equally in both dimensions.
-    //    CGFloat scale = CGContextGetCTM(context).a;
-    
-    //    CATiledLayer *tiledLayer = (CATiledLayer *)layer;
-    //    CGSize tileSize = tiledLayer.tileSize;
-    
-    // Even at scales lower than 100%, we are drawing into a rect in the coordinate system of the full
-    // image. One tile at 50% covers the width (in original image coordinates) of two tiles at 100%.
-    // So at 50% we need to stretch our tiles to double the width and height; at 25% we need to stretch
-    // them to quadruple the width and height; and so on.
-    // (Note that this means that we are drawing very blurry images as the scale gets low. At 12.5%,
-    // our lowest scale, we are stretching about 6 small tiles to fill the entire original image area.
-    // But this is okay, because the big blurry image we're drawing here will be scaled way down before
-    // it is displayed.)
-    //    tileSize.width /= scale;
-    //    tileSize.height /= scale;
-    
+
     int zoom = log2(bounds.size.width / rect.size.width);
     int x = floor(rect.origin.x / rect.size.width),
     y = floor(fabs(rect.origin.y / rect.size.height));
