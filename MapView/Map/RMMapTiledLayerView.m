@@ -124,7 +124,7 @@
         y1 = floor(fabs(rect.origin.y / rectSize)),
         y2 = floor(fabs((rect.origin.y + rect.size.height) / rectSize));
         
-        //        NSLog(@"Tiles from x1:%d, y1:%d to x2:%d, y2:%d @ zoom %d", x1, y1, x2, y2, zoom);
+//        RMLog(@"Tiles from x1:%d, y1:%d to x2:%d, y2:%d @ zoom %d", x1, y1, x2, y2, zoom);
         
         if (zoom >= _tileSource.minZoom && zoom <= _tileSource.maxZoom)
         {
@@ -145,8 +145,8 @@
         }
     }
     else {
-        //    NSString *tileName = [NSString stringWithFormat:@"%d_%d_%d.png", tile.zoom, tile.x, tile.y];
-        //    NSLog(@"draw in rect %@, %@", NSStringFromCGRect(rect), tileName);
+//        NSString *tileName = [NSString stringWithFormat:@"%d_%d_%d.png", tile.zoom, tile.x, tile.y];
+//        RMLog(@"draw in rect %@, %@", NSStringFromCGRect(rect), tileName);
         UIImage* tileImage = [self imageForRect:rect tile:tile];
         if (IS_VALID_TILE_IMAGE(tileImage)) {
             
@@ -214,7 +214,7 @@
 - (UIImage*) imageForRect:(CGRect)rect tile:(RMTile)tile{
     if (tile.zoom >= _tileSource.minZoom && tile.zoom <= _tileSource.maxZoom)
     {
-        //        NSString *tileName = [NSString stringWithFormat:@"%d_%d_%d.png", tile.zoom, tile.x, tile.y];
+//        NSString *tileName = [NSString stringWithFormat:@"%d_%d_%d.png", tile.zoom, tile.x, tile.y];
         
         UIImage *cachedImage = nil;
         
@@ -231,10 +231,10 @@
         else
         {
             if (_tileSource.isCacheable) {
-                //                NSLog(@"testing cache for tile %@", tileName);
+//                RMLog(@"testing cache for tile %@", tileName);
                 UIImage* image = [[_mapView tileCache] cachedImage:tile withCacheKey:[_tileSource uniqueTilecacheKey]];
                 if (IS_VALID_TILE_IMAGE(image)) {
-                    //                    NSLog(@"got cache for tile %@", tileName);
+//                    RMLog(@"got cache for tile %@", tileName);
                     return image;
                 }
             }
@@ -244,7 +244,7 @@
                                                                                               usingCache:[_mapView tileCache]];
             
             __block RMTileCacheDownloadOperation *internalOperation = operation;
-            //            __block NSString* internalTileName = tileName;
+//            __block NSString* internalTileName = tileName;
             __block CGRect internalRect = rect;
             
             [operation setCompletionBlock:^(void)
@@ -253,12 +253,12 @@
                  {
                      dispatch_sync(dispatch_get_main_queue(), ^(void)
                                    {
-                                       //                                       NSLog(@"refreshing for tile %@, %@", internalTileName, NSStringFromCGRect(internalRect));
+//                                       RMLog(@"refreshing for tile %@, %@", internalTileName, NSStringFromCGRect(internalRect));
                                        [[self tiledLayer] setNeedsDisplayInRect:internalRect];
                                    });
                  }
                  internalOperation = nil;
-                 //                 internalTileName = nil;
+//                 internalTileName = nil;
              }];
             
             [_backgroundFetchQueue addOperation:operation];
@@ -269,9 +269,11 @@
         }
         else if (_tileSource.isCacheable)
         {
+            NSUInteger maxDepth = _mapView.missingTilesDepth;
+            NSUInteger minZoom = _tileSource.minZoom;
             NSUInteger currentTileDepth = 1, currentZoom = tile.zoom - currentTileDepth;
             // tries to return lower zoom level tiles if a tile cannot be found
-            while ( !cachedImage && currentZoom >= _tileSource.minZoom && currentTileDepth <= _mapView.missingTilesDepth)
+            while ( !cachedImage && currentZoom >= minZoom && currentTileDepth <= maxDepth)
             {
                 float nextX = tile.x / powf(2.0, (float)currentTileDepth),
                 nextY = tile.y / powf(2.0, (float)currentTileDepth);
@@ -282,6 +284,17 @@
                 
                 if (IS_VALID_TILE_IMAGE(cachedImage))
                 {
+                    // crop
+                    float cropSize = 1.0 / powf(2.0, (float)currentTileDepth);
+                    
+                    CGRect cropBounds = CGRectMake(cachedImage.size.width * (nextX - nextTileX),
+                                                   cachedImage.size.height * (nextY - nextTileY),
+                                                   cachedImage.size.width * cropSize,
+                                                   cachedImage.size.height * cropSize);
+                    
+                    CGImageRef imageRef = CGImageCreateWithImageInRect([cachedImage CGImage], cropBounds);
+                    return [UIImage imageWithCGImage:imageRef];
+                    CGImageRelease(imageRef);
                     return cachedImage;
                 }
                 
