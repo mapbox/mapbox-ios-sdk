@@ -58,8 +58,9 @@
     {
         if ([self isCancelled])
             return;
-
-        if ( ! [_source imageForTile:_tile inCache:_cache])
+        
+        UIImage* image = [_source imageForTile:_tile inCache:_cache];
+        if ( ! IS_VALID_TILE_IMAGE(image))
             [self cancel];
     }
 }

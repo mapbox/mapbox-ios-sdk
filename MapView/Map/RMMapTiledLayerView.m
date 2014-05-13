@@ -38,7 +38,6 @@
 #import "RMDatabaseCache.h"
 #import "RMTileCacheDownloadOperation.h"
 
-#define IS_VALID_TILE_IMAGE(image) (image != nil && [image isKindOfClass:[UIImage class]])
 
 @interface CATiledLayer(additions)
 - (void) setNeedsDisplayInRect:(CGRect)r levelOfDetail:(int)level;
