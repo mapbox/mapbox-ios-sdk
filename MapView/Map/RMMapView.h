@@ -38,6 +38,9 @@
 #import "RMMapScrollView.h"
 #import "RMTileSourcesContainer.h"
 
+#import "SMCalloutView.h"
+
+
 @class RMProjection;
 @class RMFractalTileProjection;
 @class RMTileCache;
@@ -347,6 +350,11 @@ typedef enum : NSUInteger {
 
 /** The annotation that is currently selected. */
 @property (nonatomic, strong) RMAnnotation *selectedAnnotation;
+
+/**
+ *  The current callout reference for annotation
+ */
+@property (nonatomic, weak) SMCalloutView *currentCallout;
 
 #pragma mark - TileSources
 

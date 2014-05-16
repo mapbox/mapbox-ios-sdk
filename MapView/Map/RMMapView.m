@@ -53,7 +53,6 @@
 
 #import "RMAttributionViewController.h"
 
-#import "SMCalloutView.h"
 
 #pragma mark --- begin constants ----
 
@@ -144,6 +143,7 @@
     BOOL _delegateHasDoubleTapOnAnnotation;
     BOOL _delegateHasLongPressOnAnnotation;
     BOOL _delegateHasTapOnCalloutAccessoryControlForAnnotation;
+    BOOL _delegateHasTapOnCalloutForAnnotation;
     BOOL _delegateHasTapOnLabelForAnnotation;
     BOOL _delegateHasDoubleTapOnLabelForAnnotation;
     BOOL _delegateHasShouldDragAnnotation;
@@ -210,7 +210,7 @@
     UIButton *_compassButton;
 
     RMAnnotation *_currentAnnotation;
-    SMCalloutView *_currentCallout;
+
 
     BOOL _rotateAtMinZoom;
 }
@@ -236,6 +236,8 @@
 @synthesize debugTiles = _debugTiles;
 @synthesize hideAttribution = _hideAttribution;
 @synthesize showLogoBug = _showLogoBug;
+
+@synthesize currentCallout=_currentCallout;
 
 #pragma mark -
 #pragma mark Initialization
@@ -677,6 +679,7 @@
     _delegateHasDoubleTapOnAnnotation = [_delegate respondsToSelector:@selector(doubleTapOnAnnotation:onMap:)];
     _delegateHasLongPressOnAnnotation = [_delegate respondsToSelector:@selector(longPressOnAnnotation:onMap:)];
     _delegateHasTapOnCalloutAccessoryControlForAnnotation = [_delegate respondsToSelector:@selector(tapOnCalloutAccessoryControl:forAnnotation:onMap:)];
+    _delegateHasTapOnCalloutForAnnotation=[_delegate respondsToSelector:@selector(tapOnCalloutForAnnotation:onMap:)];
     _delegateHasTapOnLabelForAnnotation = [_delegate respondsToSelector:@selector(tapOnLabelForAnnotation:onMap:)];
     _delegateHasDoubleTapOnLabelForAnnotation = [_delegate respondsToSelector:@selector(doubleTapOnLabelForAnnotation:onMap:)];
 
@@ -1995,6 +1998,13 @@
 {
     if (_delegateHasTapOnCalloutAccessoryControlForAnnotation)
         [_delegate tapOnCalloutAccessoryControl:(UIControl *)recognizer.view forAnnotation:_currentAnnotation onMap:self];
+}
+
+-(void)calloutViewClicked:(SMCalloutView *)calloutView
+{
+    if(_delegateHasTapOnCalloutForAnnotation){
+        [self.delegate tapOnCalloutForAnnotation:_currentAnnotation onMap:self];
+    }
 }
 
 - (void)doubleTapOnAnnotation:(RMAnnotation *)anAnnotation atPoint:(CGPoint)aPoint

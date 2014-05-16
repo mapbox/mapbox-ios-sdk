@@ -46,6 +46,10 @@
 		23A0AAEB0EB90AA6003A4521 /* RMFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 23A0AAEA0EB90AA6003A4521 /* RMFoundation.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		25757F4F1291C8640083D504 /* RMCircle.h in Headers */ = {isa = PBXBuildFile; fileRef = 25757F4D1291C8640083D504 /* RMCircle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		25757F501291C8640083D504 /* RMCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 25757F4E1291C8640083D504 /* RMCircle.m */; };
+		9534ACEC18D8D4B000231153 /* SMCalloutView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9534ACE818D8D4B000231153 /* SMCalloutView.h */; };
+		9534ACED18D8D4B000231153 /* SMCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9534ACE918D8D4B000231153 /* SMCalloutView.m */; };
+		9534ACEE18D8D4B000231153 /* SMClassicCalloutView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9534ACEA18D8D4B000231153 /* SMClassicCalloutView.h */; };
+		9534ACEF18D8D4B000231153 /* SMClassicCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9534ACEB18D8D4B000231153 /* SMClassicCalloutView.m */; };
 		96492C400FA8AD3400EBA6D2 /* RMGlobalConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 96492C3F0FA8AD3400EBA6D2 /* RMGlobalConstants.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		B1EB26C610B5D8E6009F8658 /* RMNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = B1EB26C510B5D8E6009F8658 /* RMNotifications.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		B8474BA40EB40094006A0BC1 /* RMDatabaseCache.h in Headers */ = {isa = PBXBuildFile; fileRef = B8474B980EB40094006A0BC1 /* RMDatabaseCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -91,8 +95,6 @@
 		DD07A23D17F3AF9800E420B2 /* HeadingAngleMaskLarge@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD07A23717F3AF9800E420B2 /* HeadingAngleMaskLarge@2x.png */; };
 		DD1985C1165C5F6400DF667F /* RMTileMillSource.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1985BF165C5F6400DF667F /* RMTileMillSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD1985C2165C5F6400DF667F /* RMTileMillSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DD1985C0165C5F6400DF667F /* RMTileMillSource.m */; };
-		DD1E3C6E161F954F004FC649 /* SMCalloutView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1E3C6C161F954F004FC649 /* SMCalloutView.h */; };
-		DD1E3C6F161F954F004FC649 /* SMCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD1E3C6D161F954F004FC649 /* SMCalloutView.m */; };
 		DD280D1416EFDDD30014B549 /* examples.map-z2effxa8.json in Resources */ = {isa = PBXBuildFile; fileRef = DD280D1216EFDDD30014B549 /* examples.map-z2effxa8.json */; };
 		DD2B374514CF8041008DE8CB /* FMDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = DD2B373F14CF8041008DE8CB /* FMDatabase.h */; };
 		DD2B374614CF8041008DE8CB /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B374014CF8041008DE8CB /* FMDatabase.m */; };
@@ -114,8 +116,6 @@
 		DD41960116250ED40049E6BA /* RMTileCacheDownloadOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = DD4195FF16250ED40049E6BA /* RMTileCacheDownloadOperation.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		DD41960216250ED40049E6BA /* RMTileCacheDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = DD41960016250ED40049E6BA /* RMTileCacheDownloadOperation.m */; };
 		DD4BE198161CE296003EF677 /* Mapbox.h in Headers */ = {isa = PBXBuildFile; fileRef = DD4BE197161CE296003EF677 /* Mapbox.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DD5F5F9518C7C03C0085DE98 /* SMClassicCalloutView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD5F5F9318C7C03C0085DE98 /* SMClassicCalloutView.h */; };
-		DD5F5F9618C7C03C0085DE98 /* SMClassicCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD5F5F9418C7C03C0085DE98 /* SMClassicCalloutView.m */; };
 		DD5FA1EB15E2B020004EB6C5 /* RMLoadingTileView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD5FA1E915E2B020004EB6C5 /* RMLoadingTileView.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		DD5FA1EC15E2B020004EB6C5 /* RMLoadingTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD5FA1EA15E2B020004EB6C5 /* RMLoadingTileView.m */; };
 		DD63175F17D1506D008CA79B /* RMGreatCircleAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = DD63175D17D1506D008CA79B /* RMGreatCircleAnnotation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -233,6 +233,10 @@
 		25757F4E1291C8640083D504 /* RMCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMCircle.m; sourceTree = "<group>"; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* MapView_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapView_Prefix.pch; sourceTree = SOURCE_ROOT; };
+		9534ACE818D8D4B000231153 /* SMCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMCalloutView.h; sourceTree = "<group>"; };
+		9534ACE918D8D4B000231153 /* SMCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMCalloutView.m; sourceTree = "<group>"; };
+		9534ACEA18D8D4B000231153 /* SMClassicCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMClassicCalloutView.h; sourceTree = "<group>"; };
+		9534ACEB18D8D4B000231153 /* SMClassicCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMClassicCalloutView.m; sourceTree = "<group>"; };
 		96492C3F0FA8AD3400EBA6D2 /* RMGlobalConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMGlobalConstants.h; sourceTree = "<group>"; };
 		B1EB26C510B5D8E6009F8658 /* RMNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMNotifications.h; sourceTree = "<group>"; };
 		B83E64B60E80E73F001663B6 /* RMPixel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMPixel.h; sourceTree = "<group>"; };
@@ -274,8 +278,6 @@
 		DD07A23717F3AF9800E420B2 /* HeadingAngleMaskLarge@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "HeadingAngleMaskLarge@2x.png"; path = "Map/Resources/HeadingAngleMaskLarge@2x.png"; sourceTree = "<group>"; };
 		DD1985BF165C5F6400DF667F /* RMTileMillSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMTileMillSource.h; sourceTree = "<group>"; };
 		DD1985C0165C5F6400DF667F /* RMTileMillSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMTileMillSource.m; sourceTree = "<group>"; };
-		DD1E3C6C161F954F004FC649 /* SMCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMCalloutView.h; path = SMCalloutView/SMCalloutView.h; sourceTree = "<group>"; };
-		DD1E3C6D161F954F004FC649 /* SMCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SMCalloutView.m; path = SMCalloutView/SMCalloutView.m; sourceTree = "<group>"; };
 		DD280D1216EFDDD30014B549 /* examples.map-z2effxa8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "examples.map-z2effxa8.json"; path = "Map/Resources/examples.map-z2effxa8.json"; sourceTree = "<group>"; };
 		DD2B373F14CF8041008DE8CB /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		DD2B374014CF8041008DE8CB /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
@@ -297,8 +299,6 @@
 		DD4195FF16250ED40049E6BA /* RMTileCacheDownloadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMTileCacheDownloadOperation.h; sourceTree = "<group>"; };
 		DD41960016250ED40049E6BA /* RMTileCacheDownloadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMTileCacheDownloadOperation.m; sourceTree = "<group>"; };
 		DD4BE197161CE296003EF677 /* Mapbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mapbox.h; sourceTree = "<group>"; };
-		DD5F5F9318C7C03C0085DE98 /* SMClassicCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMClassicCalloutView.h; path = SMCalloutView/SMClassicCalloutView.h; sourceTree = "<group>"; };
-		DD5F5F9418C7C03C0085DE98 /* SMClassicCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SMClassicCalloutView.m; path = SMCalloutView/SMClassicCalloutView.m; sourceTree = "<group>"; };
 		DD5FA1E915E2B020004EB6C5 /* RMLoadingTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMLoadingTileView.h; sourceTree = "<group>"; };
 		DD5FA1EA15E2B020004EB6C5 /* RMLoadingTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMLoadingTileView.m; sourceTree = "<group>"; };
 		DD63175D17D1506D008CA79B /* RMGreatCircleAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMGreatCircleAnnotation.h; sourceTree = "<group>"; };
@@ -613,10 +613,10 @@
 		DD76E12E161E347B00F60F43 /* SMCallout */ = {
 			isa = PBXGroup;
 			children = (
-				DD1E3C6C161F954F004FC649 /* SMCalloutView.h */,
-				DD1E3C6D161F954F004FC649 /* SMCalloutView.m */,
-				DD5F5F9318C7C03C0085DE98 /* SMClassicCalloutView.h */,
-				DD5F5F9418C7C03C0085DE98 /* SMClassicCalloutView.m */,
+				9534ACE818D8D4B000231153 /* SMCalloutView.h */,
+				9534ACE918D8D4B000231153 /* SMCalloutView.m */,
+				9534ACEA18D8D4B000231153 /* SMClassicCalloutView.h */,
+				9534ACEB18D8D4B000231153 /* SMClassicCalloutView.m */,
 			);
 			name = SMCallout;
 			path = Map;
@@ -774,9 +774,10 @@
 				B8C9742A0E8A19B2007D16AD /* RMTileImage.h in Headers */,
 				B8C9742D0E8A19B2007D16AD /* RMFractalTileProjection.h in Headers */,
 				23A0AAEB0EB90AA6003A4521 /* RMFoundation.h in Headers */,
+				9534ACEE18D8D4B000231153 /* SMClassicCalloutView.h in Headers */,
+				9534ACEC18D8D4B000231153 /* SMCalloutView.h in Headers */,
 				96492C400FA8AD3400EBA6D2 /* RMGlobalConstants.h in Headers */,
 				B1EB26C610B5D8E6009F8658 /* RMNotifications.h in Headers */,
-				DD5F5F9518C7C03C0085DE98 /* SMClassicCalloutView.h in Headers */,
 				D1437B37122869E400888DAE /* RMDBMapSource.h in Headers */,
 				1606C9FE13D86BA400547581 /* RMOpenCycleMapSource.h in Headers */,
 				16FAB66413E03D55002F4E1C /* RMQuadTree.h in Headers */,
@@ -798,7 +799,6 @@
 				DD2B374914CF8041008DE8CB /* FMResultSet.h in Headers */,
 				DD2B374F14CF814F008DE8CB /* FMDatabasePool.h in Headers */,
 				DD2B375114CF814F008DE8CB /* FMDatabaseQueue.h in Headers */,
-				DD1E3C6E161F954F004FC649 /* SMCalloutView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -931,12 +931,13 @@
 				DD63176417D15EB5008CA79B /* RMCircleAnnotation.m in Sources */,
 				B8C9744A0E8A19B2007D16AD /* RMProjection.m in Sources */,
 				B8C9746C0E8A1A50007D16AD /* RMMapView.m in Sources */,
+				9534ACED18D8D4B000231153 /* SMCalloutView.m in Sources */,
 				B8F3FC610EA2B382004D8F85 /* RMMapLayer.m in Sources */,
 				B8F3FC650EA2E792004D8F85 /* RMMarker.m in Sources */,
-				DD5F5F9618C7C03C0085DE98 /* SMClassicCalloutView.m in Sources */,
 				B8474BA50EB40094006A0BC1 /* RMDatabaseCache.m in Sources */,
 				126693040EB76C0B00E002D5 /* RMConfiguration.m in Sources */,
 				23A0AAE90EB90A99003A4521 /* RMFoundation.c in Sources */,
+				9534ACEF18D8D4B000231153 /* SMClassicCalloutView.m in Sources */,
 				D1437B36122869E400888DAE /* RMDBMapSource.m in Sources */,
 				25757F501291C8640083D504 /* RMCircle.m in Sources */,
 				16EC85D3133CA6C300219947 /* RMAbstractMercatorTileSource.m in Sources */,
@@ -972,7 +973,6 @@
 				DD5FA1EC15E2B020004EB6C5 /* RMLoadingTileView.m in Sources */,
 				DD41960216250ED40049E6BA /* RMTileCacheDownloadOperation.m in Sources */,
 				DD4195CA162356900049E6BA /* RMBingSource.m in Sources */,
-				DD1E3C6F161F954F004FC649 /* SMCalloutView.m in Sources */,
 				DD7C7E39164C894F0021CCA5 /* RMStaticMapView.m in Sources */,
 				DDE357E81651F570001DB842 /* RMPointAnnotation.m in Sources */,
 				DDE357F1165223A3001DB842 /* RMShapeAnnotation.m in Sources */,
