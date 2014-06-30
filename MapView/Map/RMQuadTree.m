@@ -179,7 +179,8 @@
     {
         @synchronized (_annotations)
         {
-            [_annotations addObject:annotation];
+            if (annotation)
+                [_annotations addObject:annotation];
         }
 
         annotation.quadTreeNode = self;
@@ -257,7 +258,8 @@
     {
         @synchronized (_annotations)
         {
-            [_annotations addObject:annotation];
+            if (annotation)
+                [_annotations addObject:annotation];
         }
 
         annotation.quadTreeNode = self;

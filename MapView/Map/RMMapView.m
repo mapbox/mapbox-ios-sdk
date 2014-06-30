@@ -3123,7 +3123,8 @@
         if ([_annotations containsObject:annotation])
             return;
 
-        [_annotations addObject:annotation];
+        if (annotation)
+            [_annotations addObject:annotation];
         [self.quadTree addAnnotation:annotation];
     }
 
