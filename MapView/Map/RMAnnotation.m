@@ -130,7 +130,7 @@
 
 - (void)setPosition:(CGPoint)aPosition
 {
-    [self setPosition:aPosition animated:YES];
+    [self setPosition:aPosition animated:NO];
 }
 
 - (RMMapLayer *)layer
