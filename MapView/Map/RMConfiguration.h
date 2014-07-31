@@ -38,11 +38,18 @@
 
 - (RMConfiguration *)initWithPath:(NSString *)path;
 
+/** @name Authorizing Access */
+
+/** An Mapbox API access token. Obtain an access token on the [Mapbox account page](https://www.mapbox.com/account/apps/). */
+@property (nonatomic, retain) NSString *accessToken;
+
+/** @name Cache Configuration */
+
 /** Access the disk- and memory-based cache configuration. 
 *   @return A dictionary containing the cache configuration. */
 - (NSDictionary *)cacheConfiguration;
 
-/** @name Changing and Accessing a Custom User Agent */
+/** @name Using a Custom User Agent */
 
 /** Access and change the global user agent for HTTP requests using the library.
 *

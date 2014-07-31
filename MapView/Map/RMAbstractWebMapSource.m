@@ -130,7 +130,9 @@
         // wait for whole group of fetches (with retries) to finish, then clean up
         //
         dispatch_group_wait(fetchGroup, dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * self.requestTimeoutSeconds));
+#if ! OS_OBJECT_USE_OBJC
         dispatch_release(fetchGroup);
+#endif
 
         // composite the collected images together
         //

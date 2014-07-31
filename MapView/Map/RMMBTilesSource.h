@@ -42,7 +42,7 @@
 #define kMBTilesDefaultMaxTileZoom 22
 #define kMBTilesDefaultLatLonBoundingBox ((RMSphericalTrapezium){.northEast = {.latitude = 90, .longitude = 180}, .southWest = {.latitude = -90, .longitude = -180}})
 
-/** An RMMBTilesSource provides for a fast, offline-capable set of map tile images served from a local database. [MBTiles](http://mbtiles.org) is an open standard for map tile image transport. */
+/** An RMMBTilesSource provides for a fast, offline-capable set of map tile images served from a local database. [MBTiles](https://www.mapbox.com/foundations/an-open-platform/#mbtiles) is an open standard for map tile image transport. */
 @interface RMMBTilesSource : NSObject <RMTileSource>
 {
     FMDatabaseQueue *queue;

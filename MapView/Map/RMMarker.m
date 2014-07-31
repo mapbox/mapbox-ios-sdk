@@ -140,13 +140,17 @@
 
 - (id)initWithMapboxMarkerImage:(NSString *)symbolName tintColorHex:(NSString *)colorHex sizeString:(NSString *)sizeString
 {
-    BOOL useRetina = ([[UIScreen mainScreen] scale] > 1.0);
-    
-    NSURL *imageURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://api.tiles.mapbox.com/v3/marker/pin-%@%@%@%@.png",
+    NSString *version     = ([[RMConfiguration configuration] accessToken] ? @"v4" : @"v3");
+    NSString *accessToken = ([[RMConfiguration configuration] accessToken] ? [@"?access_token=" stringByAppendingString:[[RMConfiguration configuration] accessToken]] : @"");
+    BOOL useRetina        = ([[UIScreen mainScreen] scale] > 1.0);
+
+    NSURL *imageURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.tiles.mapbox.com/%@/marker/pin-%@%@%@%@.png%@",
+                                               version,
                                                (sizeString ? [sizeString substringToIndex:1] : @"m"), 
                                                (symbolName ? [@"-" stringByAppendingString:symbolName] : @""),
                                                (colorHex   ? [@"+" stringByAppendingString:[colorHex stringByReplacingOccurrencesOfString:@"#" withString:@""]] : @"+ff0000"),
-                                               (useRetina  ? @"@2x" : @"")]];
+                                               (useRetina  ? @"@2x" : @""),
+                                               accessToken]];
 
     UIImage *image = nil;
     

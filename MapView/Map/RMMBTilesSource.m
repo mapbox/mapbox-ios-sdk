@@ -36,8 +36,7 @@
 #import "RMProjection.h"
 #import "RMFractalTileProjection.h"
 
-#import "FMDatabase.h"
-#import "FMDatabaseQueue.h"
+#import "FMDB.h"
 
 @implementation RMMBTilesSource
 {
@@ -123,7 +122,7 @@
 
         [results next];
 
-        NSData *data = [results dataForColumn:@"tile_data"];
+        NSData *data = ([[results columnNameToIndexMap] count] ? [results dataForColumn:@"tile_data"] : nil);
 
         if ( ! data)
             image = [RMTileImage errorTile];

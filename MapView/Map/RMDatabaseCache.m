@@ -26,8 +26,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #import "RMDatabaseCache.h"
-#import "FMDatabase.h"
-#import "FMDatabaseQueue.h"
+#import "FMDB.h"
 #import "RMTileImage.h"
 #import "RMTile.h"
 

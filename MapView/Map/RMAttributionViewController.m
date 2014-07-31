@@ -96,7 +96,7 @@
     // fallback to generic OSM attribution
     //
     if ( ! [attribution length])
-        [attribution setString:@"Map data © OpenStreetMap contributors<br/><a href=\"http://mapbox.com/about/maps/\">More</a>"];
+        [attribution setString:@"Map data © OpenStreetMap contributors<br/><a href=\"https://mapbox.com/about/maps/\">More</a>"];
 
     // build up HTML styling
     //
@@ -137,7 +137,7 @@
         NSDateFormatter *dateFormatter = [NSDateFormatter new];
         [dateFormatter setDateFormat:@"yyyy"];
         NSString *currentYear = [dateFormatter stringFromDate:[NSDate date]];
-        [attribution insertString:[NSString stringWithFormat:@"%@ uses the Mapbox iOS SDK © %@ Mapbox, Inc.<br/><a href='http://mapbox.com/mapbox-ios-sdk'>More</a><br/><br/>", appName, currentYear] atIndex:0];
+        [attribution insertString:[NSString stringWithFormat:@"%@ uses the Mapbox iOS SDK © %@ Mapbox, Inc.<br/><a href='https://mapbox.com/mapbox-ios-sdk'>More</a><br/><br/>", appName, currentYear] atIndex:0];
 
         // add tinted logo
         //

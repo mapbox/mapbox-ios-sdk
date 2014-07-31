@@ -35,8 +35,7 @@
 
 #import "RMConfiguration.h"
 
-#import "FMDatabase.h"
-#import "FMDatabaseQueue.h"
+#import "FMDB.h"
 
 #import "GRMustache.h"
 
@@ -539,8 +538,17 @@ RMTilePoint RMInteractiveSourceNormalizedTilePointForMapView(CGPoint point, RMMa
 
         // ensure JSONP format
         //
-        if ( ! [gridURLString hasSuffix:@"?callback=grid"])
-            gridURLString = [gridURLString stringByAppendingString:@"?callback=grid"];
+        if (NSEqualRanges([gridURLString rangeOfString:@"callback=grid"], NSMakeRange(NSNotFound, 0)))
+        {
+            if ([[NSURL URLWithString:gridURLString] query])
+            {
+                gridURLString = [gridURLString stringByAppendingString:@"&callback=grid"];
+            }
+            else
+            {
+                gridURLString = [gridURLString stringByAppendingString:@"?callback=grid"];
+            }
+        }
 
         // get the data for this tile
         //

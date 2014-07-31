@@ -37,8 +37,11 @@
     if (self.mapScrollViewDelegate)
         [self.mapScrollViewDelegate scrollView:self correctedContentOffset:&contentOffset];
 
-    if ( ! isnan(contentOffset.x) && ! isnan(contentOffset.y))
+    if ( ! [[NSDecimalNumber notANumber] isEqualToNumber:@(contentOffset.x)] &&
+         ! [[NSDecimalNumber notANumber] isEqualToNumber:@(contentOffset.y)])
+    {
         [super setContentOffset:contentOffset];
+    }
 }
 
 - (void)setContentOffset:(CGPoint)contentOffset animated:(BOOL)animated
@@ -46,8 +49,11 @@
     if (self.mapScrollViewDelegate)
         [self.mapScrollViewDelegate scrollView:self correctedContentOffset:&contentOffset];
 
-    if ( ! isnan(contentOffset.x) && ! isnan(contentOffset.y))
+    if ( ! [[NSDecimalNumber notANumber] isEqualToNumber:@(contentOffset.x)] &&
+         ! [[NSDecimalNumber notANumber] isEqualToNumber:@(contentOffset.y)])
+    {
         [super setContentOffset:contentOffset animated:animated];
+    }
 }
 
 - (void)setContentSize:(CGSize)contentSize

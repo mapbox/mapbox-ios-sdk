@@ -58,12 +58,7 @@
 
 - (id)initWithMapID:(NSString *)mapID
 {
-    return [self initWithMapID:mapID enablingSSL:NO];
-}
-
-- (id)initWithMapID:(NSString *)mapID enablingSSL:(BOOL)enableSSL
-{
-    return [self initWithMapID:mapID enablingDataOnMapView:nil enablingSSL:enableSSL];
+    return [self initWithMapID:mapID enablingDataOnMapView:nil];
 }
 
 - (id)initWithTileJSON:(NSString *)tileJSON
@@ -86,7 +81,7 @@
         _tileJSON = tileJSON;
 
         if ([_infoDictionary[@"id"] hasPrefix:@"examples."])
-            RMLog(@"Using watermarked example map ID %@. Please go to http://mapbox.com and create your own map style.", _infoDictionary[@"id"]);
+            RMLog(@"Using watermarked example map ID %@. Please go to https://mapbox.com and create your own map style.", _infoDictionary[@"id"]);
 
         _uniqueTilecacheKey = [NSString stringWithFormat:@"Mapbox-%@%@", _infoDictionary[@"id"], (_infoDictionary[@"version"] ? [@"-" stringByAppendingString:_infoDictionary[@"version"]] : @"")];
 
@@ -173,29 +168,30 @@
 
 - (id)initWithMapID:(NSString *)mapID enablingDataOnMapView:(RMMapView *)mapView
 {
-    return [self initWithMapID:mapID enablingDataOnMapView:mapView enablingSSL:NO];
-}
-
-- (id)initWithMapID:(NSString *)mapID enablingDataOnMapView:(RMMapView *)mapView enablingSSL:(BOOL)enableSSL
-{
-    NSString *referenceURLString = [NSString stringWithFormat:@"http%@://api.tiles.mapbox.com/v3/%@.json%@", (enableSSL ? @"s" : @""), mapID, (enableSSL ? @"?secure" : @"")];
-
-    return [self initWithReferenceURL:[NSURL URLWithString:referenceURLString] enablingDataOnMapView:mapView];
+    return [self initWithReferenceURL:[self canonicalURLForMapID:mapID] enablingDataOnMapView:mapView];
 }
 
 - (void)dealloc
 {
+#if ! OS_OBJECT_USE_OBJC
     if (_dataQueue)
         dispatch_release(_dataQueue);
+#endif
 }
 
 #pragma mark 
 
+- (NSURL *)canonicalURLForMapID:(NSString *)mapID
+{
+    NSString *version     = ([[RMConfiguration configuration] accessToken] ? @"v4" : @"v3");
+    NSString *accessToken = ([[RMConfiguration configuration] accessToken] ? [@"&access_token=" stringByAppendingString:[[RMConfiguration configuration] accessToken]] : @"");
+
+    return [NSURL URLWithString:[NSString stringWithFormat:@"https://api.tiles.mapbox.com/%@/%@.json?secure%@", version, mapID, accessToken]];
+}
+
 - (NSURL *)tileJSONURL
 {
-    BOOL useSSL = [self.infoDictionary[@"tiles"][0] hasPrefix:@"https"];
-
-    return [NSURL URLWithString:[NSString stringWithFormat:@"http%@://api.tiles.mapbox.com/v3/%@.json%@", (useSSL ? @"s" : @""), self.infoDictionary[@"id"], (useSSL ? @"?secure" : @"")]];
+    return [self canonicalURLForMapID:self.infoDictionary[@"id"]];
 }
 
 - (NSURL *)URLForTile:(RMTile)tile

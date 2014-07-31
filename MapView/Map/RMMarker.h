@@ -76,31 +76,31 @@ typedef enum : NSUInteger {
 - (id)initWithMapboxMarkerImage;
 
 /** Initializes and returns a newly allocated marker object using a red, medium-sized pin image and a given symbol name, e.g., `bus`.
-*   @param symbolName A symbol name from the [Maki](http://mapbox.com/maki/) icon set.
+*   @param symbolName A symbol name from the [Maki](https://mapbox.com/maki/) icon set.
 *   @return An initialized RMMarker layer. */
 - (id)initWithMapboxMarkerImage:(NSString *)symbolName;
 
 /** Initializes and returns a newly allocated marker object using a medium-sized pin image, a given symbol name, e.g., `bus`, and a given color.
-*   @param symbolName A symbol name from the [Maki](http://mapbox.com/maki/) icon set.
+*   @param symbolName A symbol name from the [Maki](https://mapbox.com/maki/) icon set.
 *   @param color A color for the marker.
 *   @return An initialized RMMarker layer. */
 - (id)initWithMapboxMarkerImage:(NSString *)symbolName tintColor:(UIColor *)color;
 
 /** Initializes and returns a newly allocated marker object using a pin image, a given symbol name, e.g., `bus`, a given color, and a given size. 
-*   @param symbolName A symbol name from the [Maki](http://mapbox.com/maki/) icon set.
+*   @param symbolName A symbol name from the [Maki](https://mapbox.com/maki/) icon set.
 *   @param color A color for the marker.
 *   @param size A size for the marker.
 *   @return An initialized RMMarker layer. */
 - (id)initWithMapboxMarkerImage:(NSString *)symbolName tintColor:(UIColor *)color size:(RMMarkerMapboxImageSize)size;
 
 /** Initializes and returns a newly allocated marker object using a medium-sized pin image, a given symbol name, e.g., `bus`, and a given HTML hex color, e.g., `ff0000`.
-*   @param symbolName A symbol name from the [Maki](http://mapbox.com/maki/) icon set.
+*   @param symbolName A symbol name from the [Maki](https://mapbox.com/maki/) icon set.
 *   @param colorHex A color for the marker specified as an HTML hex code.
 *   @return An initialized RMMarker layer. */
 - (id)initWithMapboxMarkerImage:(NSString *)symbolName tintColorHex:(NSString *)colorHex;
 
 /** Initializes and returns a newly allocated marker object using a pin image, a given symbol name, e.g., `bus`, a given HTML hex color, e.g., `ff0000`, and a given size, e.g., `large`.
-*   @param symbolName A symbol name from the [Maki](http://mapbox.com/maki/) icon set.
+*   @param symbolName A symbol name from the [Maki](https://mapbox.com/maki/) icon set.
 *   @param colorHex A color for the marker specified as an HTML hex code.
 *   @param sizeString A size such as `small`, `medium`, or `large`.
 *   @return An initialized RMMarker layer. */

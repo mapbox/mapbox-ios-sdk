@@ -75,7 +75,7 @@ typedef enum : NSUInteger {
 
 #pragma mark -
 
-/** Developers can import RMInteractiveSource in order to enable embedded interactivity in their RMMapView, RMMBTilesSource, and RMMapboxSource objects. Interactivity is based on the [UTFGrid specification](https://github.com/mapbox/utfgrid-spec) and is best described by [this web demo](http://mapbox.com/demo/visiblemap/).
+/** Developers can import RMInteractiveSource in order to enable embedded interactivity in their RMMapView, RMMBTilesSource, and RMMapboxSource objects. Interactivity is based on the [UTFGrid specification](https://github.com/mapbox/utfgrid-spec) and is best described by [this web demo](https://mapbox.com/demo/visiblemap/).
 *
 *   Interactive tile sources adopt the RMInteractiveSource protocol.
 *
