@@ -2017,6 +2017,14 @@
     }
 }
 
+-(void)calloutViewClicked:(SMCalloutView *)calloutView
+{
+    if(_delegateHasTapOnLabelForAnnotation)
+    {
+        [self.delegate tapOnLabelForAnnotation:_currentAnnotation onMap:self];
+    }
+}
+
 - (void)doubleTapOnLabelForAnnotation:(RMAnnotation *)anAnnotation atPoint:(CGPoint)aPoint
 {
     if (_delegateHasDoubleTapOnLabelForAnnotation && anAnnotation)
