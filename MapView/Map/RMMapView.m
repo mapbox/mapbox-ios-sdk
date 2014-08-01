@@ -3131,9 +3131,10 @@
         if ([_annotations containsObject:annotation])
             return;
 
-        if (annotation)
+        if (annotation) {
             [_annotations addObject:annotation];
-        [self.quadTree addAnnotation:annotation];
+            [self.quadTree addAnnotation:annotation];
+        }
     }
 
     if (_clusteringEnabled)
