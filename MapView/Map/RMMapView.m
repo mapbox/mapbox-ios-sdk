@@ -144,6 +144,7 @@
     BOOL _delegateHasDoubleTapOnAnnotation;
     BOOL _delegateHasLongPressOnAnnotation;
     BOOL _delegateHasTapOnCalloutAccessoryControlForAnnotation;
+    BOOL _delegateHasTapOnCalloutViewForAnnotation;
     BOOL _delegateHasTapOnLabelForAnnotation;
     BOOL _delegateHasDoubleTapOnLabelForAnnotation;
     BOOL _delegateHasShouldDragAnnotation;
@@ -702,6 +703,7 @@
     _delegateHasDoubleTapOnAnnotation = [_delegate respondsToSelector:@selector(doubleTapOnAnnotation:onMap:)];
     _delegateHasLongPressOnAnnotation = [_delegate respondsToSelector:@selector(longPressOnAnnotation:onMap:)];
     _delegateHasTapOnCalloutAccessoryControlForAnnotation = [_delegate respondsToSelector:@selector(tapOnCalloutAccessoryControl:forAnnotation:onMap:)];
+    _delegateHasTapOnCalloutViewForAnnotation=[_delegate respondsToSelector:@selector(tapOnCalloutViewForAnnotation:onMap:)];
     _delegateHasTapOnLabelForAnnotation = [_delegate respondsToSelector:@selector(tapOnLabelForAnnotation:onMap:)];
     _delegateHasDoubleTapOnLabelForAnnotation = [_delegate respondsToSelector:@selector(doubleTapOnLabelForAnnotation:onMap:)];
 
@@ -2020,6 +2022,13 @@
 {
     if (_delegateHasTapOnCalloutAccessoryControlForAnnotation)
         [_delegate tapOnCalloutAccessoryControl:(UIControl *)recognizer.view forAnnotation:_currentAnnotation onMap:self];
+}
+
+-(void)calloutViewClicked:(SMCalloutView *)calloutView
+{
+    if(_delegateHasTapOnCalloutViewForAnnotation){
+        [_delegate tapOnCalloutViewForAnnotation:_currentAnnotation onMap:self];
+    }
 }
 
 - (void)doubleTapOnAnnotation:(RMAnnotation *)anAnnotation atPoint:(CGPoint)aPoint
