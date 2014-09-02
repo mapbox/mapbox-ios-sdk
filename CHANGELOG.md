@@ -1,6 +1,19 @@
 Changelog
 ---------
 
+### 1.3.0
+#### August 14, 2014
+
+  - Added support for Mapbox `v4` API and [access tokens](https://www.mapbox.com/developers/api/#access-tokens) in tile and metadata requests. 
+  - Now ensures that all Mapbox API requests are over HTTPS.   
+  - Updated FMDB SQLite library under the hood for caching and MBTiles support. 
+  - Updated some support for the forthcoming iOS 8. 
+  - Fixed a crash that could occur when the map view delegate changed `showsUserLocation`. 
+  - Fixes a minor bug with map view subview constraints during use of tab bar controllers. 
+  - Fixed a minor memory leak with Grand Central Dispatch queues. 
+  - Fixed a small deployment problem for iOS 5. 
+  - Quieted some debug logging. 
+
 ### 1.2.0
 #### June 23, 2014
 

@@ -34,6 +34,8 @@
 
 - (id)initWithMapView:(RMMapView *)aMapView coordinate1:(CLLocationCoordinate2D)coordinate1 coordinate2:(CLLocationCoordinate2D)coordinate2
 {
+    NSAssert(coordinate1.latitude != coordinate2.latitude || coordinate1.longitude != coordinate2.longitude, @"Start and end coordinates must differ.");
+
     if (!(self = [super initWithMapView:aMapView points:@[ [[CLLocation alloc] initWithLatitude:coordinate1.latitude longitude:coordinate1.longitude], [[CLLocation alloc] initWithLatitude:coordinate2.latitude longitude:coordinate2.longitude]]]))
         return nil;
 

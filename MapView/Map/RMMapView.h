@@ -363,7 +363,7 @@ typedef enum : NSUInteger {
 /** Whether to position cluster markers at the weighted center of the points they represent. If `YES`, position clusters in weighted fashion. If `NO`, position them on a rectangular grid. Defaults to `YES`. */
 @property (nonatomic, assign) BOOL positionClusterMarkersAtTheGravityCenter;
 
-/** Whether to order cluster markers above non-clustered markers. Defaults to `NO`. */
+/** Whether to order cluster markers above non-clustered markers. Defaults to `YES`. */
 @property (nonatomic, assign) BOOL orderClusterMarkersAboveOthers;
 
 @property (nonatomic, assign) CGSize clusterMarkerSize;
@@ -497,7 +497,9 @@ typedef enum : NSUInteger {
 *
 *   This property does not indicate whether the user’s position is actually visible on the map, only whether the map view is allowed to display it. To determine whether the user’s position is visible, use the userLocationVisible property. The default value of this property is `NO`.
 *
-*   Setting this property to `YES` causes the map view to use the Core Location framework to find the current location. As long as this property is `YES`, the map view continues to track the user’s location and update it periodically. */
+*   Setting this property to `YES` causes the map view to use the Core Location framework to find the current location. As long as this property is `YES`, the map view continues to track the user’s location and update it periodically. 
+*
+*   On iOS 8 and above, your app must specify a value for `NSLocationWhenInUseUsageDescription` in its `Info.plist` to satisfy the requirements of the underlying Core Location framework when enabling this property. */
 @property (nonatomic, assign) BOOL showsUserLocation;
 
 /** The annotation object representing the user’s current location. (read-only) */
@@ -519,6 +521,8 @@ typedef enum : NSUInteger {
 /** Set the mode used to track the user location. 
 *
 *   Setting the tracking mode to `RMUserTrackingModeFollow` or `RMUserTrackingModeFollowWithHeading` causes the map view to center the map on that location and begin tracking the user’s location. If the map is zoomed out, the map view automatically zooms in on the user’s location, effectively changing the current visible region.
+*
+*   On iOS 8 and above, your app must specify a value for `NSLocationWhenInUseUsageDescription` in its `Info.plist` to satisfy the requirements of the underlying Core Location framework when tracking the user location.
 *
 *   @param mode The mode used to track the user location. 
 *   @param animated Whether changes to the map center or rotation should be animated when the mode is changed. */
