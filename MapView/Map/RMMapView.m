@@ -3456,7 +3456,7 @@
             {
                 // otherwise re-center and zoom in to near accuracy confidence
                 //
-                float delta = (newLocation.horizontalAccuracy / 110000) * 1.2; // approx. meter per degree latitude, plus some margin
+                float delta = (newLocation.horizontalAccuracy / 110000) * 150; // approx. meter per degree latitude, plus some margin
 
                 CLLocationCoordinate2D desiredSouthWest = CLLocationCoordinate2DMake(newLocation.coordinate.latitude  - delta,
                                                                                      newLocation.coordinate.longitude - delta);
