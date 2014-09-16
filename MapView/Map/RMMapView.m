@@ -3521,13 +3521,17 @@
             {
                 // otherwise re-center and zoom in to near accuracy confidence
                 //
-                float delta = (newLocation.horizontalAccuracy / 110000) * 150; // approx. meter per degree latitude, plus some margin
+                float metersPerDegree = (60 * 1852) * cos(newLocation.coordinate.latitude * M_PI / 180.0f); //1852meters per 1 degree * cos(lat)
+                float delta = newLocation.horizontalAccuracy / metersPerDegree;
+                
+                if (delta < 400 / metersPerDegree) delta = 400 / metersPerDegree; //If accuracy is better than 400m, do not zoom in to more than 400m.
+                if (delta > 3000 / metersPerDegree) delta = 3000 / metersPerDegree; //If accuracy is worse than 3km, do not zoom out to more than 3km.
 
-                CLLocationCoordinate2D desiredSouthWest = CLLocationCoordinate2DMake(newLocation.coordinate.latitude  - delta,
-                                                                                     newLocation.coordinate.longitude - delta);
+                CLLocationCoordinate2D desiredSouthWest = CLLocationCoordinate2DMake(newLocation.coordinate.latitude  - delta / 2,
+                                                                                     newLocation.coordinate.longitude - delta / 2);
 
-                CLLocationCoordinate2D desiredNorthEast = CLLocationCoordinate2DMake(newLocation.coordinate.latitude  + delta,
-                                                                                     newLocation.coordinate.longitude + delta);
+                CLLocationCoordinate2D desiredNorthEast = CLLocationCoordinate2DMake(newLocation.coordinate.latitude  + delta / 2,
+                                                                                     newLocation.coordinate.longitude + delta / 2);
 
                 CGFloat pixelRadius = fminf(self.bounds.size.width, self.bounds.size.height) / 2;
 

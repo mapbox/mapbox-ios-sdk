@@ -34,10 +34,14 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 + (NSData *)sendBrandedSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error
 {
     NSMutableURLRequest *newRequest = [NSMutableURLRequest requestWithURL:request.URL cachePolicy:request.cachePolicy timeoutInterval:request.timeoutInterval];
-
+    
     [newRequest setValue:[[RMConfiguration configuration] userAgent] forHTTPHeaderField:@"User-Agent"];
-
-    return [NSURLConnection sendSynchronousRequest:newRequest returningResponse:response error:error];
+    
+    NSData *data = [NSURLConnection sendSynchronousRequest:newRequest returningResponse:response error:error];
+    
+    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
+    
+    return data;
 }
 
 @end
@@ -51,8 +55,12 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:aURL];
 
     [request setValue:[[RMConfiguration configuration] userAgent] forHTTPHeaderField:@"User-Agent"];
-
-    return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    
+    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
+    
+    return data;
 }
 
 @end
@@ -68,6 +76,8 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
     [request setValue:[[RMConfiguration configuration] userAgent] forHTTPHeaderField:@"User-Agent"];
 
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:error];
+    
+    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
 
     if ( ! returnData)
         return nil;
