@@ -48,7 +48,7 @@ typedef enum : short {
 @property (nonatomic, readonly) RMProjectedRect southWestBoundingBox;
 @property (nonatomic, readonly) RMProjectedRect southEastBoundingBox;
 
-@property (nonatomic, readonly) RMQuadTreeNode *parentNode;
+@property (nonatomic, weak, readonly) RMQuadTreeNode *parentNode;
 @property (nonatomic, readonly) RMQuadTreeNode *northWest;
 @property (nonatomic, readonly) RMQuadTreeNode *northEast;
 @property (nonatomic, readonly) RMQuadTreeNode *southWest;

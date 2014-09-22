@@ -360,7 +360,7 @@ typedef enum : NSUInteger {
 /** Whether to order markers on the z-axis according to increasing y-position. Defaults to `YES`. 
 *
 *   @warning This property has been deprecated in favor of [RMMapViewDelegate annotationSortingComparatorForMapView:]. */
-@property (nonatomic, assign) BOOL orderMarkersByYPosition __attribute__((deprecated("use -[RMMapViewDelegate annotationSortingComparatorForMapView:] for annotation sorting")));
+@property (nonatomic, assign) BOOL orderMarkersByYPosition DEPRECATED_MSG_ATTRIBUTE("use -[RMMapViewDelegate annotationSortingComparatorForMapView:] for annotation sorting");
 
 /** Whether to position cluster markers at the weighted center of the points they represent. If `YES`, position clusters in weighted fashion. If `NO`, position them on a rectangular grid. Defaults to `YES`. */
 @property (nonatomic, assign) BOOL positionClusterMarkersAtTheGravityCenter;
@@ -368,7 +368,7 @@ typedef enum : NSUInteger {
 /** Whether to order cluster markers above non-clustered markers. Defaults to `YES`. 
 *
 *   @warning This property has been deprecated in favor of [RMMapViewDelegate annotationSortingComparatorForMapView:]. */
-@property (nonatomic, assign) BOOL orderClusterMarkersAboveOthers __attribute__((deprecated("use -[RMMapViewDelegate annotationSortingComparatorForMapView:] for annotation sorting")));
+@property (nonatomic, assign) BOOL orderClusterMarkersAboveOthers DEPRECATED_MSG_ATTRIBUTE("use -[RMMapViewDelegate annotationSortingComparatorForMapView:] for annotation sorting");
 
 @property (nonatomic, assign) CGSize clusterMarkerSize;
 @property (nonatomic, assign) CGSize clusterAreaSize;

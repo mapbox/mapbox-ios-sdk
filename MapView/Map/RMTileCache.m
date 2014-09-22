@@ -131,6 +131,10 @@
          _memoryCache = nil;
          _tileCaches = nil;
     });
+    
+#if ! OS_OBJECT_USE_OBJC
+    dispatch_release(_tileCacheQueue);
+#endif
 }
 
 - (void)addCache:(id <RMTileCache>)cache
