@@ -65,6 +65,13 @@
 /** The capacity, in number of tiles, that the database cache can hold. */
 @property (nonatomic, readonly, assign) NSUInteger capacity;
 
+/** Set the maximum bytes allowed in the database.
+ *   @param theCapacityBytes The number of bytes to allow to accumulate in the database before purging begins. */
+- (void)setCapacityBytes:(NSUInteger)theCapacityBytes;
+
+/** The max file size in bytes, that the database cache can hold. */
+@property (nonatomic, readonly, assign) NSUInteger capacityBytes;
+
 /** Set the minimum number of tiles to purge when clearing space in the cache.
 *   @param thePurgeMinimum The number of tiles to delete at the time the cache is purged. */
 - (void)setMinimalPurge:(NSUInteger)thePurgeMinimum;

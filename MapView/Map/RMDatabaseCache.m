@@ -165,6 +165,13 @@
     return _capacity;
 }
 
+- (void)setCapacityBytes:(NSUInteger)theCapacityBytes
+{
+    _capacityBytes = theCapacityBytes;
+    
+    [self constrainFileSize];
+}
+
 - (void)setMinimalPurge:(NSUInteger)theMinimalPurge
 {
 	_minimalPurge = theMinimalPurge;
@@ -255,6 +262,8 @@
 
         if (_capacity <= tilesInDb && _expiryPeriod == 0)
             [self purgeTiles:MAX(_minimalPurge, 1+tilesInDb-_capacity)];
+        
+        [self constrainFileSize];
 
 //        RMLog(@"DB cache     insert tile %d %d %d (%@)", tile.x, tile.y, tile.zoom, [RMTileCache tileHash:tile]);
 
@@ -343,6 +352,14 @@
     [_writeQueueLock unlock];
 
     _tileCount = [self countTiles];
+}
+
+- (void)constrainFileSize
+{
+    if ([self fileSize] > _capacityBytes) {
+        RMLog(@"constraining db cache size %lluM", (unsigned long)self.fileSize / (1024 * 1024));
+        [self purgeTiles:_minimalPurge];
+    }
 }
 
 - (void)removeAllCachedImages 
