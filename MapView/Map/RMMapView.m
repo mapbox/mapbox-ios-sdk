@@ -466,6 +466,7 @@
 
 - (void)dealloc
 {
+    _currentCallout.delegate = nil;
     [_moveDelegateQueue cancelAllOperations];
     [_zoomDelegateQueue cancelAllOperations];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
