@@ -64,6 +64,33 @@ typedef enum : NSUInteger {
 *   @return The annotation layer to display for the specified annotation or `nil` if you do not want to display a layer. */
 - (RMMapLayer *)mapView:(RMMapView *)mapView layerForAnnotation:(RMAnnotation *)annotation;
 
+/** Returns a block used for determining the display sort order of annotation layers. The block will be called repeatedly during map change events to ensure annotation layers stay sorted in the desired order.
+*
+*   If you do not implement this method, a default sort order will be used as follows: 
+*
+*   1. User location annotations are below all others. These can be distinguished by `annotation.isUserLocationAnnotation = YES`.
+*
+*   1. Amongst user location annotations, the accuracy circle is below the tracking halo, which is below the user location. These can be distinguished by `annotation.annotationType = kRMTrackingHaloAnnotationTypeName`, `annotation.annotationType = kRMAccuracyCircleAnnotationTypeName`, and checking annotation object type against RMUserLocation.
+*
+*   1. Cluster annotations are above non-cluster annotations. These can be distinguished by `annotation.isClusterAnnotation = YES`. 
+*
+*   1. Markers are above shapes. These can be distinguished by checking annotation object type against RMMarker. 
+*
+*   1. The remaining annotations are sorted with those closer to the bottom of the view above those closer to the top of the view. This includes during user tracking mode map rotation events, when markers always remain upright and their relative layer positions change.
+*
+*   In all cases, any currently selected annotation (and its callout, if visible) are shown above all other annotations. When deselected, the desired sort order is reapplied.
+*
+*   Your implementation of this method should be as lightweight as possible to avoid affecting map renderering performance. 
+*
+*   @see [RMAnnotation isUserLocationAnnotation]
+*   @see [RMAnnotation annotationType]
+*   @see [RMAnnotation isClusterAnnotation]
+*   @see [RMMapView coordinateToPixel:]
+*
+*   @param mapView The map view whose annotations need sorting. 
+*   @return A comparison block to use in order to sort the annotations. */
+- (NSComparator)annotationSortingComparatorForMapView:(RMMapView *)mapView;
+
 /** Tells the delegate that the visible layer for an annotation is about to be hidden from view due to scrolling or zooming the map.
 *   @param mapView The map view whose annotation alyer will be hidden.
 *   @param annotation The annotation whose layer will be hidden. */

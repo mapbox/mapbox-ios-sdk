@@ -328,8 +328,8 @@ typedef enum : NSUInteger {
 /** Remove all annotations from the map. This does not remove user location annotations, if any. */
 - (void)removeAllAnnotations;
 
-/** The screen position for a given annotation. 
-*   @param annotation The annotation for which to return the current screen position.
+/** The relative map position for a given annotation. 
+*   @param annotation The annotation for which to return the current position.
 *   @return The screen position of the annotation. */
 - (CGPoint)mapPositionForAnnotation:(RMAnnotation *)annotation;
 
@@ -357,14 +357,18 @@ typedef enum : NSUInteger {
 /** Whether to enable clustering of map point annotations. Defaults to `NO`. */
 @property (nonatomic, assign) BOOL clusteringEnabled;
 
-/** Whether to order markers on the z-axis according to increasing y-position. Defaults to `YES`. */
-@property (nonatomic, assign) BOOL orderMarkersByYPosition;
+/** Whether to order markers on the z-axis according to increasing y-position. Defaults to `YES`. 
+*
+*   @warning This property has been deprecated in favor of [RMMapViewDelegate annotationSortingComparatorForMapView:]. */
+@property (nonatomic, assign) BOOL orderMarkersByYPosition __attribute__((deprecated("use -[RMMapViewDelegate annotationSortingComparatorForMapView:] for annotation sorting")));
 
 /** Whether to position cluster markers at the weighted center of the points they represent. If `YES`, position clusters in weighted fashion. If `NO`, position them on a rectangular grid. Defaults to `YES`. */
 @property (nonatomic, assign) BOOL positionClusterMarkersAtTheGravityCenter;
 
-/** Whether to order cluster markers above non-clustered markers. Defaults to `YES`. */
-@property (nonatomic, assign) BOOL orderClusterMarkersAboveOthers;
+/** Whether to order cluster markers above non-clustered markers. Defaults to `YES`. 
+*
+*   @warning This property has been deprecated in favor of [RMMapViewDelegate annotationSortingComparatorForMapView:]. */
+@property (nonatomic, assign) BOOL orderClusterMarkersAboveOthers __attribute__((deprecated("use -[RMMapViewDelegate annotationSortingComparatorForMapView:] for annotation sorting")));
 
 @property (nonatomic, assign) CGSize clusterMarkerSize;
 @property (nonatomic, assign) CGSize clusterAreaSize;

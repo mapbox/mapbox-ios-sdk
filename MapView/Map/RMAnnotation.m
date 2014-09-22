@@ -133,6 +133,11 @@
     [self setPosition:aPosition animated:YES];
 }
 
+- (CGPoint)absolutePosition
+{
+    return [self.mapView.layer convertPoint:self.position fromLayer:self.layer.superlayer];
+}
+
 - (RMMapLayer *)layer
 {
     return layer;

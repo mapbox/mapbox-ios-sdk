@@ -18,7 +18,7 @@ Major differences from [Alpstein fork of Route-Me](https://github.com/Alpstein/r
  * A bulk, background map tile downloader for cache pre-population. 
  * Annotation callouts that behave like MapKit. 
  * Annotation convenience subclasses for points and shapes. 
- * Prepackaged [binary framework](http://mapbox.com/blog/ios-sdk-framework/). 
+ * Prepackaged static library. 
  * [CocoaPods](http://cocoapods.org) support. 
  * Removal of two-finger double-tap gesture for zoom out (to speed up two-finger single-tap recognition like MapKit). 
  * Different default starting location for maps. 
@@ -52,7 +52,7 @@ Installation
 There are three ways that you can install the SDK, depending upon your needs: 
 
  1. Clone from GitHub and integrate as a dependent Xcode project. 
- 1. Use the [binary framework](http://mapbox-ios-sdk.s3.amazonaws.com/index.html). Use like regular frameworks, linking it in your project, adding `#import <Mapbox/Mapbox.h>`, and additionally, including the `-ObjC` linker flag. 
+ 1. Use the [static library](http://mapbox-ios-sdk.s3.amazonaws.com/index.html). Link it in your project, add `#import <Mapbox/Mapbox.h>`, and additionally, include the `-ObjC` linker flag. 
  1. Install via [CocoaPods](http://cocoapods.org). 
 
 More detailed information on the installation options is available in the [SDK guide](http://mapbox.com/mapbox-ios-sdk/). 
