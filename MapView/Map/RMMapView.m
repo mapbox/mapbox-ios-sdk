@@ -2006,9 +2006,28 @@
 
     contentOffset.x -= offset.width;
     contentOffset.y -= offset.height;
-
-    if (RMPostVersion7)
-        contentOffset.y -= [[[self viewController] topLayoutGuide] length];
+    
+    if (RMPostVersion7) {
+        CGRect calloutRect = [calloutView.layer convertRect:calloutView.layer.frame fromLayer:self.layer.superlayer];
+        calloutRect.origin.x *= -1;
+        calloutRect.origin.y *= -1;
+        calloutRect.origin.y -= calloutRect.size.height;
+        
+        CGRect annotationRect = CGRectMake(calloutRect.origin.x, calloutRect.origin.y + calloutRect.size.height, calloutView.layer.superlayer.frame.size.width, calloutView.layer.superlayer.frame.size.height);
+        
+        CGFloat calloutTop = calloutRect.origin.y;
+        CGFloat topLayoutGuide = [[[self viewController] topLayoutGuide] length];
+        CGFloat annotationBottom = annotationRect.origin.y + annotationRect.size.height;
+        CGFloat bottomLayoutGuide = self.frame.size.height - [[[self viewController] bottomLayoutGuide] length];
+        
+        if (calloutTop < topLayoutGuide) {
+            contentOffset.y -= (topLayoutGuide - calloutTop) + 10;
+        }
+ 
+        if (annotationBottom > bottomLayoutGuide) {
+            contentOffset.y += fabs(annotationBottom - bottomLayoutGuide) + 10;
+        }
+    }
 
     [_mapScrollView setContentOffset:contentOffset animated:YES];
 
