@@ -2935,6 +2935,11 @@
                                       _mapScrollView.contentSize.height - (normalizedProjectedPoint.y / _metersPerPixel) - _mapScrollView.contentOffset.y);
 
 //    RMLog(@"Change annotation at {%f,%f} in mapView {%f,%f}", annotation.position.x, annotation.position.y, mapScrollView.contentSize.width, mapScrollView.contentSize.height);
+    
+    //Fix half pixel positions to avoid blurry annotations
+    CGFloat scale = [UIScreen mainScreen].scale;
+    newPosition.x = floorf(newPosition.x * scale) / scale;
+    newPosition.y = floorf(newPosition.y * scale) / scale;
 
     [annotation setPosition:newPosition animated:animated];
 }
