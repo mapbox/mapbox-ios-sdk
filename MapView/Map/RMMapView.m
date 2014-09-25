@@ -1960,8 +1960,8 @@
                 constrainLayer = [CALayer layer];
                 constrainLayer.frame = self.layer.frame;
                 
-                CGFloat topLayoutGuide = [[[self viewController] topLayoutGuide] length];
-                CGFloat bottomLayoutGuide = [[[self viewController] bottomLayoutGuide] length];
+                CGFloat topLayoutGuide = [[self.viewController.parentViewController topLayoutGuide] length] + 44;
+                CGFloat bottomLayoutGuide = [[self.viewController.parentViewController bottomLayoutGuide] length];
                 
                 CGRect newFrame = CGRectMake(self.layer.frame.origin.x,
                                              self.layer.frame.origin.y + topLayoutGuide,
