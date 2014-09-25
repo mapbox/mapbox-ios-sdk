@@ -3364,7 +3364,12 @@
 
         _locationManager.headingFilter = 5.0;
         _locationManager.delegate = self;
-        [_locationManager startUpdatingLocation];
+        
+        CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+        if (status != kCLAuthorizationStatusDenied && status != kCLAuthorizationStatusRestricted)
+        {
+            [_locationManager startUpdatingLocation];
+        }
     }
     else
     {
