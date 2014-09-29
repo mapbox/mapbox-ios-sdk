@@ -3854,6 +3854,11 @@
     _userTrackingBarButtonItem = userTrackingBarButtonItem;
 }
 
+- (void)dismissHeadingCalibrationDisplay
+{
+    [_locationManager dismissHeadingCalibrationDisplay];
+}
+
 #pragma mark -
 #pragma mark Attribution
 
