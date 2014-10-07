@@ -1461,6 +1461,8 @@
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
 {
+    _mapScrollView.zoomScale = round(_mapScrollView.zoomScale);
+    
     [self completeMoveEventAfterDelay:0];
     [self completeZoomEventAfterDelay:0];
 
