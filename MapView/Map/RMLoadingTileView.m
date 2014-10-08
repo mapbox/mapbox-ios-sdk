@@ -33,6 +33,7 @@
 @implementation RMLoadingTileView
 {
     UIView *_contentView;
+    UIColor *backgroundPatternImageColor;
 }
 
 @synthesize mapZooming=_mapZooming;
@@ -64,7 +65,11 @@
     }
     else
     {
-        _contentView.backgroundColor = [UIColor colorWithPatternImage:[RMMapView resourceImageNamed:(RMPostVersion6 ? @"LoadingTile6.png" : @"LoadingTile.png")]];
+        if (!backgroundPatternImageColor) {
+            backgroundPatternImageColor = [UIColor colorWithPatternImage:[RMMapView resourceImageNamed:(RMPostVersion6 ? @"LoadingTile6.png" : @"LoadingTile.png")]];
+        }
+        
+        _contentView.backgroundColor = backgroundPatternImageColor;
         
         _contentView.frame = CGRectMake(0, 0, self.frame.size.width * 3, self.frame.size.height * 3);
         self.contentSize = _contentView.bounds.size;

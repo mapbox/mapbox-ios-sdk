@@ -3918,7 +3918,12 @@
 
     _hideAttribution = flag;
 
-    [self layoutSubviews];
+    //Avoid laying out subviews unnecessarily on app launch
+    if (!flag) {
+        self.viewControllerPresentingAttribution = nil;
+    } else {
+        [self layoutSubviews];
+    }
 }
 
 - (UIViewController *)viewControllerPresentingAttribution
