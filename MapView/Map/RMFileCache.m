@@ -25,6 +25,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#import "RMFileUtils.h"
 #import "RMFileCache.h"
 #import "FMDB.h"
 #import "RMTileImage.h"
@@ -54,6 +55,8 @@
     NSUInteger _minimalPurge;
     NSTimeInterval _expiryPeriod;
 }
+
+static dispatch_queue_t queue;
 
 @synthesize tileCachePath = _tileCachePath;
 
@@ -93,6 +96,12 @@
 {
 	if (!(self = [super init]))
 		return nil;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        queue = dispatch_queue_create("com.mapbox.filecache", 0);
+        dispatch_set_target_queue(queue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
+    });
 
 	self.tileCachePath = path;
     self.fileManager = [NSFileManager new];
@@ -166,10 +175,9 @@
 	return cachedImage;
 }
 
-- (void)addImage:(UIImage *)image forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey
+- (void)addImageWithData:(NSData *)data forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey
 {
-    // TODO: Converting the image here (again) is not so good...
-	NSData *data = UIImagePNGRepresentation(image);
+	static skipper = 0;
 
     if (_capacity != 0)
     {
@@ -178,9 +186,13 @@
         if (_capacity <= tilesInDb && _expiryPeriod == 0)
             [self purgeTiles:MAX(_minimalPurge, 1+tilesInDb-_capacity)];
         
-        [self constrainFileSize];
+        if (skipper >= 10) { //Only check file size every nth tile because its a costy process
+            [self constrainFileSize];
+            skipper = 0;
+        }
+        skipper++;
 
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        dispatch_async(queue, ^{
             [data writeToFile:[self pathForCachedTileWithHash:[RMTileCache tileHash:tile] andKey:aCacheKey] atomically:YES];
             _tileCount++;
         });
@@ -205,64 +217,56 @@
 
 - (void)purgeTiles:(NSUInteger)count
 {
-    RMLog(@"purging %lu old tiles from the file cache", (unsigned long)count);
-
-    NSMutableArray *items = [NSMutableArray new];
-    [[self.fileManager contentsOfDirectoryAtPath:[self tileCachePath] error:nil] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSDate *date = [[self.fileManager attributesOfItemAtPath:[[self tileCachePath] stringByAppendingPathComponent:obj] error:nil] fileModificationDate];
-        if (date) {
-            NSDictionary *item = @{obj: date};
-            [items addObject:item];
-        }
-    }];
-    [items sortUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2) {
-        NSDate* obj1Date = obj1.allValues[0];
-        NSDate* obj2Date = obj2.allValues[0];
+    dispatch_async(queue, ^{
+        RMLog(@"purging %lu old tiles from the file cache", (unsigned long)count);
         
-        return [obj1Date compare:obj2Date];
-    }];
-    
-    NSUInteger deletedFiles = 0;
-    for (NSDictionary *fileDictionary in items) {
-        NSString *filePath = [[self tileCachePath] stringByAppendingPathComponent:fileDictionary.allKeys[0]];
-        [self.fileManager removeItemAtPath:filePath error:nil];
-        deletedFiles++;
+        NSMutableArray *items = [NSMutableArray new];
+        [[self.fileManager contentsOfDirectoryAtPath:[self tileCachePath] error:nil] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSDate *date = [RMFileUtils modificationDateForFileAtPath:[[self tileCachePath] stringByAppendingPathComponent:obj]];
+            if (date) {
+                NSDictionary *item = @{obj: date};
+                [items addObject:item];
+            }
+        }];
         
-        if (deletedFiles >= count) {
-            break;
+        [items sortUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2) {
+            NSDate* obj1Date = obj1.allValues[0];
+            NSDate* obj2Date = obj2.allValues[0];
+            
+            return [obj1Date compare:obj2Date];
+        }];
+        
+        NSUInteger deletedFiles = 0;
+        for (NSDictionary *fileDictionary in items) {
+            NSString *filePath = [[self tileCachePath] stringByAppendingPathComponent:fileDictionary.allKeys[0]];
+            [self.fileManager removeItemAtPath:filePath error:nil];
+            deletedFiles++;
+            
+            if (deletedFiles >= count) {
+                break;
+            }
         }
-    }
-
-    _tileCount = [self countTiles];
+        
+        _tileCount = [self countTiles];
+    });
 }
 
 - (void)constrainFileSize
 {
-    if ([self folderSize:[self tileCachePath]] > _capacityBytes) {
-        RMLog(@"constraining db cache size %lluM", (unsigned long)[self folderSize:[self tileCachePath]] / (1024 * 1024));
-        [self purgeTiles:_minimalPurge];
-    }
+    dispatch_async(queue, ^{
+        unsigned long long int folderSize = [RMFileUtils folderSize:[self tileCachePath]];
+        if (folderSize > _capacityBytes) {
+            RMLog(@"constraining db cache size %lluM", folderSize / (1024 * 1024));
+            [self purgeTiles:_minimalPurge];
+        }
+    });
 }
 
-- (unsigned long long int)folderSize:(NSString *)folderPath {
-    NSArray *filesArray = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:folderPath error:nil];
-    NSEnumerator *filesEnumerator = [filesArray objectEnumerator];
-    NSString *fileName;
-    unsigned long long int fileSize = 0;
-    
-    while (fileName = [filesEnumerator nextObject]) {
-        NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:[folderPath stringByAppendingPathComponent:fileName] error:nil];
-        fileSize += [fileDictionary fileSize];
-    }
-    
-    return fileSize;
-}
-
-- (void)removeAllCachedImages 
+- (void)removeAllCachedImages
 {
     RMLog(@"removing all tiles from the file cache");
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+    dispatch_async(queue, ^{
         NSArray *items = [self.fileManager contentsOfDirectoryAtPath:[self tileCachePath] error:nil];
         for (NSString *file in items) {
             [self.fileManager removeItemAtPath:[[self tileCachePath] stringByAppendingPathComponent:file] error:nil];
@@ -276,7 +280,7 @@
 {
     RMLog(@"removing tiles for key '%@' from the file cache", cacheKey);
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+    dispatch_async(queue, ^{
         NSArray *items = [self.fileManager contentsOfDirectoryAtPath:[self tileCachePath] error:nil];
         for (NSString *file in items) {
             if ([file rangeOfString:cacheKey].location != NSNotFound) {
@@ -290,7 +294,7 @@
 
 - (void)touchTile:(RMTile)tile withKey:(NSString *)cacheKey
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+    dispatch_async(queue, ^{
         NSString *tilePath = [self pathForCachedTileWithHash:[RMTileCache tileHash:tile] andKey:cacheKey];
         [self.fileManager setAttributes:@{NSFileModificationDate: [NSDate date]} ofItemAtPath:tilePath error:nil];
     });

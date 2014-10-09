@@ -82,7 +82,7 @@
     if (!cacheCfg)
         cacheCfg = [NSArray arrayWithObjects:
                     [NSDictionary dictionaryWithObject: @"memory-cache" forKey: @"type"],
-                    [NSDictionary dictionaryWithObject: @"file-cache"     forKey: @"type"],
+                    [NSDictionary dictionaryWithObject: @"db-cache"     forKey: @"type"],
                     nil];
 
     for (id cfg in cacheCfg)
@@ -200,7 +200,7 @@
 	return image;
 }
 
-- (void)addImage:(UIImage *)image forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey
+- (void)addImage:(UIImage *)image withData:(NSData *)data forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey
 {
     if (!image || !aCacheKey)
         return;
@@ -211,8 +211,8 @@
 
         for (id <RMTileCache> cache in _tileCaches)
         {	
-            if ([cache respondsToSelector:@selector(addImage:forTile:withCacheKey:)])
-                [cache addImage:image forTile:tile withCacheKey:aCacheKey];
+            if ([cache respondsToSelector:@selector(addImageWithData:forTile:withCacheKey:)])
+                [cache addImageWithData:data forTile:tile withCacheKey:aCacheKey];
         }
 
     });

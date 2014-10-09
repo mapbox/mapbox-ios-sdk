@@ -148,6 +148,8 @@
     [_writeQueueLock unlock];
      _writeQueueLock = nil;
      _queue = nil;
+    
+    [super dealloc];
 }
 
 - (void)setPurgeStrategy:(RMCachePurgeStrategy)theStrategy
@@ -251,11 +253,8 @@
 	return cachedImage;
 }
 
-- (void)addImage:(UIImage *)image forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey
+- (void)addImageWithData:(NSData *)data forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey
 {
-    // TODO: Converting the image here (again) is not so good...
-	NSData *data = UIImagePNGRepresentation(image);
-
     if (_capacity != 0)
     {
         NSUInteger tilesInDb = [self count];
@@ -357,7 +356,7 @@
 - (void)constrainFileSize
 {
     if ([self fileSize] > _capacityBytes) {
-        RMLog(@"constraining db cache size %lluM", (unsigned long)self.fileSize / (1024 * 1024));
+        RMLog(@"constraining db cache size %luM", (unsigned long)self.fileSize / (1024 * 1024));
         [self purgeTiles:_minimalPurge];
     }
 }
