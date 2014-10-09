@@ -253,11 +253,8 @@
 	return cachedImage;
 }
 
-- (void)addImage:(UIImage *)image forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey
+- (void)addImageWithData:(NSData *)data forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey
 {
-    // TODO: Converting the image here (again) is not so good...
-	NSData *data = UIImagePNGRepresentation(image);
-
     if (_capacity != 0)
     {
         NSUInteger tilesInDb = [self count];

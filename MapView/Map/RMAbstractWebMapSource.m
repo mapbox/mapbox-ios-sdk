@@ -62,6 +62,7 @@
 - (UIImage *)imageForTile:(RMTile)tile inCache:(RMTileCache *)tileCache
 {
     __block UIImage *image = nil;
+    __block NSData *imageData;
     
     tile = [[self mercatorToTileProjection] normaliseTile:tile];
     
@@ -163,7 +164,8 @@
             NSHTTPURLResponse *response = nil;
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[URLs objectAtIndex:0]];
             [request setTimeoutInterval:(self.requestTimeoutSeconds / (CGFloat)self.retryCount)];
-            image = [UIImage imageWithData:[NSURLConnection sendBrandedSynchronousRequest:request returningResponse:&response error:nil]];
+            imageData = [NSURLConnection sendBrandedSynchronousRequest:request returningResponse:&response error:nil];
+            image = [UIImage imageWithData:imageData];
             
             if (response.statusCode == HTTP_404_NOT_FOUND)
                 break;
@@ -171,7 +173,7 @@
     }
     
     if (image && self.isCacheable)
-        [tileCache addImage:image forTile:tile withCacheKey:[self uniqueTilecacheKey]];
+        [tileCache addImage:image withData:imageData forTile:tile withCacheKey:[self uniqueTilecacheKey]];
     
     dispatch_async(dispatch_get_main_queue(), ^(void)
                    {

@@ -25,6 +25,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#import "RMFileUtils.h"
 #import "RMFileCache.h"
 #import "FMDB.h"
 #import "RMTileImage.h"
@@ -174,11 +175,9 @@ static dispatch_queue_t queue;
 	return cachedImage;
 }
 
-- (void)addImage:(UIImage *)image forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey
+- (void)addImageWithData:(NSData *)data forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey
 {
-    // TODO: Converting the image here (again) is not so good...
-	NSData *data = UIImagePNGRepresentation(image);
-    static skipper = 0;
+	static skipper = 0;
 
     if (_capacity != 0)
     {
@@ -223,12 +222,13 @@ static dispatch_queue_t queue;
         
         NSMutableArray *items = [NSMutableArray new];
         [[self.fileManager contentsOfDirectoryAtPath:[self tileCachePath] error:nil] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            NSDate *date = [[self.fileManager attributesOfItemAtPath:[[self tileCachePath] stringByAppendingPathComponent:obj] error:nil] fileModificationDate];
+            NSDate *date = [RMFileUtils modificationDateForFileAtPath:[[self tileCachePath] stringByAppendingPathComponent:obj]];
             if (date) {
                 NSDictionary *item = @{obj: date};
                 [items addObject:item];
             }
         }];
+        
         [items sortUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2) {
             NSDate* obj1Date = obj1.allValues[0];
             NSDate* obj2Date = obj2.allValues[0];
@@ -254,7 +254,7 @@ static dispatch_queue_t queue;
 - (void)constrainFileSize
 {
     dispatch_async(queue, ^{
-        unsigned long long int folderSize = [self folderSize:[self tileCachePath]];
+        unsigned long long int folderSize = [RMFileUtils folderSize:[self tileCachePath]];
         if (folderSize > _capacityBytes) {
             RMLog(@"constraining db cache size %lluM", folderSize / (1024 * 1024));
             [self purgeTiles:_minimalPurge];
@@ -262,21 +262,7 @@ static dispatch_queue_t queue;
     });
 }
 
-- (unsigned long long int)folderSize:(NSString *)folderPath {
-    NSArray *filesArray = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:folderPath error:nil];
-    NSEnumerator *filesEnumerator = [filesArray objectEnumerator];
-    NSString *fileName;
-    unsigned long long int fileSize = 0;
-    
-    while (fileName = [filesEnumerator nextObject]) {
-        NSDictionary *fileDictionary = [self.fileManager attributesOfItemAtPath:[folderPath stringByAppendingPathComponent:fileName] error:nil];
-        fileSize += [fileDictionary fileSize];
-    }
-    
-    return fileSize;
-}
-
-- (void)removeAllCachedImages 
+- (void)removeAllCachedImages
 {
     RMLog(@"removing all tiles from the file cache");
 
