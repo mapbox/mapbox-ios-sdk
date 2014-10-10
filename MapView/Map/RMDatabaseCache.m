@@ -148,8 +148,6 @@
     [_writeQueueLock unlock];
      _writeQueueLock = nil;
      _queue = nil;
-    
-    [super dealloc];
 }
 
 - (void)setPurgeStrategy:(RMCachePurgeStrategy)theStrategy
