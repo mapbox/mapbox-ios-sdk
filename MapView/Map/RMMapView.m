@@ -1880,6 +1880,40 @@
     return YES;
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesBegan:touches withEvent:event];
+
+    [_mapScrollView touchesBegan:touches withEvent:event];
+
+    if (self.userTrackingMode == RMUserTrackingModeFollowWithHeading) {
+        self.userTrackingMode = RMUserTrackingModeNone;
+    }
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesMoved:touches withEvent:event];
+
+    [_mapScrollView touchesMoved:touches withEvent:event];
+
+    if (self.userTrackingMode == RMUserTrackingModeFollowWithHeading) {
+        self.userTrackingMode = RMUserTrackingModeNone;
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesEnded:touches withEvent:event];
+
+    [_mapScrollView touchesEnded:touches withEvent:event];
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesCancelled:touches withEvent:event];
+}
+
 // Overlay
 
 - (void)tapOnAnnotation:(RMAnnotation *)anAnnotation atPoint:(CGPoint)aPoint
@@ -3461,13 +3495,20 @@
                                      if ([annotation.layer isKindOfClass:[RMMarker class]])
                                          annotation.layer.transform = _annotationTransform;
                              }
-                             completion:nil];
+                             completion:^(BOOL finished) {
+                                 if (finished) {
+                                     _mapScrollView.frame = self.bounds;
+                                     _overlayView.frame = self.bounds;
+                                 }
+                             }];
 
             [CATransaction commit];
 
-            if (_userHeadingTrackingView)
-                [_userHeadingTrackingView removeFromSuperview]; _userHeadingTrackingView = nil;
-
+            if (_userHeadingTrackingView) {
+                [_userHeadingTrackingView removeFromSuperview];
+                _userHeadingTrackingView = nil;
+            }
+            
             break;
         }
         case RMUserTrackingModeFollow:
@@ -3482,8 +3523,10 @@
                 [self locationManager:_locationManager didUpdateToLocation:self.userLocation.location fromLocation:self.userLocation.location];
                 #pragma clang diagnostic pop
 
-            if (_userHeadingTrackingView)
-                [_userHeadingTrackingView removeFromSuperview]; _userHeadingTrackingView = nil;
+            if (_userHeadingTrackingView) {
+                [_userHeadingTrackingView removeFromSuperview];
+                _userHeadingTrackingView = nil;
+            }
 
             [CATransaction setAnimationDuration:0.5];
             [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
@@ -3546,7 +3589,7 @@
             [self updateHeadingForDeviceOrientation];
 
             [_locationManager startUpdatingHeading];
-
+            
             break;
         }
     }
