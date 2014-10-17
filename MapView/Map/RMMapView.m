@@ -420,6 +420,11 @@
     return self;
 }
 
++ (BOOL)requiresConstraintBasedLayout
+{
+    return YES;
+}
+
 - (void)setFrame:(CGRect)frame
 {
     CGRect r = self.frame;
@@ -559,11 +564,10 @@
                                                                                           views:@{ @"topLayoutGuide" : viewController.topLayoutGuide,
                                                                                                    @"container"      : container }]];
 
-
             [viewController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[container]-rightSpacing-|"
                                                                                         options:0
-                                                                                        metrics:@{ @"rightSpacing" : @(5) }
-                                                                                          views:@{ @"container"    : container }]];
+                                                                                        metrics:@{ @"rightSpacing" : @(container.bounds.size.width + 5) }
+                                                                                          views:NSDictionaryOfVariableBindings(container)]];
         }
     }
 
