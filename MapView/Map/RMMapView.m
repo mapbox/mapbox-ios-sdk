@@ -427,23 +427,26 @@
 
     // only change if the frame changes and not during initialization
     if ( ! CGRectEqualToRect(r, frame))
-    {
-        RMProjectedPoint centerPoint = self.centerProjectedPoint;
+        [self updateFrames:frame];
+}
 
-        CGRect bounds = CGRectMake(0, 0, frame.size.width, frame.size.height);
-        _backgroundView.frame = bounds;
-        _mapScrollView.frame = bounds;
-        _overlayView.frame = bounds;
-
-        [self setCenterProjectedPoint:centerPoint animated:NO];
-
-        [self correctPositionOfAllAnnotations];
-
-        self.minZoom = 0; // force new minZoom calculation
-
-        if (_loadingTileView)
-            _loadingTileView.mapZooming = NO;
-    }
+- (void)updateFrames:(CGRect)frame
+{
+    RMProjectedPoint centerPoint = self.centerProjectedPoint;
+    
+    CGRect bounds = CGRectMake(0, 0, frame.size.width, frame.size.height);
+    _backgroundView.frame = bounds;
+    _mapScrollView.frame = bounds;
+    _overlayView.frame = bounds;
+    
+    [self setCenterProjectedPoint:centerPoint animated:NO];
+    
+    [self correctPositionOfAllAnnotations];
+    
+    self.minZoom = 0; // force new minZoom calculation
+    
+    if (_loadingTileView)
+        _loadingTileView.mapZooming = NO;
 }
 
 + (UIImage *)resourceImageNamed:(NSString *)imageName
@@ -3497,8 +3500,7 @@
                              }
                              completion:^(BOOL finished) {
                                  if (finished) {
-                                     _mapScrollView.frame = self.bounds;
-                                     _overlayView.frame = self.bounds;
+                                     [self updateFrames:self.superview.bounds];
                                  }
                              }];
 
