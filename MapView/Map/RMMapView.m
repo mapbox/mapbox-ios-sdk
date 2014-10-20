@@ -213,6 +213,8 @@
     SMCalloutView *_currentCallout;
 
     BOOL _rotateAtMinZoom;
+    
+    NSLayoutConstraint *compassVerticalConstraint;
 }
 
 @synthesize decelerationMode = _decelerationMode;
@@ -558,16 +560,20 @@
         if ( ! [[viewController.view valueForKeyPath:@"constraints.firstItem"]  containsObject:container] &&
              ! [[viewController.view valueForKeyPath:@"constraints.secondItem"] containsObject:container])
         {
-            [viewController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topLayoutGuide]-topSpacing-[container]"
-                                                                                        options:0
-                                                                                        metrics:@{ @"topSpacing"     : @(5) }
-                                                                                          views:@{ @"topLayoutGuide" : viewController.topLayoutGuide,
-                                                                                                   @"container"      : container }]];
+            NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[topLayoutGuide]-topSpacing-[container]"
+                                                                           options:0
+                                                                           metrics:@{ @"topSpacing"     : @(5 + self.compassTopInset) }
+                                                                             views:@{ @"topLayoutGuide" : viewController.topLayoutGuide,
+                                                                                      @"container"      : container }];
+            [viewController.view addConstraints:constraints];
+            compassVerticalConstraint = constraints[0];
 
             [viewController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[container]-rightSpacing-|"
                                                                                         options:0
                                                                                         metrics:@{ @"rightSpacing" : @(container.bounds.size.width + 5) }
                                                                                           views:NSDictionaryOfVariableBindings(container)]];
+        } else if (compassVerticalConstraint) {
+            compassVerticalConstraint.constant = 5 + self.compassTopInset;
         }
     }
 
@@ -3504,7 +3510,7 @@
                              }
                              completion:^(BOOL finished) {
                                  if (finished) {
-                                     [self updateFrames:self.superview.bounds];
+                                      [self updateFrames:self.superview.bounds];
                                  }
                              }];
 

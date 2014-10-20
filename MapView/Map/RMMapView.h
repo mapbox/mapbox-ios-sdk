@@ -522,6 +522,9 @@ typedef enum : NSUInteger {
 /** Whether the map view should display a heading calibration alert when necessary. The default value is `YES`. */
 @property (nonatomic, assign) BOOL displayHeadingCalibration;
 
+/** How much to inset the compass from the top if you have a toolbar or something else in the way. The default value is `0` */
+@property (nonatomic) NSUInteger compassTopInset;
+
 /** Set the mode used to track the user location. 
 *
 *   Setting the tracking mode to `RMUserTrackingModeFollow` or `RMUserTrackingModeFollowWithHeading` causes the map view to center the map on that location and begin tracking the user’s location. If the map is zoomed out, the map view automatically zooms in on the user’s location, effectively changing the current visible region.
