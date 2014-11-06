@@ -33,7 +33,9 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 
 + (NSData *)sendBrandedSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error
 {
-    NSMutableURLRequest *newRequest = [NSMutableURLRequest requestWithURL:request.URL cachePolicy:request.cachePolicy timeoutInterval:request.timeoutInterval];
+    NSMutableURLRequest *newRequest = [NSMutableURLRequest requestWithURL:request.URL
+                                                              cachePolicy:request.cachePolicy
+                                                          timeoutInterval:request.timeoutInterval];
     
     [newRequest setValue:[[RMConfiguration configuration] userAgent] forHTTPHeaderField:@"User-Agent"];
     

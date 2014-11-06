@@ -83,7 +83,8 @@
         if ([_infoDictionary[@"id"] hasPrefix:@"examples."])
             RMLog(@"Using watermarked example map ID %@. Please go to https://mapbox.com and create your own map style.", _infoDictionary[@"id"]);
 
-        _uniqueTilecacheKey = [NSString stringWithFormat:@"Mapbox-%@%@", _infoDictionary[@"id"], (_infoDictionary[@"version"] ? [@"-" stringByAppendingString:_infoDictionary[@"version"]] : @"")];
+        _uniqueTilecacheKey = [NSString stringWithFormat:@"Mapbox-%@%@%@", _infoDictionary[@"id"], (_infoDictionary[@"version"] ? [@"-" stringByAppendingString:_infoDictionary[@"version"]] : @""),
+            ([RMMapboxSource isUsingLargeTiles] ? @"-512" : @"")];
 
         id dataObject = nil;
         
@@ -355,9 +356,19 @@
     return roundf(([self maxZoom] + [self minZoom]) / 2);
 }
 
++ (BOOL)isUsingLargeTiles
+{
+    return ([[RMConfiguration configuration] accessToken] && [[UIScreen mainScreen] scale] > 1.0);
+}
+
 - (NSString *)uniqueTilecacheKey
 {
     return _uniqueTilecacheKey;
+}
+
+- (NSUInteger)tileSideLength
+{
+    return ([RMMapboxSource isUsingLargeTiles] ? 512 : kMapboxDefaultTileSize);
 }
 
 - (NSString *)shortName

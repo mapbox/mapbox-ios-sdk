@@ -266,6 +266,16 @@
     return (_activeTileSource || _backgroundFetchQueue);
 }
 
+- (BOOL)markCachingComplete
+{
+    BOOL incomplete = (_activeTileSource || _backgroundFetchQueue);
+
+    _activeTileSource = nil;
+    _backgroundFetchQueue = nil;
+
+    return incomplete;
+}
+
 - (NSUInteger)tileCountForSouthWest:(CLLocationCoordinate2D)southWest northEast:(CLLocationCoordinate2D)northEast minZoom:(NSUInteger)minZoom maxZoom:(NSUInteger)maxZoom
 {
     NSUInteger minCacheZoom = minZoom;
@@ -341,7 +351,8 @@
                                                                                                 forTileSource:_activeTileSource
                                                                                                    usingCache:self];
 
-                __block RMTileCacheDownloadOperation *internalOperation = operation;
+                __weak RMTileCacheDownloadOperation *internalOperation = operation;
+                __weak RMTileCache *weakSelf = self;
 
                 [operation setCompletionBlock:^(void)
                 {
@@ -352,58 +363,52 @@
                             progTile++;
 
                             if ([_backgroundCacheDelegate respondsToSelector:@selector(tileCache:didBackgroundCacheTile:withIndex:ofTotalTileCount:)])
-                                [_backgroundCacheDelegate tileCache:self didBackgroundCacheTile:RMTileMake(x, y, zoom) withIndex:progTile ofTotalTileCount:totalTiles];
+                            {
+                                [_backgroundCacheDelegate tileCache:weakSelf
+                                             didBackgroundCacheTile:RMTileMake(x, y, zoom)
+                                                          withIndex:progTile
+                                                   ofTotalTileCount:totalTiles];
+                            }
 
                             if (progTile == totalTiles)
                             {
-                                 _backgroundFetchQueue = nil;
-
-                                 _activeTileSource = nil;
+                                [weakSelf markCachingComplete];
 
                                 if ([_backgroundCacheDelegate respondsToSelector:@selector(tileCacheDidFinishBackgroundCache:)])
-                                    [_backgroundCacheDelegate tileCacheDidFinishBackgroundCache:self];
+                                {
+                                    [_backgroundCacheDelegate tileCacheDidFinishBackgroundCache:weakSelf];
+                                }
                             }
                         }
-
-                        internalOperation = nil;
                     });
                 }];
 
                 [_backgroundFetchQueue addOperation:operation];
             }
         }
-    };
+    }
 }
 
 - (void)cancelBackgroundCache
 {
+    __weak NSOperationQueue *weakBackgroundFetchQueue = _backgroundFetchQueue;
+    __weak RMTileCache *weakSelf = self;
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
     {
-        @synchronized (self)
+        dispatch_sync(dispatch_get_main_queue(), ^(void)
         {
-            BOOL didCancel = NO;
+            [weakBackgroundFetchQueue cancelAllOperations];
+            [weakBackgroundFetchQueue waitUntilAllOperationsAreFinished];
 
-            if (_backgroundFetchQueue)
+            if ([weakSelf markCachingComplete])
             {
-                [_backgroundFetchQueue cancelAllOperations];
-                [_backgroundFetchQueue waitUntilAllOperationsAreFinished];
-                 _backgroundFetchQueue = nil;
-
-                didCancel = YES;
-            }
-
-            if (_activeTileSource)
-                 _activeTileSource = nil;
-
-            if (didCancel)
-            {
-                dispatch_sync(dispatch_get_main_queue(), ^(void)
+                if ([_backgroundCacheDelegate respondsToSelector:@selector(tileCacheDidCancelBackgroundCache:)])
                 {
-                    if ([_backgroundCacheDelegate respondsToSelector:@selector(tileCacheDidCancelBackgroundCache:)])
-                        [_backgroundCacheDelegate tileCacheDidCancelBackgroundCache:self];
-                });
+                    [_backgroundCacheDelegate tileCacheDidCancelBackgroundCache:weakSelf];
+                }
             }
-        }
+        });
     });
 }
 

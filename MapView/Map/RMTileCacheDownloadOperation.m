@@ -30,8 +30,8 @@
 @implementation RMTileCacheDownloadOperation
 {
     RMTile _tile;
-    id <RMTileSource>_source;
-    RMTileCache *_cache;
+    __weak id <RMTileSource>_source;
+    __weak RMTileCache *_cache;
 }
 
 - (id)initWithTile:(RMTile)tile forTileSource:(id <RMTileSource>)source usingCache:(RMTileCache *)cache

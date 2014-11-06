@@ -106,26 +106,27 @@
             NSURL *currentURL = [URLs objectAtIndex:u];
             
             dispatch_group_async(fetchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
-                                 {
-                                     NSData *tileData = nil;
-                                     
-                                     for (NSUInteger try = 0; tileData == nil && try < self.retryCount; ++try)
-                                     {
-                                         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:currentURL];
-                                         [request setTimeoutInterval:(self.requestTimeoutSeconds / (CGFloat)self.retryCount)];
-                                         tileData = [NSURLConnection sendBrandedSynchronousRequest:request returningResponse:nil error:nil];
-                                     }
-                                     
-                                     if (tileData)
-                                     {
-                                         @synchronized (self)
-                                         {
-                                             // safely put into collection array in proper order
-                                             //
-                                             [tilesData replaceObjectAtIndex:u withObject:tileData];
-                                         };
-                                     }
-                                 });
+            {
+                NSData *tileData = nil;
+
+                for (NSUInteger try = 0; tileData == nil && try < self.retryCount; ++try)
+                {
+                    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:currentURL];
+                    [request setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
+                    [request setTimeoutInterval:(self.requestTimeoutSeconds / (CGFloat)self.retryCount)];
+                    tileData = [NSURLConnection sendBrandedSynchronousRequest:request returningResponse:nil error:nil];
+                }
+
+                if (tileData)
+                {
+                    @synchronized (self)
+                    {
+                        // safely put into collection array in proper order
+                        //
+                        [tilesData replaceObjectAtIndex:u withObject:tileData];
+                    };
+                }
+            });
         }
         
         // wait for whole group of fetches (with retries) to finish, then clean up
@@ -163,6 +164,7 @@
         {
             NSHTTPURLResponse *response = nil;
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[URLs objectAtIndex:0]];
+            [request setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
             [request setTimeoutInterval:(self.requestTimeoutSeconds / (CGFloat)self.retryCount)];
             imageData = [NSURLConnection sendBrandedSynchronousRequest:request returningResponse:&response error:nil];
             image = [UIImage imageWithData:imageData];
