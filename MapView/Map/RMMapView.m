@@ -1359,6 +1359,7 @@
     _mapScrollView.maximumZoomScale = exp2f([self maxZoom]);
     _mapScrollView.contentOffset = CGPointMake(0.0, 0.0);
     _mapScrollView.clipsToBounds = NO;
+    _mapScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
     _tiledLayersSuperview = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, contentSize.width, contentSize.height)];
     _tiledLayersSuperview.userInteractionEnabled = NO;
@@ -1392,6 +1393,7 @@
 
     _overlayView = [[RMMapOverlayView alloc] initWithFrame:[self bounds]];
     _overlayView.userInteractionEnabled = NO;
+    _overlayView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
     [self insertSubview:_overlayView aboveSubview:_mapScrollView];
 

@@ -314,7 +314,7 @@
 
     [_queue inDatabase:^(FMDatabase *db)
      {
-         FMResultSet *results = [db executeQuery:@"SELECT COUNT(tile_hash) FROM ZCACHE"];
+         FMResultSet *results = [db executeQuery:@"SELECT COUNT(*) FROM ZCACHE"];
 
          if ([results next])
              count = [results intForColumnIndex:0];
