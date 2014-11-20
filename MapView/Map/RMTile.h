@@ -66,4 +66,6 @@ RMTileRect RMTileRectRound(RMTileRect rect);
 // Dump a description of the tile to the console
 void RMLogTile(RMTile tile);
 
+#define IS_VALID_TILE_IMAGE(image) (image != nil && [image isKindOfClass:[UIImage class]])
+
 #endif

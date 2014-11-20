@@ -33,6 +33,9 @@
 #define HTTP_404_NOT_FOUND 404
 
 @implementation RMAbstractWebMapSource
+{
+    dispatch_queue_t _queue;
+}
 
 @synthesize retryCount, requestTimeoutSeconds;
 
@@ -43,8 +46,15 @@
 
     self.retryCount = RMAbstractWebMapSourceDefaultRetryCount;
     self.requestTimeoutSeconds = RMAbstractWebMapSourceDefaultWaitSeconds;
+    _queue = dispatch_queue_create(nil, DISPATCH_QUEUE_CONCURRENT);
 
     return self;
+}
+
+-(void)dealloc
+{
+    if (_queue)
+        dispatch_release(_queue);
 }
 
 - (NSURL *)URLForTile:(RMTile)tile
@@ -69,14 +79,6 @@
     // fetch another tile if missingTilesDepth > 0
     if ( ! [self tileSourceHasTile:tile])
         return (UIImage *)[NSNull null];
-
-    if (self.isCacheable)
-    {
-        image = [tileCache cachedImage:tile withCacheKey:[self uniqueTilecacheKey]];
-
-        if (image)
-            return image;
-    }
 
     dispatch_async(dispatch_get_main_queue(), ^(void)
     {
@@ -104,7 +106,7 @@
         {
             NSURL *currentURL = [URLs objectAtIndex:u];
 
-            dispatch_group_async(fetchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
+            dispatch_group_async(fetchGroup, _queue, ^(void)
             {
                 NSData *tileData = nil;
 
@@ -166,13 +168,14 @@
             [request setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
             [request setTimeoutInterval:(self.requestTimeoutSeconds / (CGFloat)self.retryCount)];
             image = [UIImage imageWithData:[NSURLConnection sendBrandedSynchronousRequest:request returningResponse:&response error:nil]];
-
-            if (response.statusCode == HTTP_404_NOT_FOUND)
+            
+            if (image || response.statusCode == HTTP_404_NOT_FOUND)
                 break;
         }
     }
-
-    if (image && self.isCacheable)
+    if (image == nil) {
+        return (UIImage *)[NSNull null];
+    } else if (self.isCacheable)
         [tileCache addImage:image forTile:tile withCacheKey:[self uniqueTilecacheKey]];
 
     dispatch_async(dispatch_get_main_queue(), ^(void)
