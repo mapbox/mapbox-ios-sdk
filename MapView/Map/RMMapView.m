@@ -3007,7 +3007,9 @@
                 [_visibleAnnotations addObject:annotation];
             }
 
-            [self correctScreenPosition:annotation animated:animated];
+            if (!_draggedAnnotation || ![annotation isEqual:_draggedAnnotation]) {
+                [self correctScreenPosition:annotation animated:animated];
+            }
 
             [previousVisibleAnnotations removeObject:annotation];
         }
