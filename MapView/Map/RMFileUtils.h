@@ -15,5 +15,6 @@
 + (unsigned long long int)folderSize:(NSString *)folderPath;
 + (long long)fileSizeAtPath:(NSString*)path;
 + (NSDate *)modificationDateForFileAtPath:(NSString*)path;
++ (NSTimeInterval)ageOfFileAtPath:(NSString*)path;
 
 @end

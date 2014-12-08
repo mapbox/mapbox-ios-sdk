@@ -40,25 +40,41 @@
 
 + (NSDate *)modificationDateForFileAtPath:(NSString*)path
 {
-    struct tm* date;
-    struct stat attrib;
+    //Return code 0 means that the file exists, ref `man access`
+    if (access(path.UTF8String, F_OK) == 0) {
+        struct tm* date;
+        struct stat attrib;
+        
+        stat(path.UTF8String, &attrib);
+        
+        date = gmtime(&(attrib.st_mtime));
+        
+        NSDateComponents *comps = [[NSDateComponents alloc] init];
+        [comps setSecond: date->tm_sec];
+        [comps setMinute: date->tm_min];
+        [comps setHour: date->tm_hour];
+        [comps setDay: date->tm_mday];
+        [comps setMonth: date->tm_mon + 1];
+        [comps setYear: date->tm_year + 1900];
+        
+        NSCalendar *cal = [NSCalendar currentCalendar];
+        NSDate *modificationDate = [[cal dateFromComponents:comps] dateByAddingTimeInterval:[[NSTimeZone systemTimeZone] secondsFromGMT]];
+        
+        return modificationDate;
+    } else {
+        return nil;
+    }
+}
+
++ (NSTimeInterval)ageOfFileAtPath:(NSString *)path
+{
+    NSDate *modificationDate = [self modificationDateForFileAtPath:path];
     
-    stat([path UTF8String], &attrib);
-    
-    date = gmtime(&(attrib.st_mtime));
-    
-    NSDateComponents *comps = [[NSDateComponents alloc] init];
-    [comps setSecond: date->tm_sec];
-    [comps setMinute: date->tm_min];
-    [comps setHour: date->tm_hour];
-    [comps setDay: date->tm_mday];
-    [comps setMonth: date->tm_mon + 1];
-    [comps setYear: date->tm_year + 1900];
-    
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDate *modificationDate = [[cal dateFromComponents:comps] dateByAddingTimeInterval:[[NSTimeZone systemTimeZone] secondsFromGMT]];
-    
-    return modificationDate;
+    if (modificationDate) {
+        return [NSDate.date timeIntervalSinceDate:modificationDate];
+    } else {
+        return 0;
+    }
 }
 
 @end
