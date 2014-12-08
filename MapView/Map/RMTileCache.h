@@ -50,13 +50,20 @@ typedef enum : short {
 *   @return An image of the tile that can be used to draw a portion of the map. */
 - (UIImage *)cachedImage:(RMTile)tile withCacheKey:(NSString *)cacheKey;
 
+/** Returns an image from the cache if it exists.
+*   @param tile A desired RMTile.
+*   @param cacheKey The key representing a certain cache.
+*   @param shouldBypassMemoryCache Whether to only consult disk-based caches.
+*   @return An image of the tile that can be used to draw a portion of the map. */
+- (UIImage *)cachedImage:(RMTile)tile withCacheKey:(NSString *)cacheKey bypassingMemoryCache:(BOOL)shouldBypassMemoryCache;
+
 - (void)didReceiveMemoryWarning;
 
 @optional
 
 /** @name Adding to the Cache */
 
-/** Adds a tile image to specified cache.
+/** Adds a tile image to the specified cache.
 *   @param image A tile image to be cached.
 *   @param tile The RMTile describing the map location of the image.
 *   @param cacheKey The key representing a certain cache. */
@@ -70,6 +77,12 @@ typedef enum : short {
 
 - (void)addImage:(UIImage *)image withData:(NSData *)data forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey;
 
+/** Adds tile image data to the specified cache, bypassing the memory cache and only writing to disk. This is useful for instances where many tiles are downloaded directly to disk for later use offline.
+*   @param data The tile image data to be cached.
+*   @param tile The RMTile describing the map location of the image.
+*   @param cacheKey The key representing a certain cache. */
+- (void)addDiskCachedImageData:(NSData *)data forTile:(RMTile)tile withCacheKey:(NSString *)cacheKey;
+
 /** @name Clearing the Cache */
 
 /** Removes all tile images from a cache. */
@@ -80,7 +93,9 @@ typedef enum : short {
 
 #pragma mark -
 
-/** The RMTileCacheBackgroundDelegate protocol is for receiving notifications about background tile cache download operations. */
+/** The RMTileCacheBackgroundDelegate protocol is for receiving notifications about background tile cache download operations. 
+*
+*   These callbacks are not guaranteed to be received on the main thread, so if you intend to do work in the user interface, you should properly enqueue such jobs on the main thread. */
 @protocol RMTileCacheBackgroundDelegate <NSObject>
 
 @optional
@@ -97,6 +112,12 @@ typedef enum : short {
 *   @param tileIndex The index of the tile in question, beginning with `1` and ending with totalTileCount. 
 *   @param totalTileCount The total number of of tiles required for coverage of the desired geographic area. */
 - (void)tileCache:(RMTileCache *)tileCache didBackgroundCacheTile:(RMTile)tile withIndex:(NSUInteger)tileIndex ofTotalTileCount:(NSUInteger)totalTileCount;
+
+/** Sent upon error when trying to cache a tile in a background cache operation. 
+*   @param tileCache The tile cache.
+*   @param error The error received.
+*   @param tile A structure representing the tile in question. */
+- (void)tileCache:(RMTileCache *)tileCache didReceiveError:(NSError *)error whenCachingTile:(RMTile)tile;
 
 /** Sent when all tiles have completed downloading and caching. 
 *   @param tileCache The tile cache. */
