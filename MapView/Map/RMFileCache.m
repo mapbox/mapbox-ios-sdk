@@ -31,6 +31,8 @@
 #import "RMTileImage.h"
 #import "RMTile.h"
 
+#import <Reachability/Reachability.h>
+
 #define kWriteQueueLimit 15
 
 @interface RMFileCache ()
@@ -54,6 +56,7 @@
     NSUInteger _capacity;
     NSUInteger _minimalPurge;
     NSTimeInterval _expiryPeriod;
+    BOOL _reachable;
 }
 
 static dispatch_queue_t queue;
@@ -107,6 +110,9 @@ static dispatch_queue_t queue;
     self.fileManager = [NSFileManager new];
 
     self.tileCount = [self countTiles];
+    
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    _reachable = [Reachability.reachabilityForInternetConnection isReachable];
 
 	return self;	
 }
@@ -114,6 +120,17 @@ static dispatch_queue_t queue;
 - (id)initUsingCacheDir:(BOOL)useCacheDir
 {
 	return [self initWithTileCachePath:[RMFileCache tileCachePathUsingCacheDir:useCacheDir]];
+}
+
+- (void)dealloc
+{
+    [NSNotificationCenter.defaultCenter removeObserver:self];
+}
+
+- (void)reachabilityChanged:(NSNotification *)notification
+{
+    Reachability *reachability = (Reachability *)notification.object;
+    _reachable = reachability.isReachable;
 }
 
 - (void)setPurgeStrategy:(RMCachePurgeStrategy)theStrategy
@@ -164,7 +181,7 @@ static dispatch_queue_t queue;
     {
         NSString *path = [self pathForCachedTileWithHash:[RMTileCache tileHash:tile] andKey:aCacheKey];
         
-        if ([RMFileUtils ageOfFileAtPath:path] > _expiryPeriod) {
+        if ([RMFileUtils ageOfFileAtPath:path] > _expiryPeriod && _reachable) {
             [self.fileManager removeItemAtPath:path error:nil];
         }
         
