@@ -157,22 +157,21 @@ static dispatch_queue_t queue;
 
 - (UIImage *)cachedImage:(RMTile)tile withCacheKey:(NSString *)aCacheKey
 {
-    UIImage *cachedImage = [UIImage imageWithContentsOfFile:[self pathForCachedTileWithHash:[RMTileCache tileHash:tile] andKey:aCacheKey]];
-
     if (_capacity != 0 && _purgeStrategy == RMCachePurgeStrategyLRU)
         [self touchTile:tile withKey:aCacheKey];
-
+    
     if (_expiryPeriod > 0)
     {
-        if (rand() % 100 == 0)
-        {
-            [self.fileManager removeItemAtPath:[self pathForCachedTileWithHash:[RMTileCache tileHash:tile] andKey:aCacheKey] error:nil];
-
-            _tileCount = [self countTiles];
+        NSString *path = [self pathForCachedTileWithHash:[RMTileCache tileHash:tile] andKey:aCacheKey];
+        
+        if ([RMFileUtils ageOfFileAtPath:path] > _expiryPeriod) {
+            [self.fileManager removeItemAtPath:path error:nil];
         }
+        
+        _tileCount = self.countTiles;
     }
-
-	return cachedImage;
+    
+    return [UIImage imageWithContentsOfFile:[self pathForCachedTileWithHash:[RMTileCache tileHash:tile] andKey:aCacheKey]];
 }
 
 - (void)addImageWithData:(NSData *)data forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey
