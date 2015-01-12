@@ -3412,7 +3412,7 @@
         //
         if ([CLLocationManager instancesRespondToSelector:@selector(requestWhenInUseAuthorization)])
         {
-            NSAssert([[[NSBundle mainBundle] infoDictionary] valueForKey:@"NSLocationWhenInUseUsageDescription"], @"For iOS 8 and above, your app must have a value for NSLocationWhenInUseUsageDescription in its Info.plist");
+            NSAssert([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"], @"For iOS 8 and above, your app must have a value for NSLocationWhenInUseUsageDescription in its Info.plist");
             [_locationManager requestWhenInUseAuthorization];
         }
 #endif
@@ -3643,6 +3643,10 @@
 
         if (fabsf(userLocationPoint.x - mapCenterPoint.x) > 1.0 || fabsf(userLocationPoint.y - mapCenterPoint.y) > 1.0)
         {
+            #if (TARGET_IPHONE_SIMULATOR)
+            [self locationManager:manager didUpdateHeading:self.userLocation.heading];
+            #endif
+            
             if (round(_zoom) >= 10)
             {
                 // at sufficient detail, just re-center the map; don't zoom
@@ -3817,6 +3821,18 @@
     }
 
     CLLocationDirection headingDirection = (newHeading.trueHeading > 0 ? newHeading.trueHeading : newHeading.magneticHeading);
+    
+    #if (TARGET_IPHONE_SIMULATOR)
+    static CLLocation *previousLocation;
+    
+    if (previousLocation && previousLocation.coordinate.latitude != self.userLocation.coordinate.latitude) {
+        CLLocationDirection course = [self bearingFromLocation:previousLocation toLocation:self.userLocation.location];
+        if (course > 0) {
+            headingDirection = course;
+        }
+    }
+    previousLocation = self.userLocation.location;
+    #endif
 
     if (headingDirection != 0 && self.userTrackingMode == RMUserTrackingModeFollowWithHeading)
     {
@@ -3907,6 +3923,30 @@
             }
         }
     }
+}
+
+double RMDegreesToRadians(double degrees) {return degrees * M_PI / 180.0;};
+double RMRadiansToDegrees(double radians) {return radians * 180.0 / M_PI;};
+
+- (double)bearingFromLocation:(CLLocation *)fromLocation toLocation:(CLLocation *)destinationLocation
+{
+    double lat1 = RMDegreesToRadians(fromLocation.coordinate.latitude);
+    double lon1 = RMDegreesToRadians(fromLocation.coordinate.longitude);
+    
+    double lat2 = RMDegreesToRadians(destinationLocation.coordinate.latitude);
+    double lon2 = RMDegreesToRadians(destinationLocation.coordinate.longitude);
+    
+    double dLon = lon2 - lon1;
+    
+    double y = sin(dLon) * cos(lat2);
+    double x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon);
+    double radiansBearing = atan2(y, x);
+    
+    if (radiansBearing < 0.0) {
+        radiansBearing += 2 * M_PI;
+    }
+    
+    return RMRadiansToDegrees(radiansBearing);
 }
 
 - (void)tappedHeadingCompass:(id)sender
