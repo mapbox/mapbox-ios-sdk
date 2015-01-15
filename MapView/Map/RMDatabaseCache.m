@@ -253,7 +253,7 @@
 
 - (void)addImageWithData:(NSData *)data forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey
 {
-    [self addDiskCachedImageData:UIImagePNGRepresentation(image) forTile:tile withCacheKey:aCacheKey];
+    [self addDiskCachedImageData:data forTile:tile withCacheKey:aCacheKey];
 }
 
 - (void)addDiskCachedImageData:(NSData *)data forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey
