@@ -1,7 +1,7 @@
 CONTRIBUTING
 ------------
 
-If you have a usage question, please email support-at-mapbox.com. 
+If you have a usage question, please email help-at-mapbox.com. 
 
 If you want to contribute code: 
 
