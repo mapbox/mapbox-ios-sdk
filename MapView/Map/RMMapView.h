@@ -495,6 +495,11 @@ typedef enum : NSUInteger {
 #pragma mark -
 #pragma mark User Location
 
+typedef enum : NSUInteger {
+    RMMapUserHeadingSourceCompass = 0, //Default
+    RMMapUserHeadingSourceGPS   = 1
+} RMMapUserHeadingSource;
+
 /** @name Tracking the User Location */
 
 /** A Boolean value indicating whether the map may display the user location.
@@ -505,6 +510,9 @@ typedef enum : NSUInteger {
 *
 *   On iOS 8 and above, your app must specify a value for `NSLocationWhenInUseUsageDescription` in its `Info.plist` to satisfy the requirements of the underlying Core Location framework when enabling this property. */
 @property (nonatomic, assign) BOOL showsUserLocation;
+
+/** Where to get the heading from. RMMapUserHeadingSourceGPS is useful for vehicular navigation */
+@property (nonatomic, assign) RMMapUserHeadingSource headingSource;
 
 /** The annotation object representing the user’s current location. (read-only) */
 @property (nonatomic, readonly) RMUserLocation *userLocation;
