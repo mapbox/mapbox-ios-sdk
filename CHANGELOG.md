@@ -1,6 +1,21 @@
 Changelog
 ---------
 
+### 1.5.0
+#### January 16, 2015
+
+  - Re-added support for Mapbox `v4` API and [access tokens](https://www.mapbox.com/developers/api/#access-tokens) (removed temporarily in `1.4.0`), which are required for new accounts. 
+  - Added support for iOS 8's QoS on background network requests. 
+  - Improved error handling. 
+  - Improved localization support. 
+  - Improved deprecation notification on some previously-removed API. 
+  - A map view's `-setCenterCoordinate:` is no longer animated by default. 
+  - Fixed an Auto Layout bug. 
+  - Fixed some memory leaks. 
+  - Performance improvements, especially to background downloading for offline use and to general disk caching. 
+  - Clarified that only web-based tile sources are eligible for background downloading. 
+  - Documentation improvements. 
+
 ### 1.4.1
 #### September 5, 2014
 

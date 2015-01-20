@@ -3,7 +3,7 @@ Mapbox iOS SDK
 
 Based on the Route-Me iOS map library (Alpstein fork) with [Mapbox][mapbox] customizations. 
 
-Requires iOS 5 or greater (includes iOS 7 support at runtime), Xcode 5.0 or greater, and ARC.
+Requires iOS 5 or greater (includes iOS 7+ support at runtime), Xcode 5.0 or greater, and ARC.
 
 [![](https://raw.github.com/mapbox/mapbox-ios-sdk/packaging/screenshot.png)]()
 
@@ -15,7 +15,7 @@ Major differences from [Alpstein fork of Route-Me](https://github.com/Alpstein/r
  * [Mapbox Markers](http://mapbox.com/blog/markers/) support. 
  * [UTFGrid interactivity](http://mapbox.com/mbtiles-spec/utfgrid/). 
  * Improved network tile loading performance. 
- * A bulk, background map tile downloader for cache pre-population. 
+ * A bulk, background map tile downloader for cache pre-population and offline use. 
  * Annotation callouts that behave like MapKit. 
  * Annotation convenience subclasses for points and shapes. 
  * Prepackaged static library. 

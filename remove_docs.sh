@@ -4,4 +4,4 @@ echo
 echo "Removing docs from ~/Library/Developer/Shared/Documentation/DocSets..."
 echo
 
-rm -rfv ~/Library/Developer/Shared/Documentation/DocSets/com.mapbox.Mapbox-*
+rm -rfv ~/Library/Developer/Shared/Documentation/DocSets/com.mapbox.Mapbox-1.*
