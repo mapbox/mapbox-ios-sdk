@@ -3539,6 +3539,11 @@
 
         if (fabsf(userLocationPoint.x - mapCenterPoint.x) > 1.0 || fabsf(userLocationPoint.y - mapCenterPoint.y) > 1.0)
         {
+
+            if (TARGET_IPHONE_SIMULATOR || self.headingSource == RMMapUserHeadingSourceGPS) {
+                [self locationManager:manager didUpdateHeading:self.userLocation.heading];
+            }
+            
             if (round(_zoom) >= 10)
             {
                 // at sufficient detail, just re-center the map; don't zoom
@@ -3709,6 +3714,30 @@
     }
 
     CLLocationDirection headingDirection = (newHeading.trueHeading > 0 ? newHeading.trueHeading : newHeading.magneticHeading);
+    
+    if (TARGET_IPHONE_SIMULATOR || self.headingSource == RMMapUserHeadingSourceGPS) {
+        static CLLocation *previousLocation;
+        
+        CLLocationDistance headingUpdateDistanceThreshold = (previousLocation.horizontalAccuracy + self.userLocation.location.horizontalAccuracy) / 4;
+        
+        if (previousLocation &&
+            previousLocation.coordinate.latitude != self.userLocation.coordinate.latitude &&
+            [previousLocation distanceFromLocation:self.userLocation.location] > headingUpdateDistanceThreshold) {
+            CLLocationDirection course = [self bearingFromLocation:previousLocation toLocation:self.userLocation.location];
+            
+            if (fabs(course) > 0) {
+                headingDirection = course;
+            }
+        } else {
+            if (!previousLocation) {
+                previousLocation = self.userLocation.location;
+            }
+            
+            return; //Can't update heading now because the data is bad
+        }
+        
+        previousLocation = self.userLocation.location;
+    }
 
     if (headingDirection != 0 && self.userTrackingMode == RMUserTrackingModeFollowWithHeading)
     {
