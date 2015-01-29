@@ -546,4 +546,7 @@ typedef enum : NSUInteger {
 /** Dismiss the heading calibration display */
 - (void)dismissHeadingCalibrationDisplay;
 
+/** Set new long press duration instead of default value */
+- (void)setLongPressDuration:(float)longPressDuration;
+
 @end
