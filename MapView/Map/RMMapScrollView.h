@@ -41,4 +41,6 @@
 
 @property (nonatomic, weak) id <RMMapScrollViewDelegate> mapScrollViewDelegate;
 
+- (void)setContentOffset:(CGPoint)contentOffset duration:(NSTimeInterval)duration;
+
 @end

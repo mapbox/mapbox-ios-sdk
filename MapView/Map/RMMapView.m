@@ -192,6 +192,7 @@
     RMAnnotation *_trackingHaloAnnotation;
 
     UIImageView *_userHeadingTrackingView;
+    UIImageView *_staticCenteredUserLocationImageView;
 
     RMUserTrackingBarButtonItem *_userTrackingBarButtonItem;
 
@@ -333,6 +334,7 @@
     [self setCenterCoordinate:initialCenterCoordinate animated:NO];
 
     [self setDecelerationMode:RMMapDecelerationFast];
+    [self setPositionUpdateAnimationDuration:0.3f];
 
     self.showLogoBug = YES;
 
@@ -351,6 +353,7 @@
     }
 
     self.displayHeadingCalibration = YES;
+    self.headingSource = RMMapUserHeadingSourceCompass;
 
     _mapTransform = CGAffineTransformIdentity;
     _annotationTransform = CATransform3DIdentity;
@@ -1026,7 +1029,7 @@
 
     [_mapScrollView setContentOffset:CGPointMake(normalizedProjectedPoint.x / _metersPerPixel - _mapScrollView.bounds.size.width/2.0,
                                                 _mapScrollView.contentSize.height - ((normalizedProjectedPoint.y / _metersPerPixel) + _mapScrollView.bounds.size.height/2.0))
-                           animated:animated];
+                            duration:(animated ? self.positionUpdateAnimationDuration : 0)];
 
 //    RMLog(@"setMapCenterProjectedPoint: {%f,%f} -> {%.0f,%.0f}", centerProjectedPoint.x, centerProjectedPoint.y, mapScrollView.contentOffset.x, mapScrollView.contentOffset.y);
 
@@ -1117,7 +1120,7 @@
     {
         [UIView animateWithDuration:0.3
                               delay:0.0
-                            options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut
+                            options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut | UIViewAnimationOptionAllowUserInteraction
                          animations:^(void)
                          {
                              [self setZoom:newZoom];
@@ -3197,7 +3200,7 @@
         }
     }
     
-    self.userLocation.layer.hidden = !self.userLocationVisible;
+    self.userLocation.layer.hidden = !self.userLocationVisible || self.staticCenteredUserLocationImage;
 
     [self correctOrderingOfAllAnnotations];
 
@@ -3514,7 +3517,7 @@
 
             [UIView animateWithDuration:(animated ? 0.5 : 0.0)
                                   delay:0.0
-                                options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut
+                                options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut | UIViewAnimationOptionAllowUserInteraction
                              animations:^(void)
                              {
                                  _mapTransform = CGAffineTransformIdentity;
@@ -3567,7 +3570,7 @@
 
             [UIView animateWithDuration:(animated ? 0.5 : 0.0)
                                   delay:0.0
-                                options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut
+                                options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut | UIViewAnimationOptionAllowUserInteraction
                              animations:^(void)
                              {
                                  _mapTransform = CGAffineTransformIdentity;
@@ -3630,6 +3633,29 @@
 
     if (_delegateHasDidChangeUserTrackingMode)
         [_delegate mapView:self didChangeUserTrackingMode:_userTrackingMode animated:animated];
+}
+
+- (void)setStaticCenteredUserLocationImage:(UIImage *)staticCenteredUserLocationImage
+{
+    _staticCenteredUserLocationImage = staticCenteredUserLocationImage;
+    
+    if (_staticCenteredUserLocationImageView) {
+        [_staticCenteredUserLocationImageView removeFromSuperview];
+    }
+    
+    if (staticCenteredUserLocationImage) {
+        _staticCenteredUserLocationImageView = [UIImageView.alloc initWithImage:staticCenteredUserLocationImage];
+        
+        _staticCenteredUserLocationImageView.center = CGPointMake(self.bounds.size.width / 2.f, self.bounds.size.height / 2.f);
+        _staticCenteredUserLocationImageView.contentMode = UIViewContentModeCenter;
+        
+        _staticCenteredUserLocationImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin  |
+        UIViewAutoresizingFlexibleRightMargin |
+        UIViewAutoresizingFlexibleTopMargin   |
+        UIViewAutoresizingFlexibleBottomMargin;
+        
+        [self insertSubview:_staticCenteredUserLocationImageView aboveSubview:_overlayView];
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
@@ -3801,12 +3827,18 @@
     if ([newLocation distanceFromLocation:oldLocation])
         _trackingHaloAnnotation.coordinate = newLocation.coordinate;
 
-    self.userLocation.layer.hidden = ( ! CLLocationCoordinate2DIsValid(self.userLocation.coordinate));
-
-    _accuracyCircleAnnotation.layer.hidden = newLocation.horizontalAccuracy <= 10 || self.userLocation.hasCustomLayer;
-
-    _trackingHaloAnnotation.layer.hidden = ( ! CLLocationCoordinate2DIsValid(self.userLocation.coordinate) || newLocation.horizontalAccuracy > 10 || self.userLocation.hasCustomLayer);
-
+    if (self.staticCenteredUserLocationImage) {
+        self.userLocation.layer.hidden = YES;
+        _accuracyCircleAnnotation.layer.hidden = YES;
+        _trackingHaloAnnotation.layer.hidden = YES;
+    } else {
+        self.userLocation.layer.hidden = ( ! CLLocationCoordinate2DIsValid(self.userLocation.coordinate));
+        
+        _accuracyCircleAnnotation.layer.hidden = newLocation.horizontalAccuracy <= 10 || self.userLocation.hasCustomLayer;
+        
+        _trackingHaloAnnotation.layer.hidden = ( ! CLLocationCoordinate2DIsValid(self.userLocation.coordinate) || newLocation.horizontalAccuracy > 10 || self.userLocation.hasCustomLayer);
+    }
+    
     if ( ! [_annotations containsObject:self.userLocation])
         [self addAnnotation:self.userLocation];
 }
@@ -3836,12 +3868,12 @@
             return;
     }
 
-    CLLocationDirection headingDirection = (newHeading.trueHeading > 0 ? newHeading.trueHeading : newHeading.magneticHeading);
+    self.headingDirection = (newHeading.trueHeading > 0 ? newHeading.trueHeading : newHeading.magneticHeading);
     
     if (TARGET_IPHONE_SIMULATOR || self.headingSource == RMMapUserHeadingSourceGPS) {
         static CLLocation *previousLocation;
         
-        CLLocationDistance headingUpdateDistanceThreshold = (previousLocation.horizontalAccuracy + self.userLocation.location.horizontalAccuracy) / 4;
+        CLLocationDistance headingUpdateDistanceThreshold = (previousLocation.horizontalAccuracy + self.userLocation.location.horizontalAccuracy) / 2;
         
         if (previousLocation &&
             previousLocation.coordinate.latitude != self.userLocation.coordinate.latitude &&
@@ -3849,7 +3881,7 @@
             CLLocationDirection course = [self bearingFromLocation:previousLocation toLocation:self.userLocation.location];
             
             if (fabs(course) > 0) {
-                headingDirection = course;
+                self.headingDirection = course;
             }
         } else {
             if (!previousLocation) {
@@ -3862,21 +3894,21 @@
         previousLocation = self.userLocation.location;
     }
 
-    if (headingDirection != 0 && self.userTrackingMode == RMUserTrackingModeFollowWithHeading)
+    if (self.headingDirection != 0 && self.userTrackingMode == RMUserTrackingModeFollowWithHeading)
     {
         if (_userHeadingTrackingView.alpha < 1.0)
-            [UIView animateWithDuration:0.5 animations:^(void) { _userHeadingTrackingView.alpha = 1.0; }];
+            [UIView animateWithDuration:self.positionUpdateAnimationDuration animations:^(void) { _userHeadingTrackingView.alpha = 1.0; }];
 
         [CATransaction begin];
-        [CATransaction setAnimationDuration:0.5];
+        [CATransaction setAnimationDuration:self.positionUpdateAnimationDuration];
         [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
 
-        [UIView animateWithDuration:0.5
+        [UIView animateWithDuration:self.positionUpdateAnimationDuration
                               delay:0.0
-                            options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut
+                            options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut | UIViewAnimationOptionAllowUserInteraction
                          animations:^(void)
                          {
-                             CGFloat angle = (M_PI / -180) * headingDirection;
+                             CGFloat angle = (M_PI / -180) * self.headingDirection;
 
                              _mapTransform = CGAffineTransformMakeRotation(angle);
                              _annotationTransform = CATransform3DMakeAffineTransform(CGAffineTransformMakeRotation(-angle));
@@ -4206,7 +4238,7 @@ double RMRadiansToDegrees(double radians) {return radians * 180.0 / M_PI;};
 
     [UIView animateWithDuration:[self transitionDuration:transitionContext]
                           delay:0
-                        options:UIViewAnimationOptionCurveEaseInOut
+                        options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowUserInteraction
                      animations:^(void)
                      {
                          fromView.userInteractionEnabled = NO;

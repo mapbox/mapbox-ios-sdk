@@ -511,8 +511,17 @@ typedef enum : NSUInteger {
 *   On iOS 8 and above, your app must specify a value for `NSLocationWhenInUseUsageDescription` in its `Info.plist` to satisfy the requirements of the underlying Core Location framework when enabling this property. */
 @property (nonatomic, assign) BOOL showsUserLocation;
 
+/** Set an image that will be shown in the center of the map instead of the actual user location. Useful for smooth navigation */
+@property (nonatomic, strong) UIImage *staticCenteredUserLocationImage;
+
 /** Where to get the heading from. RMMapUserHeadingSourceGPS is useful for vehicular navigation */
 @property (nonatomic, assign) RMMapUserHeadingSource headingSource;
+
+/** The current heading of the map. */
+@property (nonatomic, assign) CLLocationDirection headingDirection;
+
+/** Location and heading animation duration. Can be used to smooth out the display for navigation */
+@property (nonatomic, assign) NSTimeInterval positionUpdateAnimationDuration;
 
 /** The annotation object representing the user’s current location. (read-only) */
 @property (nonatomic, readonly) RMUserLocation *userLocation;
