@@ -198,6 +198,11 @@ typedef enum : NSUInteger {
 *   @param delta A `CGSize` by which to move the map center. */
 - (void)moveBy:(CGSize)delta;
 
+/** Set the map heading direction
+ *  @param headingDirection the angle of the heading in degrees.
+ *  @param animated Wether to animate the change of heading. */
+- (void)setLocationDirection:(CLLocationDirection) headingDirection animated:(BOOL) animated;
+
 #pragma mark - Zoom
 
 /** @name Zooming the Map */
