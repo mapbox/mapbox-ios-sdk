@@ -3319,7 +3319,9 @@
         //
         if ([CLLocationManager instancesRespondToSelector:@selector(requestWhenInUseAuthorization)])
         {
-            NSAssert([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"], @"For iOS 8 and above, your app must have a value for NSLocationWhenInUseUsageDescription in its Info.plist");
+            BOOL hasLocationDescription = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"] ||
+                [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"];
+            NSAssert(hasLocationDescription, @"For iOS 8 and above, your app must have a value for NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription in its Info.plist");
             [_locationManager requestWhenInUseAuthorization];
         }
 #endif
@@ -3710,38 +3712,7 @@
 
     if (headingDirection != 0 && self.userTrackingMode == RMUserTrackingModeFollowWithHeading)
     {
-        if (_userHeadingTrackingView.alpha < 1.0)
-            [UIView animateWithDuration:0.5 animations:^(void) { _userHeadingTrackingView.alpha = 1.0; }];
-
-        [CATransaction begin];
-        [CATransaction setAnimationDuration:0.5];
-        [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-
-        [UIView animateWithDuration:0.5
-                              delay:0.0
-                            options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut
-                         animations:^(void)
-                         {
-                             CGFloat angle = (M_PI / -180) * headingDirection;
-
-                             _mapTransform = CGAffineTransformMakeRotation(angle);
-                             _annotationTransform = CATransform3DMakeAffineTransform(CGAffineTransformMakeRotation(-angle));
-
-                             _mapScrollView.transform = _mapTransform;
-                             _compassButton.transform = _mapTransform;
-                             _overlayView.transform   = _mapTransform;
-
-                             _compassButton.alpha = 1.0;
-
-                             for (RMAnnotation *annotation in _annotations)
-                                 if ([annotation.layer isKindOfClass:[RMMarker class]])
-                                     annotation.layer.transform = _annotationTransform;
-
-                             [self correctPositionOfAllAnnotations];
-                         }
-                         completion:nil];
-
-        [CATransaction commit];
+        [self setLocationDirection:headingDirection animated:true];
     }
 }
 
@@ -3796,6 +3767,48 @@
                 break;
             }
         }
+    }
+}
+
+- (void) setLocationDirection:(CLLocationDirection) headingDirection animated:(BOOL) animated {
+    
+    if (_userHeadingTrackingView.alpha < 1.0)
+        [UIView animateWithDuration:0.5 animations:^(void) { _userHeadingTrackingView.alpha = 1.0; }];
+    
+    dispatch_block_t animations = ^(void)
+    {
+        CGFloat angle = (M_PI / -180) * headingDirection;
+        
+        _mapTransform = CGAffineTransformMakeRotation(angle);
+        _annotationTransform = CATransform3DMakeAffineTransform(CGAffineTransformMakeRotation(-angle));
+        
+        _mapScrollView.transform = _mapTransform;
+        _compassButton.transform = _mapTransform;
+        _overlayView.transform   = _mapTransform;
+        
+        _compassButton.alpha = 1.0;
+        
+        for (RMAnnotation *annotation in _annotations)
+            if ([annotation.layer isKindOfClass:[RMMarker class]])
+                annotation.layer.transform = _annotationTransform;
+        
+        [self correctPositionOfAllAnnotations];
+    };
+    
+    if(animated) {
+        [CATransaction begin];
+        [CATransaction setAnimationDuration:0.5];
+        [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        
+        [UIView animateWithDuration:0.5
+                              delay:0.0
+                            options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseInOut
+                         animations:animations
+                         completion:nil];
+        
+        [CATransaction commit];
+    }else{
+        animations();
     }
 }
 
