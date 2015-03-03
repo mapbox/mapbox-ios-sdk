@@ -1,6 +1,10 @@
 Mapbox iOS SDK
 --------------
 
+
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/mapbox/mapbox-ios-sdk)
+
+
 Based on the Route-Me iOS map library (Alpstein fork) with [Mapbox](http://mapbox.com) customizations. 
 
 Requires iOS 5 or greater (includes iOS 7+ support at runtime), Xcode 5.0 or greater, and ARC.
@@ -42,11 +46,12 @@ Please note that you are responsible for getting permission to use the map data,
 Installation
 ------------
 
-There are three ways that you can install the SDK, depending upon your needs: 
+There are four ways that you can install the SDK, depending upon your needs: 
 
  1. Clone from GitHub and integrate as a dependent Xcode project. 
  1. Use the [static library](http://mapbox-ios-sdk.s3.amazonaws.com/index.html). Link it in your project, add `#import <Mapbox/Mapbox.h>`, and additionally, include the `-ObjC` linker flag. 
  1. Install via [CocoaPods](http://cocoapods.org). 
+ 1. Install via [Carthage](http://github.com/Carthage/Carthage)
 
 More detailed information on the installation options is available in the [SDK guide](http://mapbox.com/mapbox-ios-sdk/). 
 
