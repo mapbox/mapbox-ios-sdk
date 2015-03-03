@@ -456,11 +456,14 @@
 
 + (NSString *)pathForBundleResourceNamed:(NSString *)name ofType:(NSString *)extension
 {
+#ifndef IOS_FMWK
     NSAssert([[NSBundle mainBundle] pathForResource:@"Mapbox" ofType:@"bundle"], @"Resource bundle not found in application.");
 
     NSString *bundlePath      = [[NSBundle mainBundle] pathForResource:@"Mapbox" ofType:@"bundle"];
     NSBundle *resourcesBundle = [NSBundle bundleWithPath:bundlePath];
-
+#else
+    NSBundle *resourcesBundle= [NSBundle bundleWithIdentifier:@"com.mapbox.MapBox"];
+#endif
     return [resourcesBundle pathForResource:name ofType:extension];
 }
 

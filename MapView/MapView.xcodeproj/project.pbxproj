@@ -215,6 +215,7 @@
 		4AA8AB651AA0F3FF007C21F1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B83E65630E80E81C001663B6 /* CoreLocation.framework */; };
 		4AF3A6C91AA512C100CD6FAF /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B8474BC00EB4019A006A0BC1 /* libsqlite3.dylib */; };
 		4AF3A6CB1AA512E400CD6FAF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AF3A6CA1AA512E400CD6FAF /* libz.dylib */; };
+		4AF3A6D61AA534DA00CD6FAF /* Mapbox_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 4AF3A6D51AA534DA00CD6FAF /* Mapbox_Prefix.pch */; };
 		96492C400FA8AD3400EBA6D2 /* RMGlobalConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 96492C3F0FA8AD3400EBA6D2 /* RMGlobalConstants.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		B1EB26C610B5D8E6009F8658 /* RMNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = B1EB26C510B5D8E6009F8658 /* RMNotifications.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		B8474BA40EB40094006A0BC1 /* RMDatabaseCache.h in Headers */ = {isa = PBXBuildFile; fileRef = B8474B980EB40094006A0BC1 /* RMDatabaseCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -406,6 +407,7 @@
 		4AA8AAA91AA0F311007C21F1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4AA8AAAA1AA0F311007C21F1 /* Mapbox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mapbox.h; sourceTree = "<group>"; };
 		4AF3A6CA1AA512E400CD6FAF /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		4AF3A6D51AA534DA00CD6FAF /* Mapbox_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mapbox_Prefix.pch; sourceTree = "<group>"; };
 		96492C3F0FA8AD3400EBA6D2 /* RMGlobalConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMGlobalConstants.h; sourceTree = "<group>"; };
 		B1EB26C510B5D8E6009F8658 /* RMNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMNotifications.h; sourceTree = "<group>"; };
 		B83E64B60E80E73F001663B6 /* RMPixel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMPixel.h; sourceTree = "<group>"; };
@@ -654,6 +656,7 @@
 		4AA8AAA71AA0F311007C21F1 /* MapBox-iOS-SDK */ = {
 			isa = PBXGroup;
 			children = (
+				4AF3A6D51AA534DA00CD6FAF /* Mapbox_Prefix.pch */,
 				4AA8AAAA1AA0F311007C21F1 /* Mapbox.h */,
 				4AA8AAA81AA0F311007C21F1 /* Supporting Files */,
 			);
@@ -1012,6 +1015,7 @@
 				4AA8AAC71AA0F328007C21F1 /* RMCoordinateGridSource.h in Headers */,
 				4AA8AAC51AA0F328007C21F1 /* RMCompositeSource.h in Headers */,
 				4AA8AB001AA0F338007C21F1 /* RMGreatCircleAnnotation.h in Headers */,
+				4AF3A6D61AA534DA00CD6FAF /* Mapbox_Prefix.pch in Headers */,
 				4AA8AB0A1AA0F338007C21F1 /* RMCircle.h in Headers */,
 				4AA8AAFE1AA0F338007C21F1 /* RMCircleAnnotation.h in Headers */,
 				4AA8AAEA1AA0F332007C21F1 /* RMCacheObject.h in Headers */,
@@ -1442,7 +1446,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = MapView_Prefix.pch;
+				GCC_PREFIX_HEADER = "MapBox-iOS-SDK/Mapbox_Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1459,6 +1463,7 @@
 				);
 				INFOPLIST_FILE = "MapBox-iOS-SDK/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IOS_FMWK = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -1497,7 +1502,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = MapView_Prefix.pch;
+				GCC_PREFIX_HEADER = "MapBox-iOS-SDK/Mapbox_Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -1509,6 +1514,7 @@
 				);
 				INFOPLIST_FILE = "MapBox-iOS-SDK/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IOS_FMWK = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
