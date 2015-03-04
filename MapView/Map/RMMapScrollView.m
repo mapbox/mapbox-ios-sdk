@@ -53,7 +53,7 @@
          ! [[NSDecimalNumber notANumber] isEqualToNumber:@(contentOffset.y)])
     {       
         if (duration != 0.3f) {
-            [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
+            [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction animations:^{
                 [super setContentOffset:contentOffset animated:NO];
             } completion:nil];
         } else {
