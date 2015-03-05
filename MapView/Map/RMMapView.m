@@ -3512,6 +3512,13 @@
         [_delegate mapView:self didChangeUserTrackingMode:_userTrackingMode animated:animated];
 }
 
+- (void) showUserHeadingTrackingView:(BOOL) shouldShow animated:(BOOL) animated {
+    if (_userHeadingTrackingView.alpha != shouldShow ? 1.0 : 0.0) {
+        [UIView animateWithDuration: animated ? 0.5 : 0.0 animations:^(void) { _userHeadingTrackingView.alpha = shouldShow ? 1.0 : 0.0; }];
+    }
+    
+}
+
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
     if ( ! _showsUserLocation || _mapScrollView.isDragging || ! newLocation || ! CLLocationCoordinate2DIsValid(newLocation.coordinate))
@@ -3712,6 +3719,7 @@
 
     if (headingDirection != 0 && self.userTrackingMode == RMUserTrackingModeFollowWithHeading)
     {
+        [self showUserHeadingTrackingView:YES animated:YES];
         [self setLocationDirection:headingDirection animated:true];
     }
 }
@@ -3771,9 +3779,6 @@
 }
 
 - (void) setLocationDirection:(CLLocationDirection) headingDirection animated:(BOOL) animated {
-    
-    if (_userHeadingTrackingView.alpha < 1.0)
-        [UIView animateWithDuration:0.5 animations:^(void) { _userHeadingTrackingView.alpha = 1.0; }];
     
     dispatch_block_t animations = ^(void)
     {

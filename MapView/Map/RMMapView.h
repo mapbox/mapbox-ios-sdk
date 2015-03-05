@@ -537,4 +537,9 @@ typedef enum : NSUInteger {
 *   @param animated Whether changes to the map center or rotation should be animated when the mode is changed. */
 - (void)setUserTrackingMode:(RMUserTrackingMode)mode animated:(BOOL)animated;
 
+/** Toggle the user heading tracking view
+ * @param shouldShow whether to show or hide the tracking view
+ * @param animated wether or not animate the transition */
+- (void) showUserHeadingTrackingView:(BOOL) shouldShow animated:(BOOL) animated;
+
 @end
