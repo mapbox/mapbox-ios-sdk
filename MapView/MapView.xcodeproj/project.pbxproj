@@ -46,7 +46,18 @@
 		23A0AAEB0EB90AA6003A4521 /* RMFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 23A0AAEA0EB90AA6003A4521 /* RMFoundation.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		25757F4F1291C8640083D504 /* RMCircle.h in Headers */ = {isa = PBXBuildFile; fileRef = 25757F4D1291C8640083D504 /* RMCircle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		25757F501291C8640083D504 /* RMCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 25757F4E1291C8640083D504 /* RMCircle.m */; };
+		961E6A061AA9838D002B83B0 /* Compass@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 961E6A051AA9838D002B83B0 /* Compass@3x.png */; };
+		961E6A081AA983B4002B83B0 /* mapbox@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 961E6A071AA983B4002B83B0 /* mapbox@3x.png */; };
 		96492C400FA8AD3400EBA6D2 /* RMGlobalConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 96492C3F0FA8AD3400EBA6D2 /* RMGlobalConstants.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		96870DBB1AA9862100EB7E46 /* HeadingAngleMaskLarge@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96870DB21AA9862100EB7E46 /* HeadingAngleMaskLarge@3x.png */; };
+		96870DBC1AA9862100EB7E46 /* HeadingAngleMaskMedium@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96870DB31AA9862100EB7E46 /* HeadingAngleMaskMedium@3x.png */; };
+		96870DBD1AA9862100EB7E46 /* HeadingAngleMaskSmall@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96870DB41AA9862100EB7E46 /* HeadingAngleMaskSmall@3x.png */; };
+		96870DBE1AA9862100EB7E46 /* TrackingHeadingMask@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96870DB51AA9862100EB7E46 /* TrackingHeadingMask@3x.png */; };
+		96870DBF1AA9862100EB7E46 /* TrackingHeadingMaskLandscape@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96870DB61AA9862100EB7E46 /* TrackingHeadingMaskLandscape@3x.png */; };
+		96870DC01AA9862100EB7E46 /* TrackingLocationMask@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96870DB71AA9862100EB7E46 /* TrackingLocationMask@3x.png */; };
+		96870DC11AA9862100EB7E46 /* TrackingLocationMaskLandscape@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96870DB81AA9862100EB7E46 /* TrackingLocationMaskLandscape@3x.png */; };
+		96870DC21AA9862100EB7E46 /* TrackingLocationOffMask@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96870DB91AA9862100EB7E46 /* TrackingLocationOffMask@3x.png */; };
+		96870DC31AA9862100EB7E46 /* TrackingLocationOffMaskLandscape@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96870DBA1AA9862100EB7E46 /* TrackingLocationOffMaskLandscape@3x.png */; };
 		B1EB26C610B5D8E6009F8658 /* RMNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = B1EB26C510B5D8E6009F8658 /* RMNotifications.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		B8474BA40EB40094006A0BC1 /* RMDatabaseCache.h in Headers */ = {isa = PBXBuildFile; fileRef = B8474B980EB40094006A0BC1 /* RMDatabaseCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B8474BA50EB40094006A0BC1 /* RMDatabaseCache.m in Sources */ = {isa = PBXBuildFile; fileRef = B8474B990EB40094006A0BC1 /* RMDatabaseCache.m */; };
@@ -233,7 +244,18 @@
 		25757F4E1291C8640083D504 /* RMCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMCircle.m; sourceTree = "<group>"; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* MapView_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapView_Prefix.pch; sourceTree = SOURCE_ROOT; };
+		961E6A051AA9838D002B83B0 /* Compass@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Compass@3x.png"; path = "Map/Resources/Compass@3x.png"; sourceTree = "<group>"; };
+		961E6A071AA983B4002B83B0 /* mapbox@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "mapbox@3x.png"; path = "Map/Resources/mapbox@3x.png"; sourceTree = "<group>"; };
 		96492C3F0FA8AD3400EBA6D2 /* RMGlobalConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMGlobalConstants.h; sourceTree = "<group>"; };
+		96870DB21AA9862100EB7E46 /* HeadingAngleMaskLarge@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "HeadingAngleMaskLarge@3x.png"; path = "Map/Resources/HeadingAngleMaskLarge@3x.png"; sourceTree = "<group>"; };
+		96870DB31AA9862100EB7E46 /* HeadingAngleMaskMedium@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "HeadingAngleMaskMedium@3x.png"; path = "Map/Resources/HeadingAngleMaskMedium@3x.png"; sourceTree = "<group>"; };
+		96870DB41AA9862100EB7E46 /* HeadingAngleMaskSmall@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "HeadingAngleMaskSmall@3x.png"; path = "Map/Resources/HeadingAngleMaskSmall@3x.png"; sourceTree = "<group>"; };
+		96870DB51AA9862100EB7E46 /* TrackingHeadingMask@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TrackingHeadingMask@3x.png"; path = "Map/Resources/TrackingHeadingMask@3x.png"; sourceTree = "<group>"; };
+		96870DB61AA9862100EB7E46 /* TrackingHeadingMaskLandscape@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TrackingHeadingMaskLandscape@3x.png"; path = "Map/Resources/TrackingHeadingMaskLandscape@3x.png"; sourceTree = "<group>"; };
+		96870DB71AA9862100EB7E46 /* TrackingLocationMask@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TrackingLocationMask@3x.png"; path = "Map/Resources/TrackingLocationMask@3x.png"; sourceTree = "<group>"; };
+		96870DB81AA9862100EB7E46 /* TrackingLocationMaskLandscape@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TrackingLocationMaskLandscape@3x.png"; path = "Map/Resources/TrackingLocationMaskLandscape@3x.png"; sourceTree = "<group>"; };
+		96870DB91AA9862100EB7E46 /* TrackingLocationOffMask@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TrackingLocationOffMask@3x.png"; path = "Map/Resources/TrackingLocationOffMask@3x.png"; sourceTree = "<group>"; };
+		96870DBA1AA9862100EB7E46 /* TrackingLocationOffMaskLandscape@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TrackingLocationOffMaskLandscape@3x.png"; path = "Map/Resources/TrackingLocationOffMaskLandscape@3x.png"; sourceTree = "<group>"; };
 		B1EB26C510B5D8E6009F8658 /* RMNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMNotifications.h; sourceTree = "<group>"; };
 		B83E64B60E80E73F001663B6 /* RMPixel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMPixel.h; sourceTree = "<group>"; };
 		B83E64B70E80E73F001663B6 /* RMPixel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RMPixel.c; sourceTree = "<group>"; };
@@ -650,26 +672,31 @@
 		DD932BC1165C287600D69D49 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				DD932BA5165C287000D69D49 /* mapbox.png */,
-				DD932BA6165C287000D69D49 /* mapbox@2x.png */,
-				DDE68E5917D94C0500F1E869 /* mapbox-logo.png */,
-				DD36766A17D94F980001F27B /* mapbox-logo@2x.png */,
 				DDA256FD1798A95600BBB325 /* Compass.png */,
 				DDA256FC1798A95600BBB325 /* Compass@2x.png */,
-				DD932BA9165C287000D69D49 /* HeadingAngleSmall.png */,
-				DD932BAA165C287000D69D49 /* HeadingAngleSmall@2x.png */,
-				DD94D46816C2E064003D5739 /* HeadingAngleMedium.png */,
-				DD94D46916C2E064003D5739 /* HeadingAngleMedium@2x.png */,
+				961E6A051AA9838D002B83B0 /* Compass@3x.png */,
 				DD94D46616C2E064003D5739 /* HeadingAngleLarge.png */,
 				DD94D46716C2E064003D5739 /* HeadingAngleLarge@2x.png */,
-				DD07A23217F3AF9800E420B2 /* HeadingAngleMaskSmall.png */,
-				DD07A23517F3AF9800E420B2 /* HeadingAngleMaskSmall@2x.png */,
-				DD07A23317F3AF9800E420B2 /* HeadingAngleMaskMedium.png */,
-				DD07A23617F3AF9800E420B2 /* HeadingAngleMaskMedium@2x.png */,
 				DD07A23417F3AF9800E420B2 /* HeadingAngleMaskLarge.png */,
 				DD07A23717F3AF9800E420B2 /* HeadingAngleMaskLarge@2x.png */,
+				96870DB21AA9862100EB7E46 /* HeadingAngleMaskLarge@3x.png */,
+				DD07A23317F3AF9800E420B2 /* HeadingAngleMaskMedium.png */,
+				DD07A23617F3AF9800E420B2 /* HeadingAngleMaskMedium@2x.png */,
+				96870DB31AA9862100EB7E46 /* HeadingAngleMaskMedium@3x.png */,
+				DD07A23217F3AF9800E420B2 /* HeadingAngleMaskSmall.png */,
+				DD07A23517F3AF9800E420B2 /* HeadingAngleMaskSmall@2x.png */,
+				96870DB41AA9862100EB7E46 /* HeadingAngleMaskSmall@3x.png */,
+				DD94D46816C2E064003D5739 /* HeadingAngleMedium.png */,
+				DD94D46916C2E064003D5739 /* HeadingAngleMedium@2x.png */,
+				DD932BA9165C287000D69D49 /* HeadingAngleSmall.png */,
+				DD932BAA165C287000D69D49 /* HeadingAngleSmall@2x.png */,
 				DD932BAB165C287000D69D49 /* LoadingTile.png */,
 				DDC8D28517E92ED100A4FB32 /* LoadingTile6.png */,
+				DDE68E5917D94C0500F1E869 /* mapbox-logo.png */,
+				DD36766A17D94F980001F27B /* mapbox-logo@2x.png */,
+				DD932BA5165C287000D69D49 /* mapbox.png */,
+				DD932BA6165C287000D69D49 /* mapbox@2x.png */,
+				961E6A071AA983B4002B83B0 /* mapbox@3x.png */,
 				DD932BA7165C287000D69D49 /* TrackingDot.png */,
 				DD932BA8165C287000D69D49 /* TrackingDot@2x.png */,
 				DD932BAD165C287000D69D49 /* TrackingDotHalo.png */,
@@ -678,15 +705,21 @@
 				DD932BB0165C287000D69D49 /* TrackingHeading@2x.png */,
 				DDA256FE1798A95600BBB325 /* TrackingHeadingMask.png */,
 				DDA256FB1798A95600BBB325 /* TrackingHeadingMask@2x.png */,
+				96870DB51AA9862100EB7E46 /* TrackingHeadingMask@3x.png */,
 				DDA256FA1798A95600BBB325 /* TrackingHeadingMaskLandscape@2x.png */,
+				96870DB61AA9862100EB7E46 /* TrackingHeadingMaskLandscape@3x.png */,
 				DD932BB1165C287000D69D49 /* TrackingLocation.png */,
 				DD932BB2165C287000D69D49 /* TrackingLocation@2x.png */,
 				DDA257001798A95600BBB325 /* TrackingLocationMask.png */,
 				DDA256F91798A95600BBB325 /* TrackingLocationMask@2x.png */,
+				96870DB71AA9862100EB7E46 /* TrackingLocationMask@3x.png */,
 				DDA256F81798A95600BBB325 /* TrackingLocationMaskLandscape@2x.png */,
+				96870DB81AA9862100EB7E46 /* TrackingLocationMaskLandscape@3x.png */,
 				DDA256FF1798A95600BBB325 /* TrackingLocationOffMask.png */,
 				DDA256F71798A95600BBB325 /* TrackingLocationOffMask@2x.png */,
+				96870DB91AA9862100EB7E46 /* TrackingLocationOffMask@3x.png */,
 				DDA256F61798A95600BBB325 /* TrackingLocationOffMaskLandscape@2x.png */,
+				96870DBA1AA9862100EB7E46 /* TrackingLocationOffMaskLandscape@3x.png */,
 			);
 			name = Resources;
 			path = ..;
@@ -874,18 +907,26 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96870DBB1AA9862100EB7E46 /* HeadingAngleMaskLarge@3x.png in Resources */,
 				DD932BB3165C287000D69D49 /* mapbox.png in Resources */,
 				DD932BB4165C287000D69D49 /* mapbox@2x.png in Resources */,
+				96870DBF1AA9862100EB7E46 /* TrackingHeadingMaskLandscape@3x.png in Resources */,
 				DD932BB7165C287000D69D49 /* HeadingAngleSmall.png in Resources */,
 				DD07A23A17F3AF9800E420B2 /* HeadingAngleMaskLarge.png in Resources */,
 				DD07A23C17F3AF9800E420B2 /* HeadingAngleMaskMedium@2x.png in Resources */,
+				96870DBC1AA9862100EB7E46 /* HeadingAngleMaskMedium@3x.png in Resources */,
 				DD07A23917F3AF9800E420B2 /* HeadingAngleMaskMedium.png in Resources */,
 				DDA257071798A95600BBB325 /* Compass@2x.png in Resources */,
 				DD932BB8165C287000D69D49 /* HeadingAngleSmall@2x.png in Resources */,
+				96870DC01AA9862100EB7E46 /* TrackingLocationMask@3x.png in Resources */,
 				DD932BB9165C287000D69D49 /* LoadingTile.png in Resources */,
+				961E6A061AA9838D002B83B0 /* Compass@3x.png in Resources */,
+				96870DBD1AA9862100EB7E46 /* HeadingAngleMaskSmall@3x.png in Resources */,
 				DDE68E5A17D94C0500F1E869 /* mapbox-logo.png in Resources */,
+				961E6A081AA983B4002B83B0 /* mapbox@3x.png in Resources */,
 				DD932BB5165C287000D69D49 /* TrackingDot.png in Resources */,
 				DD932BB6165C287000D69D49 /* TrackingDot@2x.png in Resources */,
+				96870DC11AA9862100EB7E46 /* TrackingLocationMaskLandscape@3x.png in Resources */,
 				DD932BBB165C287000D69D49 /* TrackingDotHalo.png in Resources */,
 				DD932BBC165C287000D69D49 /* TrackingDotHalo@2x.png in Resources */,
 				DDA257031798A95600BBB325 /* TrackingLocationMaskLandscape@2x.png in Resources */,
@@ -901,12 +942,15 @@
 				DDA2570A1798A95600BBB325 /* TrackingLocationOffMask.png in Resources */,
 				DDA257011798A95600BBB325 /* TrackingLocationOffMaskLandscape@2x.png in Resources */,
 				DDA257041798A95600BBB325 /* TrackingLocationMask@2x.png in Resources */,
+				96870DC31AA9862100EB7E46 /* TrackingLocationOffMaskLandscape@3x.png in Resources */,
 				DDA257081798A95600BBB325 /* Compass.png in Resources */,
 				DD07A23817F3AF9800E420B2 /* HeadingAngleMaskSmall.png in Resources */,
 				DD94D46A16C2E064003D5739 /* HeadingAngleLarge.png in Resources */,
 				DD94D46B16C2E064003D5739 /* HeadingAngleLarge@2x.png in Resources */,
+				96870DC21AA9862100EB7E46 /* TrackingLocationOffMask@3x.png in Resources */,
 				DD07A23D17F3AF9800E420B2 /* HeadingAngleMaskLarge@2x.png in Resources */,
 				DD94D46C16C2E064003D5739 /* HeadingAngleMedium.png in Resources */,
+				96870DBE1AA9862100EB7E46 /* TrackingHeadingMask@3x.png in Resources */,
 				DD94D46D16C2E064003D5739 /* HeadingAngleMedium@2x.png in Resources */,
 				DD07A23B17F3AF9800E420B2 /* HeadingAngleMaskSmall@2x.png in Resources */,
 				DD36766B17D94F980001F27B /* mapbox-logo@2x.png in Resources */,
