@@ -639,7 +639,12 @@
         // needs a scroll view frame in order to calculate _metersPerPixel.
         // See https://github.com/mapbox/mapbox-ios-sdk/issues/270
         //
-        [self performInitializationWithTilesource:[RMMapboxSource new]
+        RMMapboxSource * source = nil;
+        // Do not allocate a new tile source as it loads with a synchronous call
+        if (![_earlyTileSources count]){
+            source = [RMMapboxSource new];
+        }
+        [self performInitializationWithTilesource:source
                                  centerCoordinate:CLLocationCoordinate2DMake(kDefaultInitialLatitude, kDefaultInitialLongitude)
                                         zoomLevel:kDefaultInitialZoomLevel
                                      maxZoomLevel:kDefaultMaximumZoomLevel
