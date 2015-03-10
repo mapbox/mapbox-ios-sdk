@@ -1669,35 +1669,43 @@
 {
     CALayer *hit = [_overlayView overlayHitTest:[recognizer locationInView:self]];
 
-    if (_currentAnnotation && ! [hit isEqual:_currentAnnotation.layer])
+    // See if tap was on an annotation or on one of its sublayers and send delegate protocol method
+    RMAnnotation *tappedAnnotation;
+    NSInteger sublayerCount = 0;
+    CALayer *superlayer = hit;
+    
+    while (superlayer != nil && ! [superlayer isEqual:_overlayView])
+    {
+        if ([superlayer isKindOfClass:[RMMapLayer class]])
+        {
+            tappedAnnotation = [((RMMapLayer *)superlayer) annotation];
+            break;
+        }
+        
+        superlayer = [superlayer superlayer];
+        sublayerCount++;
+    }
+    
+    if (_currentAnnotation && ! [_currentAnnotation isEqual:tappedAnnotation])
     {
         [self deselectAnnotation:_currentAnnotation animated:( ! [hit isKindOfClass:[RMMarker class]])];
     }
-
-    if ( ! hit)
+    
+    if (! tappedAnnotation)
     {
         [self singleTapAtPoint:[recognizer locationInView:self]];
-        return;
     }
-
-    CALayer *superlayer = [hit superlayer];
-
-    // See if tap was on an annotation layer or marker label and send delegate protocol method
-    if ([hit isKindOfClass:[RMMapLayer class]])
+    else if ([superlayer isKindOfClass:[RMMarker class]] && sublayerCount == 1)
     {
-        [self tapOnAnnotation:[((RMMapLayer *)hit) annotation] atPoint:[recognizer locationInView:self]];
+         [self tapOnLabelForAnnotation:tappedAnnotation atPoint:[recognizer locationInView:self]];
     }
-    else if (superlayer != nil && [superlayer isKindOfClass:[RMMarker class]])
+    else if ([superlayer isKindOfClass:[RMMarker class]] && sublayerCount == 2)
     {
-        [self tapOnLabelForAnnotation:[((RMMarker *)superlayer) annotation] atPoint:[recognizer locationInView:self]];
-    }
-    else if ([superlayer superlayer] != nil && [[superlayer superlayer] isKindOfClass:[RMMarker class]])
-    {
-        [self tapOnLabelForAnnotation:[((RMMarker *)[superlayer superlayer]) annotation] atPoint:[recognizer locationInView:self]];
+        [self tapOnLabelForAnnotation:tappedAnnotation atPoint:[recognizer locationInView:self]];
     }
     else
     {
-        [self singleTapAtPoint:[recognizer locationInView:self]];
+        [self tapOnAnnotation:tappedAnnotation atPoint:[recognizer locationInView:self]];
     }
 }
 
