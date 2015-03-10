@@ -412,11 +412,12 @@
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
-    if (![super initWithCoder:decoder])
-        return nil;
-
-    _earlyTileSources = [NSMutableArray array];
-
+    self = [super initWithCoder:decoder];
+    
+    if (self) {
+        _earlyTileSources = [NSMutableArray array];
+    }
+    
     return self;
 }
 
