@@ -18,6 +18,8 @@ Pod::Spec.new do |m|
 
   m.source_files = 'Proj4/*.h', 'MapView/Map/*.{h,c,m}'
 
+  m.public_header_files = 'Mapbox.h'
+
   m.requires_arc = true
 
   m.prefix_header_file = 'MapView/MapView_Prefix.pch'
