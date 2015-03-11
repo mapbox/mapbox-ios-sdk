@@ -18,7 +18,7 @@ Pod::Spec.new do |m|
 
   m.source_files = 'Proj4/*.h', 'MapView/Map/*.{h,c,m}'
 
-  m.public_header_files = ['MapView/Map/Mapbox.h']
+  m.public_header_files = 'MapView/Map/*.h'
 
   m.requires_arc = true
 
