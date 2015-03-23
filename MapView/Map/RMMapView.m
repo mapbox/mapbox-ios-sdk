@@ -419,10 +419,11 @@
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
-    if (![super initWithCoder:decoder])
-        return nil;
-
-    _earlyTileSources = [NSMutableArray array];
+    self = [super initWithCoder:decoder];
+    
+    if (self) {
+        _earlyTileSources = [NSMutableArray array];
+    }
 
     return self;
 }
@@ -1209,7 +1210,7 @@
 
 - (void)zoomInToNextNativeZoomAt:(CGPoint)pivot animated:(BOOL)animated
 {
-    if (self.userTrackingMode != RMUserTrackingModeNone && ! CGPointEqualToPoint(pivot, [self coordinateToPixel:self.userLocation.location.coordinate]))
+    if (self.userTrackingMode != RMUserTrackingModeNone && ! CGPointEqualToPoint(pivot, [self coordinateToPixel:self.userLocation.location.coordinate]) && !_zoomingDisablesScroll)
         self.userTrackingMode = RMUserTrackingModeNone;
     
     // Calculate rounded zoom
@@ -1449,7 +1450,7 @@
 {
     [self registerMoveEventByUser:YES];
 
-    if (self.userTrackingMode != RMUserTrackingModeNone)
+    if (self.userTrackingMode != RMUserTrackingModeNone && self.shouldStopTrackingUserLocation)
         self.userTrackingMode = RMUserTrackingModeNone;
 }
 
@@ -1483,6 +1484,8 @@
 
     if (_loadingTileView)
         _loadingTileView.mapZooming = YES;
+    
+    peggedProjectedPoint = self.centerProjectedPoint;
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
@@ -1506,6 +1509,13 @@
         _loadingTileView.mapZooming = NO;
 }
 
+- (BOOL)shouldStopTrackingUserLocation
+{
+    return !(_zoomingDisablesScroll && _mapScrollViewIsZooming);
+}
+
+static RMProjectedPoint peggedProjectedPoint;
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (_loadingTileView)
@@ -1513,6 +1523,12 @@
         CGSize delta = CGSizeMake(scrollView.contentOffset.x - _lastContentOffset.x, scrollView.contentOffset.y - _lastContentOffset.y);
         CGPoint newOffset = CGPointMake(_loadingTileView.contentOffset.x + delta.width, _loadingTileView.contentOffset.y + delta.height);
         _loadingTileView.contentOffset = newOffset;
+    }
+    
+    if (_mapScrollViewIsZooming && _zoomingDisablesScroll) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setCenterProjectedPoint:peggedProjectedPoint animated:NO];
+        });
     }
 }
 
@@ -1522,13 +1538,18 @@
 
     [self registerZoomEventByUser:wasUserAction];
 
-    if (self.userTrackingMode != RMUserTrackingModeNone && wasUserAction)
+    if (self.userTrackingMode != RMUserTrackingModeNone && wasUserAction && self.shouldStopTrackingUserLocation)
         self.userTrackingMode = RMUserTrackingModeNone;
     
     [self correctPositionOfAllAnnotations];
 
     if (_zoom < 3 && self.userTrackingMode == RMUserTrackingModeFollowWithHeading)
         self.userTrackingMode = RMUserTrackingModeFollow;
+}
+
+- (BOOL)isZooming
+{
+    return _mapScrollViewIsZooming;
 }
 
 // Detect dragging/zooming

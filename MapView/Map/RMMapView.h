@@ -91,6 +91,15 @@ typedef enum : NSUInteger {
 /** A Boolean value that determines whether double-tap zooms of the map always zoom on the center of the map, or whether they zoom on the center of the double-tap gesture. The default value is `NO`, which zooms on the gesture. */
 @property (nonatomic, assign) BOOL zoomingInPivotsAroundCenter;
 
+/** A Boolean value that determines whether zooming disables the scroll feature. Useful if the map is following the users location during turn by turn navigation. */
+@property (nonatomic, assign) BOOL zoomingDisablesScroll;
+
+/** A Boolean value that indicates whether the map is currently zooming. */
+@property (nonatomic, readonly) BOOL isZooming;
+
+/** A Boolean value that indicates whether the user tracking should be disabled. */
+- (BOOL)shouldStopTrackingUserLocation;
+
 /** A custom deceleration mode for the map view for drag operations. Set to `RMMapDecelerationOff` to disable map drag deceleration. The default value is `RMMapDecelerationFast`. */
 @property (nonatomic, assign) RMMapDecelerationMode decelerationMode;
 
