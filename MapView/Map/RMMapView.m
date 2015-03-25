@@ -2634,10 +2634,11 @@
 
 - (float)adjustedZoomForRetinaDisplay
 {
-    if (!self.adjustTilesForRetinaDisplay && _screenScale > 1.0 && ! [RMMapboxSource isUsingLargeTiles])
-        return [self zoom] + 1.0;
+    if (!self.adjustTilesForRetinaDisplay && self.screenScale > 1.0 && [RMMapboxSource isUsingLargeTiles]) {
+        return fminf(self.tileSourcesMaxZoom, self.zoom + 1.0);
+    }
 
-    return [self zoom];
+    return self.zoom;
 }
 
 - (RMProjection *)projection
