@@ -140,6 +140,8 @@
 
 - (id)initWithMapboxMarkerImage:(NSString *)symbolName tintColorHex:(NSString *)colorHex sizeString:(NSString *)sizeString
 {
+    NSAssert([[[RMConfiguration sharedInstance] accessToken] length], @"an access token is required to use Mapbox markers");
+
     BOOL useRetina = ([[UIScreen mainScreen] scale] > 1.0);
 
     NSURL *imageURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.tiles.mapbox.com/v4/marker/pin-%@%@%@%@.png%@",
