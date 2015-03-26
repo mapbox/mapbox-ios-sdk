@@ -202,7 +202,6 @@
 		4AA8AB581AA0F367007C21F1 /* FMResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = DD56B94D1961E23F00706C67 /* FMResultSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4AA8AB591AA0F367007C21F1 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = DD56B94E1961E23F00706C67 /* FMResultSet.m */; };
 		4AA8AB5A1AA0F36C007C21F1 /* libGRMustache7-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDEDBBCF1A81864800646DBB /* libGRMustache7-iOS.a */; };
-		4AA8AB5B1AA0F36F007C21F1 /* libProj4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD97C11516489678007C4652 /* libProj4.a */; };
 		4AA8AB5C1AA0F373007C21F1 /* SMCalloutView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1E3C6C161F954F004FC649 /* SMCalloutView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4AA8AB5D1AA0F373007C21F1 /* SMCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD1E3C6D161F954F004FC649 /* SMCalloutView.m */; };
 		4AA8AB5E1AA0F373007C21F1 /* SMClassicCalloutView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD5F5F9318C7C03C0085DE98 /* SMClassicCalloutView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -218,6 +217,7 @@
 		4AF3A6D61AA534DA00CD6FAF /* Mapbox_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 4AF3A6D51AA534DA00CD6FAF /* Mapbox_Prefix.pch */; };
 		96492C400FA8AD3400EBA6D2 /* RMGlobalConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 96492C3F0FA8AD3400EBA6D2 /* RMGlobalConstants.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		B1EB26C610B5D8E6009F8658 /* RMNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = B1EB26C510B5D8E6009F8658 /* RMNotifications.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		B3B8A78C1AC42BEE0083E33D /* libProj4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD97C11516489678007C4652 /* libProj4.a */; };
 		B8474BA40EB40094006A0BC1 /* RMDatabaseCache.h in Headers */ = {isa = PBXBuildFile; fileRef = B8474B980EB40094006A0BC1 /* RMDatabaseCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B8474BA50EB40094006A0BC1 /* RMDatabaseCache.m in Sources */ = {isa = PBXBuildFile; fileRef = B8474B990EB40094006A0BC1 /* RMDatabaseCache.m */; };
 		B8474BC10EB4019A006A0BC1 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B8474BC00EB4019A006A0BC1 /* libsqlite3.dylib */; };
@@ -540,6 +540,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3B8A78C1AC42BEE0083E33D /* libProj4.a in Frameworks */,
 				4AF3A6CB1AA512E400CD6FAF /* libz.dylib in Frameworks */,
 				4AF3A6C91AA512C100CD6FAF /* libsqlite3.dylib in Frameworks */,
 				4AA8AB631AA0F3E3007C21F1 /* UIKit.framework in Frameworks */,
@@ -549,7 +550,6 @@
 				4AA8AB611AA0F3D3007C21F1 /* CoreFoundation.framework in Frameworks */,
 				4AA8AB601AA0F3C2007C21F1 /* Foundation.framework in Frameworks */,
 				4AA8AB5A1AA0F36C007C21F1 /* libGRMustache7-iOS.a in Frameworks */,
-				4AA8AB5B1AA0F36F007C21F1 /* libProj4.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1469,7 +1469,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Map/GRMustache/lib",
-					"/Users/florent/src/mapbox-ios-sdk/Proj4",
+					"$(PROJECT_DIR)/../Proj4",
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1520,7 +1520,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Map/GRMustache/lib",
-					"/Users/florent/src/mapbox-ios-sdk/Proj4",
+					"$(PROJECT_DIR)/../Proj4",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
