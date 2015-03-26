@@ -456,11 +456,14 @@
 
 + (NSString *)pathForBundleResourceNamed:(NSString *)name ofType:(NSString *)extension
 {
+#ifndef IOS_FMWK
     NSAssert([[NSBundle mainBundle] pathForResource:@"Mapbox" ofType:@"bundle"], @"Resource bundle not found in application.");
 
     NSString *bundlePath      = [[NSBundle mainBundle] pathForResource:@"Mapbox" ofType:@"bundle"];
     NSBundle *resourcesBundle = [NSBundle bundleWithPath:bundlePath];
-
+#else
+    NSBundle *resourcesBundle= [NSBundle bundleWithIdentifier:@"com.mapbox.MapBox"];
+#endif
     return [resourcesBundle pathForResource:name ofType:extension];
 }
 
@@ -2634,10 +2637,11 @@
 
 - (float)adjustedZoomForRetinaDisplay
 {
-    if (!self.adjustTilesForRetinaDisplay && _screenScale > 1.0 && ! [RMMapboxSource isUsingLargeTiles])
-        return [self zoom] + 1.0;
+    if (!self.adjustTilesForRetinaDisplay && self.screenScale > 1.0 && [RMMapboxSource isUsingLargeTiles]) {
+        return fminf(self.tileSourcesMaxZoom, self.zoom + 1.0);
+    }
 
-    return [self zoom];
+    return self.zoom;
 }
 
 - (RMProjection *)projection
