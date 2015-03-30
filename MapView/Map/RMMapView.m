@@ -477,6 +477,7 @@
     _locationManager.delegate = nil;
     [_locationManager stopUpdatingLocation];
     [_locationManager stopUpdatingHeading];
+    _mapScrollView.delegate = nil; // UIScrollView's delegate is not weak
 }
 
 - (void)didReceiveMemoryWarning
