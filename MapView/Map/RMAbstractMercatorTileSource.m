@@ -68,7 +68,7 @@
 
 - (UIImage *)cachedImageForTile:(RMTile)tile inCache:(RMTileCache *)tileCache {
     NSLog(@"Warning: Tile source: %@ does not implement cachedImageForTile:inCache:", self.description);
-    return (UIImage *)[NSNull null];
+    return nil;
 }
 
 - (BOOL)tileSourceHasTile:(RMTile)tile

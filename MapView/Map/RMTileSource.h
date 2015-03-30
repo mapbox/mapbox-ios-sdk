@@ -106,7 +106,7 @@
  *  @param tile      The map tile required
  *  @param tileCache The tile cache to obtain the image from
  *
- *  @return The tile image, or NSNull if not cached.
+ *  @return The tile image, or nil if not cached.
  */
 - (UIImage *)cachedImageForTile:(RMTile)tile inCache:(RMTileCache *)tileCache;
 

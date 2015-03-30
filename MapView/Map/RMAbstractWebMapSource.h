@@ -62,7 +62,7 @@
  *
  *  @param tile The tile required
  *
- *  @return UIImage if the tile is cached, NSNULL if not.
+ *  @return UIImage if the tile is cached, nil if not.
  */
 -(UIImage *)cachedImageForTile:(RMTile)tile;
 
