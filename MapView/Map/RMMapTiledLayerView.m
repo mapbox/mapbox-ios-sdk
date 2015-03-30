@@ -123,7 +123,7 @@
                     UIImage *tileImage = [_tileSource cachedImageForTile:tile inCache:[_mapView tileCache]];
 
                     // If this tile's image is not present, try to obtain lower resolution tiles from higher zoom levels instead.
-                    if (tileImage == (id)[NSNull null])
+                    if (!tileImage)
                     {
                         if (_mapView.missingTilesDepth == 0)
                         {
@@ -133,7 +133,7 @@
                         {
                             NSUInteger currentTileDepth = 1, currentZoom = zoom - currentTileDepth;
                             
-                            while ((tileImage== (id)[NSNull null]) && currentZoom >= _tileSource.minZoom && currentTileDepth <= _mapView.missingTilesDepth)
+                            while (!tileImage && currentZoom >= _tileSource.minZoom && currentTileDepth <= _mapView.missingTilesDepth)
                             {
                                 float nextX = x / powf(2.0, (float)currentTileDepth),
                                 nextY = y / powf(2.0, (float)currentTileDepth);

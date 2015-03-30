@@ -77,7 +77,7 @@
             return image;
         }
     }
-    return (UIImage *)[NSNull null];
+    return nil;
 }
 
 - (UIImage *)imageForTile:(RMTile)tile inCache:(RMTileCache *)tileCache
