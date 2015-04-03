@@ -1,6 +1,7 @@
 Pod::Spec.new do |m|
 
   m.name    = 'Mapbox-iOS-SDK'
+  m.module_name = 'Mapbox_iOS_SDK'
   m.version = '1.6.0'
 
   m.summary          = 'An open source toolset for building mapping applications for iOS devices.'
@@ -17,6 +18,8 @@ Pod::Spec.new do |m|
   m.ios.deployment_target = '5.0'
 
   m.source_files = 'Proj4/*.h', 'MapView/Map/*.{h,c,m}'
+
+  m.public_header_files = 'MapView/Map/*.h'
 
   m.requires_arc = true
 
