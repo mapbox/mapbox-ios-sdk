@@ -456,11 +456,14 @@
 
 + (NSString *)pathForBundleResourceNamed:(NSString *)name ofType:(NSString *)extension
 {
+#ifndef IOS_FMWK
     NSAssert([[NSBundle mainBundle] pathForResource:@"Mapbox" ofType:@"bundle"], @"Resource bundle not found in application.");
 
     NSString *bundlePath      = [[NSBundle mainBundle] pathForResource:@"Mapbox" ofType:@"bundle"];
     NSBundle *resourcesBundle = [NSBundle bundleWithPath:bundlePath];
-
+#else
+    NSBundle *resourcesBundle= [NSBundle bundleWithIdentifier:@"com.mapbox.MapBox"];
+#endif
     return [resourcesBundle pathForResource:name ofType:extension];
 }
 
@@ -474,6 +477,7 @@
     _locationManager.delegate = nil;
     [_locationManager stopUpdatingLocation];
     [_locationManager stopUpdatingHeading];
+    _mapScrollView.delegate = nil; // UIScrollView's delegate is not weak
 }
 
 - (void)didReceiveMemoryWarning
@@ -2091,8 +2095,9 @@
 
     UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, [[UIScreen mainScreen] scale]);
 
-    for (RMMapTiledLayerView *tiledLayerView in _tiledLayersSuperview.subviews)
+    for (RMMapTiledLayerView *tiledLayerView in _tiledLayersSuperview.subviews) {
         tiledLayerView.useSnapshotRenderer = YES;
+    }
 
     [self.layer renderInContext:UIGraphicsGetCurrentContext()];
 
@@ -2634,10 +2639,11 @@
 
 - (float)adjustedZoomForRetinaDisplay
 {
-    if (!self.adjustTilesForRetinaDisplay && _screenScale > 1.0 && ! [RMMapboxSource isUsingLargeTiles])
-        return [self zoom] + 1.0;
+    if (!self.adjustTilesForRetinaDisplay && self.screenScale > 1.0 && [RMMapboxSource isUsingLargeTiles]) {
+        return fminf(self.tileSourcesMaxZoom, self.zoom + 1.0);
+    }
 
-    return [self zoom];
+    return self.zoom;
 }
 
 - (RMProjection *)projection

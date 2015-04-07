@@ -64,7 +64,12 @@
     @throw [NSException exceptionWithName:@"RMAbstractMethodInvocation"
                                    reason:@"imageForTile:inCache: invoked on RMAbstractMercatorTileSource. Override this method when instantiating an abstract class."
                                  userInfo:nil];
-}    
+}
+
+- (UIImage *)cachedImageForTile:(RMTile)tile inCache:(RMTileCache *)tileCache {
+    NSLog(@"Warning: Tile source: %@ does not implement cachedImageForTile:inCache:", self.description);
+    return nil;
+}
 
 - (BOOL)tileSourceHasTile:(RMTile)tile
 {

@@ -59,6 +59,27 @@
     return [NSArray arrayWithObjects:[self URLForTile:tile], nil];
 }
 
+-(UIImage *)cachedImageForTile:(RMTile)tile inCache:(RMTileCache *)tileCache {
+    __block UIImage *image = nil;
+
+    RMTile normalisedTile = [[self mercatorToTileProjection] normaliseTile:tile];
+
+    // Return nil here so that the RMMapTiledLayerView will try to
+    // fetch another tile if missingTilesDepth > 0
+    if ( ! [self tileSourceHasTile:normalisedTile])
+        return nil;
+
+    if (self.isCacheable)
+    {
+        image = [tileCache cachedImage:normalisedTile withCacheKey:[self uniqueTilecacheKey]];
+        
+        if (image) {
+            return image;
+        }
+    }
+    return nil;
+}
+
 - (UIImage *)imageForTile:(RMTile)tile inCache:(RMTileCache *)tileCache
 {
     __block UIImage *image = nil;

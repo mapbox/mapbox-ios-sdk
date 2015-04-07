@@ -54,4 +54,16 @@
     @return An array of tile URLs to download, listed bottom to top. */
 - (NSArray *)URLsForTile:(RMTile)tile;
 
+/**
+ *  Returns the tile image if it is already cached. This method *does not* make 
+ *  a network request if the tile image isn't already downloaded.
+ *  This is useful for map snapshotting if we don't want to fire off network 
+ *  requests as a side effect of rendering the current map view.
+ *
+ *  @param tile The tile required
+ *
+ *  @return UIImage if the tile is cached, nil if not.
+ */
+-(UIImage *)cachedImageForTile:(RMTile)tile;
+
 @end

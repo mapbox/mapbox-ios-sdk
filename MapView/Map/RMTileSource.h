@@ -99,6 +99,17 @@
 *   @return An image to display. */
 - (UIImage *)imageForTile:(RMTile)tile inCache:(RMTileCache *)tileCache;
 
+/**
+ *  Provide an image for a given tile location in the given cache, but don't make
+ *  a network request if it is not already cached.
+ *
+ *  @param tile      The map tile required
+ *  @param tileCache The tile cache to obtain the image from
+ *
+ *  @return The tile image, or nil if not cached.
+ */
+- (UIImage *)cachedImageForTile:(RMTile)tile inCache:(RMTileCache *)tileCache;
+
 /** Check if the tile source can provide the requested tile.
  *  @param tile The map tile in question.
  *  @return A Boolean value indicating whether the tile source can provide the requested tile. */

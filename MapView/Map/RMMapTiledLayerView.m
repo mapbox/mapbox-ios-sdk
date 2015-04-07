@@ -119,10 +119,60 @@
             {
                 for (int y=y1; y<=y2; ++y)
                 {
-                    UIImage *tileImage = [_tileSource imageForTile:RMTileMake(x, y, zoom) inCache:[_mapView tileCache]];
+                    RMTile tile = RMTileMake(x, y, zoom);
+                    UIImage *tileImage = [_tileSource cachedImageForTile:tile inCache:[_mapView tileCache]];
 
-                    if (IS_VALID_TILE_IMAGE(tileImage))
+                    // If this tile's image is not present, try to obtain lower resolution tiles from higher zoom levels instead.
+                    if (!tileImage)
+                    {
+                        if (_mapView.missingTilesDepth == 0)
+                        {
+                            tileImage = [RMTileImage errorTile];
+                        }
+                        else
+                        {
+                            NSUInteger currentTileDepth = 1, currentZoom = zoom - currentTileDepth;
+                            
+                            while (!tileImage && currentZoom >= _tileSource.minZoom && currentTileDepth <= _mapView.missingTilesDepth)
+                            {
+                                float nextX = x / powf(2.0, (float)currentTileDepth),
+                                nextY = y / powf(2.0, (float)currentTileDepth);
+                                float nextTileX = floor(nextX),
+                                nextTileY = floor(nextY);
+                                
+                                tileImage = [_tileSource cachedImageForTile:RMTileMake((int)nextTileX, (int)nextTileY, currentZoom)
+                                                                    inCache:[_mapView tileCache]];
+                                
+                                if (IS_VALID_TILE_IMAGE(tileImage))
+                                {
+                                    // crop
+                                    float cropSize = 1.0 / powf(2.0, (float)currentTileDepth);
+                                    
+                                    CGRect cropBounds = CGRectMake(tileImage.size.width * (nextX - nextTileX),
+                                                                   tileImage.size.height * (nextY - nextTileY),
+                                                                   tileImage.size.width * cropSize,
+                                                                   tileImage.size.height * cropSize);
+                                    
+                                    CGImageRef imageRef = CGImageCreateWithImageInRect([tileImage CGImage], cropBounds);
+                                    tileImage = [UIImage imageWithCGImage:imageRef];
+                                    CGImageRelease(imageRef);
+                                    
+                                    break;
+                                }
+                                else
+                                {
+                                    tileImage = nil;
+                                }
+                                
+                                currentTileDepth++;
+                                currentZoom = zoom - currentTileDepth;
+                            }
+                        }
+                    }
+                    
+                    if (IS_VALID_TILE_IMAGE(tileImage)) {
                         [tileImage drawInRect:CGRectMake(x * rectSize, y * rectSize, rectSize, rectSize)];
+                    }
                 }
             }
 
