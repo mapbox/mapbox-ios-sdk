@@ -24,7 +24,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-
+#import <Foundation/Foundation.h>
 #import "RMTile.h"
 
 /** An RMCacheObject is a representation of a tile cache for use with the RMMemoryCache in-memory cache storage. While RMDatabaseCache uses a disk-based database backing store, RMMemoryCache maintains first-class objects in memory for use later. */
