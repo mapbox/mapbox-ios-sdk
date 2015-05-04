@@ -506,7 +506,8 @@ typedef enum : NSUInteger {
 
 typedef enum : NSUInteger {
     RMMapUserHeadingSourceCompass = 0, //Default
-    RMMapUserHeadingSourceGPS   = 1
+    RMMapUserHeadingSourceGPS     = 1,
+    RMMapUserHeadingSourceManual  = 2
 } RMMapUserHeadingSource;
 
 /** @name Tracking the User Location */

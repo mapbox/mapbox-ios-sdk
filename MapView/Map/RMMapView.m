@@ -3889,32 +3889,34 @@ static RMProjectedPoint peggedProjectedPoint;
             return;
     }
 
-    self.headingDirection = (newHeading.trueHeading > 0 ? newHeading.trueHeading : newHeading.magneticHeading);
-    
-    if (TARGET_IPHONE_SIMULATOR || self.headingSource == RMMapUserHeadingSourceGPS) {
-        static CLLocation *previousLocation;
+    if (self.headingSource != RMMapUserHeadingSourceManual) {
+        self.headingDirection = (newHeading.trueHeading > 0 ? newHeading.trueHeading : newHeading.magneticHeading);
         
-        CLLocationDistance headingUpdateDistanceThreshold = (previousLocation.horizontalAccuracy + self.userLocation.location.horizontalAccuracy) / 2;
-        
-        if (previousLocation &&
-            previousLocation.coordinate.latitude != self.userLocation.coordinate.latitude &&
-            [previousLocation distanceFromLocation:self.userLocation.location] > headingUpdateDistanceThreshold) {
-            CLLocationDirection course = [self bearingFromLocation:previousLocation toLocation:self.userLocation.location];
+        if (TARGET_IPHONE_SIMULATOR || self.headingSource == RMMapUserHeadingSourceGPS) {
+            static CLLocation *previousLocation;
             
-            if (fabs(course) > 0) {
-                self.headingDirection = course;
-            }
-        } else {
-            if (!previousLocation) {
-                previousLocation = self.userLocation.location;
+            CLLocationDistance headingUpdateDistanceThreshold = (previousLocation.horizontalAccuracy + self.userLocation.location.horizontalAccuracy) / 2;
+            
+            if (previousLocation &&
+                previousLocation.coordinate.latitude != self.userLocation.coordinate.latitude &&
+                [previousLocation distanceFromLocation:self.userLocation.location] > headingUpdateDistanceThreshold) {
+                CLLocationDirection course = [self bearingFromLocation:previousLocation toLocation:self.userLocation.location];
+                
+                if (fabs(course) > 0) {
+                    self.headingDirection = course;
+                }
+            } else {
+                if (!previousLocation) {
+                    previousLocation = self.userLocation.location;
+                }
+                
+                return; //Can't update heading now because the data is bad
             }
             
-            return; //Can't update heading now because the data is bad
+            previousLocation = self.userLocation.location;
         }
-        
-        previousLocation = self.userLocation.location;
     }
-
+    
     if (self.headingDirection != 0 && self.userTrackingMode == RMUserTrackingModeFollowWithHeading)
     {
         if (_userHeadingTrackingView.alpha < 1.0)

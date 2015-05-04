@@ -459,12 +459,14 @@
             if (!enclosedAnnotations)
                 enclosedAnnotations = [self enclosedWithoutUnclusteredAnnotations];
 
-            @synchronized (_cachedClusterAnnotation)
-            {
-                if (_cachedClusterAnnotation && [enclosedAnnotations count] != [_cachedClusterEnclosedAnnotations count])
+            if (_cachedClusterAnnotation) {
+                @synchronized (_cachedClusterAnnotation)
                 {
-                     _cachedClusterEnclosedAnnotations = nil;
-                     _cachedClusterAnnotation = nil;
+                    if ([enclosedAnnotations count] != [_cachedClusterEnclosedAnnotations count])
+                    {
+                        _cachedClusterEnclosedAnnotations = nil;
+                        _cachedClusterAnnotation = nil;
+                    }
                 }
             }
 
