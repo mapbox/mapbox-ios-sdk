@@ -74,6 +74,12 @@ typedef enum : NSUInteger {
 
 /** @name Configuring Map Behavior */
 
+/** A Boolean value that determines whether the user may rotate the map
+ *
+ * The default value of this property is `NO`.
+ */
+@property (nonatomic, assign) BOOL rotationEnabled;
+
 /** A Boolean value that determines whether the user may scroll around the map.
 *
 *   This property controls only user interactions with the map. If you set the value of this property to `NO`, you may still change the map location programmatically.

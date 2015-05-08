@@ -181,7 +181,7 @@
     CGSize _lastContentSize;
     BOOL _mapScrollViewIsZooming;
 
-    BOOL _draggingEnabled, _bouncingEnabled;
+    BOOL _draggingEnabled, _bouncingEnabled, _rotationEnabled;
 
     RMAnnotation *_draggedAnnotation;
     CGPoint _dragOffset;
@@ -249,7 +249,7 @@
 {
     _constrainMovement = _constrainMovementByUser = _bouncingEnabled = _zoomingInPivotsAroundCenter = NO;
     _draggingEnabled = YES;
-
+    _rotationEnabled = NO;
     _draggedAnnotation = nil;
 
     self.backgroundColor = (RMPostVersion6 ? [UIColor colorWithRed:0.970 green:0.952 blue:0.912 alpha:1.000] : [UIColor grayColor]);
@@ -2593,6 +2593,64 @@
         decelerationRate = UIScrollViewDecelerationRateFast;
 
     [_mapScrollView setDecelerationRate:decelerationRate];
+}
+
+- (BOOL) rotationEnabled
+{
+    return _rotationEnabled;
+}
+
+- (void) setRotationEnabled:(BOOL)enableRotation
+{
+    _rotationEnabled = enableRotation;
+    
+    UIGestureRecognizer *rotationRecognizer = nil;
+    for(UIGestureRecognizer *recognizer in [self gestureRecognizers]) {
+        if([recognizer isMemberOfClass:[UIRotationGestureRecognizer class]]) {
+            rotationRecognizer = recognizer;
+            break;
+        }
+    }
+    
+    if(rotationRecognizer) {
+        [self removeGestureRecognizer:rotationRecognizer];
+    }
+    
+    if(enableRotation) {
+        rotationRecognizer = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(handleRotation:)];
+        rotationRecognizer.delegate = self;
+        [self addGestureRecognizer:rotationRecognizer];
+    }
+    
+}
+
+- (void) handleRotation:(UIRotationGestureRecognizer*) recognizer {
+    
+    [CATransaction begin];
+    [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
+    _mapScrollView.transform = CGAffineTransformRotate(_mapScrollView.transform,
+                                                       recognizer.rotation);
+    
+    _overlayView.transform = CGAffineTransformRotate(_overlayView.transform,
+                                                     recognizer.rotation);
+    
+    _compassButton.transform = CGAffineTransformRotate(_compassButton.transform,
+                                                       recognizer.rotation);
+    
+    _annotationTransform = CATransform3DMakeAffineTransform(CGAffineTransformMakeRotation(-recognizer.rotation));
+    
+    for (RMAnnotation *annotation in _annotations)
+        if ([annotation.layer isKindOfClass:[RMMarker class]])
+            annotation.layer.transform = _annotationTransform;
+    
+    [self correctPositionOfAllAnnotations];
+    
+    
+    [CATransaction commit];
+    
+    
+    [recognizer setRotation:0];
+    
 }
 
 - (BOOL)draggingEnabled
