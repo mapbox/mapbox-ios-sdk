@@ -48,6 +48,8 @@ Pod::Spec.new do |m|
     'MapView/Map/RMMapView.h',
     'MapView/Map/RMMapViewDelegate.h',
     'MapView/Map/RMMapOverlayView.h',
+    'MapView/Map/RMMapTiledLayerView.h',
+    'MapView/Map/RMMapScrollView.h',
     'MapView/Map/RMMarker.h',
     'MapView/Map/RMMemoryCache.h',
     'MapView/Map/RMPointAnnotation.h',
@@ -61,6 +63,7 @@ Pod::Spec.new do |m|
     'MapView/Map/RMTileCache.h',
     'MapView/Map/RMTileMillSource.h',
     'MapView/Map/RMTileSource.h',
+    'MapView/Map/RMTileSourcesContainer.h',
     'MapView/Map/RMUserLocation.h',
     'MapView/Map/RMUserTrackingBarButtonItem.h'
   ]
