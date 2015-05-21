@@ -28,6 +28,7 @@ Pod::Spec.new do |m|
 
   m.public_header_files = [
     'MapView/Map/Mapbox.h',
+    'MapView/Map/RMAbstractMercatorTileSource.h',
     'MapView/Map/RMAnnotation.h',
     'MapView/Map/RMCacheObject.h',
     'MapView/Map/RMCircle.h',
