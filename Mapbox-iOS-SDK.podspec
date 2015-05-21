@@ -40,6 +40,7 @@ Pod::Spec.new do |m|
     'MapView/Map/RMDatabaseCache.h',
     'MapView/Map/RMFractalTileProjection.h',
     'MapView/Map/RMFoundation.h',
+    'MapView/Map/RMGenericMapSource.h',
     'MapView/Map/RMGlobalConstants.h',
     'MapView/Map/RMGreatCircleAnnotation.h',
     'MapView/Map/RMInteractiveSource.h',
