@@ -36,6 +36,7 @@ Pod::Spec.new do |m|
     'MapView/Map/RMConfiguration.h',
     'MapView/Map/RMCoordinateGridSource.h',
     'MapView/Map/RMDatabaseCache.h',
+    'MapView/Map/RMFoundation.h',
     'MapView/Map/RMGreatCircleAnnotation.h',
     'MapView/Map/RMInteractiveSource.h',
     'MapView/Map/RMMBTilesSource.h',
