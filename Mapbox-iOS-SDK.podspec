@@ -41,6 +41,7 @@ Pod::Spec.new do |m|
     'MapView/Map/RMInteractiveSource.h',
     'MapView/Map/RMMBTilesSource.h',
     'MapView/Map/RMMapboxSource.h',
+    'MapView/Map/RMMapLayer.h',
     'MapView/Map/RMMapView.h',
     'MapView/Map/RMMapViewDelegate.h',
     'MapView/Map/RMMarker.h',
