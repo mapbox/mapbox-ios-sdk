@@ -56,6 +56,7 @@ Pod::Spec.new do |m|
     'MapView/Map/RMTile.h',
     'MapView/Map/RMTileCache.h',
     'MapView/Map/RMTileMillSource.h',
+    'MapView/Map/RMTileSource.h',
     'MapView/Map/RMUserLocation.h',
     'MapView/Map/RMUserTrackingBarButtonItem.h'
   ]
