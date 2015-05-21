@@ -50,6 +50,7 @@ Pod::Spec.new do |m|
     'MapView/Map/RMPolygonAnnotation.h',
     'MapView/Map/RMPolylineAnnotation.h',
     'MapView/Map/RMShape.h',
+    'MapView/Map/RMShapeAnnotation.h',
     'MapView/Map/RMStaticMapView.h',
     'MapView/Map/RMTile.h',
     'MapView/Map/RMTileCache.h',
