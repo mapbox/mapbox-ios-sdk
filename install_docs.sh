@@ -11,7 +11,7 @@ echo
 
 appledoc \
     --output /tmp/`uuidgen` \
-    --project-name "Mapbox $VERSION" \
+    --project-name "Mapbox iOS SDK $VERSION" \
     --project-company Mapbox \
     --create-docset \
     --company-id com.mapbox \

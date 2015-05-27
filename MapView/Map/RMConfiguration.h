@@ -32,17 +32,19 @@
 
 /** @name Accessing the Configuration */
 
+/** Access the shared instance of the configuration.
+*   @return The shared configuration instance. */
++ (instancetype)sharedInstance;
+
 /** Access the shared instance of the configuration. 
 *   @return The shared configuration instance. */
-+ (instancetype)configuration;
++ (instancetype)configuration DEPRECATED_MSG_ATTRIBUTE("use +[RMConfiguration sharedInstance]");
 
 - (RMConfiguration *)initWithPath:(NSString *)path;
 
 /** @name Authorizing Access */
 
-/** A Mapbox API access token. Obtain an access token on your [Mapbox account page](https://www.mapbox.com/account/apps/). Setting an access token will use Mapbox's `v4` API, otherwise `v3` will be used. At a future date, `v3` support will be phased out of the library. 
-*
-*   @warning Use of the Mapbox `v4` API on retina devices will use `512px` map tile images instead of `256px`, which won't be able to be composited with other tile sources that are not also `512px` in size. */
+/** A Mapbox API access token. Obtain an access token on your [Mapbox account page](https://www.mapbox.com/account/apps/). */
 @property (nonatomic, retain) NSString *accessToken;
 
 /** @name Cache Configuration */

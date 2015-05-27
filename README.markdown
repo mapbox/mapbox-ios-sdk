@@ -1,7 +1,7 @@
 Mapbox iOS SDK
 --------------
 
-Based on the Route-Me iOS map library (Alpstein fork) with [Mapbox][mapbox] customizations. 
+Based on the Route-Me iOS map library (Alpstein fork) with [Mapbox](http://mapbox.com) customizations. 
 
 Requires iOS 5 or greater (includes iOS 7+ support at runtime), Xcode 5.0 or greater, and ARC.
 
@@ -28,8 +28,6 @@ Major differences from [Alpstein fork of Route-Me](https://github.com/Alpstein/r
  * A few added defaults for convenience. 
  * Improved documentation. 
 
-[mapbox]: http://mapbox.com
-
 Keep your eye also on [Mapbox GL](https://www.mapbox.com/blog/mapbox-gl/), the future of our rendering technology. We are aiming to have a clear upgrade path between existing toolsets and GL as it matures. Read more in the [Mapbox GL Cocoa FAQ](https://github.com/mapbox/mapbox-gl-cocoa/blob/master/FAQ.md). 
 
 Route-Me
@@ -37,14 +35,9 @@ Route-Me
 
 Route-Me is an open source map library that runs natively on iOS.  It's designed to look and feel much like the built-in iOS map library, but it's entirely open, and works with any map source using a pluggable backend system. 
 
-Supported map tile sources include [Mapbox][1]/[TileStream][2], the offline-capable, database-backed format [MBTiles][3], [OpenStreetMap][4], and several others. 
+Supported map tile sources include [Mapbox](http://mapbox.com/developers/api/)/[TileStream](https://github.com/mapbox/tilestream), the offline-capable, database-backed format [MBTiles](http://mbtiles.org), [OpenStreetMap](http://www.openstreetmap.org), and several others. 
 
 Please note that you are responsible for getting permission to use the map data, and for ensuring your use adheres to the relevant terms of use.
-
-   [1]: http://mapbox.com/developers/api/
-   [2]: https://github.com/mapbox/tilestream
-   [3]: http://mbtiles.org
-   [4]: http://www.openstreetmap.org
 
 Installation
 ------------

@@ -472,9 +472,9 @@
 
 + (NSString *)pathForBundleResourceNamed:(NSString *)name ofType:(NSString *)extension
 {
-    NSAssert([[NSBundle mainBundle] pathForResource:@"Mapbox" ofType:@"bundle"], @"Resource bundle not found in application.");
+    NSAssert([[NSBundle bundleForClass:[self class]] pathForResource:@"Mapbox" ofType:@"bundle"], @"Resource bundle not found in application.");
 
-    NSString *bundlePath      = [[NSBundle mainBundle] pathForResource:@"Mapbox" ofType:@"bundle"];
+    NSString *bundlePath      = [[NSBundle bundleForClass:[self class]] pathForResource:@"Mapbox" ofType:@"bundle"];
     NSBundle *resourcesBundle = [NSBundle bundleWithPath:bundlePath];
 
     return [resourcesBundle pathForResource:name ofType:extension];
@@ -899,8 +899,6 @@
 
     myOrigin.x = myOrigin.x - (zoomRect.size.width / 2);
     myOrigin.y = myOrigin.y - (zoomRect.size.height / 2);
-
-    RMLog(@"Origin is calculated at: %f, %f", [_projection projectedPointToCoordinate:myOrigin].longitude, [_projection projectedPointToCoordinate:myOrigin].latitude);
 
     zoomRect.origin = myOrigin;
 
@@ -3452,7 +3450,9 @@ static RMProjectedPoint peggedProjectedPoint;
         //
         if ([CLLocationManager instancesRespondToSelector:@selector(requestWhenInUseAuthorization)])
         {
-            NSAssert([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"], @"For iOS 8 and above, your app must have a value for NSLocationWhenInUseUsageDescription in its Info.plist");
+            BOOL hasLocationDescription = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"] ||
+                [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"];
+            NSAssert(hasLocationDescription, @"For iOS 8 and above, your app must have a value for NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription in its Info.plist");
             [_locationManager requestWhenInUseAuthorization];
         }
 #endif

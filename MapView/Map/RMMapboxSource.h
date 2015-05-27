@@ -60,6 +60,8 @@ typedef enum : NSUInteger {
 
 /** @name Creating Tile Sources */
 
+- (id)init DEPRECATED_MSG_ATTRIBUTE("please use an explicit map ID, URL, or TileJSON string.");
+
 /** Initialize a tile source using the Mapbox map ID.
 *
 *   This method requires a network connection in order to download the TileJSON used to define the tile source. 

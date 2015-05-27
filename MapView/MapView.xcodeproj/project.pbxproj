@@ -93,7 +93,6 @@
 		DD1985C2165C5F6400DF667F /* RMTileMillSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DD1985C0165C5F6400DF667F /* RMTileMillSource.m */; };
 		DD1E3C6E161F954F004FC649 /* SMCalloutView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1E3C6C161F954F004FC649 /* SMCalloutView.h */; };
 		DD1E3C6F161F954F004FC649 /* SMCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD1E3C6D161F954F004FC649 /* SMCalloutView.m */; };
-		DD280D1416EFDDD30014B549 /* examples.map-z2effxa8.json in Resources */ = {isa = PBXBuildFile; fileRef = DD280D1216EFDDD30014B549 /* examples.map-z2effxa8.json */; };
 		DD2B375514CF8197008DE8CB /* RMMBTilesSource.h in Headers */ = {isa = PBXBuildFile; fileRef = DD2B375314CF8197008DE8CB /* RMMBTilesSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD2B375614CF8197008DE8CB /* RMMBTilesSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B375414CF8197008DE8CB /* RMMBTilesSource.m */; };
 		DD36766B17D94F980001F27B /* mapbox-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD36766A17D94F980001F27B /* mapbox-logo@2x.png */; };
@@ -123,7 +122,6 @@
 		DD63176017D1506D008CA79B /* RMGreatCircleAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = DD63175E17D1506D008CA79B /* RMGreatCircleAnnotation.m */; };
 		DD63176317D15EB5008CA79B /* RMCircleAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = DD63176117D15EB5008CA79B /* RMCircleAnnotation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD63176417D15EB5008CA79B /* RMCircleAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = DD63176217D15EB5008CA79B /* RMCircleAnnotation.m */; };
-		DD63DD531811AD0B00726E03 /* libGRMustache6-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD63DD521811AD0B00726E03 /* libGRMustache6-iOS.a */; };
 		DD7C7E38164C894F0021CCA5 /* RMStaticMapView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD7C7E36164C894F0021CCA5 /* RMStaticMapView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD7C7E39164C894F0021CCA5 /* RMStaticMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD7C7E37164C894F0021CCA5 /* RMStaticMapView.m */; };
 		DD8CDB4A14E0507100B73EB9 /* RMMapQuestOSMSource.h in Headers */ = {isa = PBXBuildFile; fileRef = DD8CDB4814E0507100B73EB9 /* RMMapQuestOSMSource.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -175,6 +173,7 @@
 		DDE357F816522CD8001DB842 /* RMPolygonAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = DDE357F616522CD8001DB842 /* RMPolygonAnnotation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDE357F916522CD8001DB842 /* RMPolygonAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = DDE357F716522CD8001DB842 /* RMPolygonAnnotation.m */; };
 		DDE68E5A17D94C0500F1E869 /* mapbox-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE68E5917D94C0500F1E869 /* mapbox-logo.png */; };
+		DDEDBBD01A81864800646DBB /* libGRMustache7-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDEDBBCF1A81864800646DBB /* libGRMustache7-iOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -277,7 +276,6 @@
 		DD1985C0165C5F6400DF667F /* RMTileMillSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMTileMillSource.m; sourceTree = "<group>"; };
 		DD1E3C6C161F954F004FC649 /* SMCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMCalloutView.h; path = SMCalloutView/SMCalloutView.h; sourceTree = "<group>"; };
 		DD1E3C6D161F954F004FC649 /* SMCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SMCalloutView.m; path = SMCalloutView/SMCalloutView.m; sourceTree = "<group>"; };
-		DD280D1216EFDDD30014B549 /* examples.map-z2effxa8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "examples.map-z2effxa8.json"; path = "Map/Resources/examples.map-z2effxa8.json"; sourceTree = "<group>"; };
 		DD2B375314CF8197008DE8CB /* RMMBTilesSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMMBTilesSource.h; sourceTree = "<group>"; };
 		DD2B375414CF8197008DE8CB /* RMMBTilesSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMMBTilesSource.m; sourceTree = "<group>"; };
 		DD36766A17D94F980001F27B /* mapbox-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "mapbox-logo@2x.png"; path = "Map/Resources/mapbox-logo@2x.png"; sourceTree = "<group>"; };
@@ -307,7 +305,6 @@
 		DD63175E17D1506D008CA79B /* RMGreatCircleAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMGreatCircleAnnotation.m; sourceTree = "<group>"; };
 		DD63176117D15EB5008CA79B /* RMCircleAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMCircleAnnotation.h; sourceTree = "<group>"; };
 		DD63176217D15EB5008CA79B /* RMCircleAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMCircleAnnotation.m; sourceTree = "<group>"; };
-		DD63DD521811AD0B00726E03 /* libGRMustache6-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGRMustache6-iOS.a"; path = "GRMustache/lib/libGRMustache6-iOS.a"; sourceTree = "<group>"; };
 		DD6A83751644A20C0097F31F /* Mapbox.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Mapbox.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD7C7E36164C894F0021CCA5 /* RMStaticMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMStaticMapView.h; sourceTree = "<group>"; };
 		DD7C7E37164C894F0021CCA5 /* RMStaticMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMStaticMapView.m; sourceTree = "<group>"; };
@@ -360,6 +357,7 @@
 		DDE357F616522CD8001DB842 /* RMPolygonAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMPolygonAnnotation.h; sourceTree = "<group>"; };
 		DDE357F716522CD8001DB842 /* RMPolygonAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMPolygonAnnotation.m; sourceTree = "<group>"; };
 		DDE68E5917D94C0500F1E869 /* mapbox-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "mapbox-logo.png"; path = "Map/Resources/mapbox-logo.png"; sourceTree = "<group>"; };
+		DDEDBBCF1A81864800646DBB /* libGRMustache7-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGRMustache7-iOS.a"; path = "GRMustache/lib/libGRMustache7-iOS.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -373,7 +371,7 @@
 				B8C974530E8A19B2007D16AD /* UIKit.framework in Frameworks */,
 				B8C974540E8A19B2007D16AD /* QuartzCore.framework in Frameworks */,
 				B8474BC10EB4019A006A0BC1 /* libsqlite3.dylib in Frameworks */,
-				DD63DD531811AD0B00726E03 /* libGRMustache6-iOS.a in Frameworks */,
+				DDEDBBD01A81864800646DBB /* libGRMustache7-iOS.a in Frameworks */,
 				DD97C11616489678007C4652 /* libProj4.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -652,7 +650,6 @@
 		DD932BC1165C287600D69D49 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				DD280D1216EFDDD30014B549 /* examples.map-z2effxa8.json */,
 				DD932BA5165C287000D69D49 /* mapbox.png */,
 				DD932BA6165C287000D69D49 /* mapbox@2x.png */,
 				DDE68E5917D94C0500F1E869 /* mapbox-logo.png */,
@@ -718,7 +715,7 @@
 		DDC4BEEE152E3DEC00089409 /* GRMustache */ = {
 			isa = PBXGroup;
 			children = (
-				DD63DD521811AD0B00726E03 /* libGRMustache6-iOS.a */,
+				DDEDBBCF1A81864800646DBB /* libGRMustache7-iOS.a */,
 			);
 			name = GRMustache;
 			path = Map;
@@ -911,7 +908,6 @@
 				DD07A23D17F3AF9800E420B2 /* HeadingAngleMaskLarge@2x.png in Resources */,
 				DD94D46C16C2E064003D5739 /* HeadingAngleMedium.png in Resources */,
 				DD94D46D16C2E064003D5739 /* HeadingAngleMedium@2x.png in Resources */,
-				DD280D1416EFDDD30014B549 /* examples.map-z2effxa8.json in Resources */,
 				DD07A23B17F3AF9800E420B2 /* HeadingAngleMaskSmall@2x.png in Resources */,
 				DD36766B17D94F980001F27B /* mapbox-logo@2x.png in Resources */,
 				DDA257021798A95600BBB325 /* TrackingLocationOffMask@2x.png in Resources */,

@@ -92,7 +92,7 @@
     [_queue inDatabase:^(FMDatabase *db) {
         [[db executeQuery:@"PRAGMA synchronous=OFF"] close];
         [[db executeQuery:@"PRAGMA journal_mode=OFF"] close];
-        [[db executeQuery:@"PRAGMA cache-size=100"] close];
+        [[db executeQuery:@"PRAGMA cache_size=100"] close];
         [[db executeQuery:@"PRAGMA count_changes=OFF"] close];
         [db executeUpdate:@"CREATE TABLE IF NOT EXISTS ZCACHE (tile_hash INTEGER NOT NULL, cache_key VARCHAR(25) NOT NULL, last_used DOUBLE NOT NULL, data BLOB NOT NULL)"];
         [db executeUpdate:@"CREATE UNIQUE INDEX IF NOT EXISTS main_index ON ZCACHE(tile_hash, cache_key)"];
@@ -110,8 +110,6 @@
     _writeQueue = [NSOperationQueue new];
     [_writeQueue setMaxConcurrentOperationCount:1];
     _writeQueueLock = [NSRecursiveLock new];
-
-	RMLog(@"Opening database at %@", path);
 
     _queue = [FMDatabaseQueue databaseQueueWithPath:path];
 

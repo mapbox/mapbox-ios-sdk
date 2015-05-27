@@ -1,6 +1,32 @@
 Changelog
 ---------
 
+### 1.6.1
+#### April 25, 2015
+
+  - Allow requirement for iOS 8 location services to be satisified both "always" and "when in use" modes. 
+  - Fixed a bug when checking the types of tile sources that can be taken offline. 
+  - Better developer warnings around when a Mapbox access token is required. 
+  - Fixed a visual glitch with the user location dot. 
+  - Improvements and fixes to CocoaPods installation method. 
+
+### 1.6.0
+#### February 4, 2015
+
+  - Removed support for Mapbox `v3` API and require [access tokens](https://www.mapbox.com/developers/api/#access-tokens). 
+  - Fixed a small bug with database caching which was also causing an error in the console log. 
+  - Reduced console log verbosity. 
+  - Deprecated the `-[RMMapboxSource init]` convenience initializer since tokens are now required. 
+  - Updated the included GRMustache from 6.8.3 to 7.3.0. 
+  - Documentation improvements. 
+
+### 1.5.1
+#### January 28, 2015
+
+  - Deprecated `+[RMConfiguration configuration]` in favor of the Swift-friendly and better-looking `+[RMConfiguration sharedInstance]`. 
+  - Fixed a bug in the docs removal script. 
+  - Documentation improvements. 
+
 ### 1.5.0
 #### January 16, 2015
 
