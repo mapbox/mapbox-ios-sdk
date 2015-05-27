@@ -1674,7 +1674,7 @@ static RMProjectedPoint peggedProjectedPoint;
             if (_mapScrollViewIsZooming)
                 [self correctPositionOfAllAnnotationsIncludingInvisibles:NO animated:YES];
             else
-                [self correctPositionOfAllAnnotations];
+                [self correctPositionOfAllAnnotationsIncludingInvisibles:!_updateOnlyVisibleAnnotationsWhilePanning animated:NO];
         }
     }
     else

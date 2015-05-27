@@ -533,6 +533,9 @@ typedef enum : NSUInteger {
 /** Location and heading animation duration. Can be used to smooth out the display for navigation */
 @property (nonatomic, assign) NSTimeInterval positionUpdateAnimationDuration;
 
+/** Decides whether only visible annotations should be updated while moving the map. Can improve performance when there are a lot of annotations. */
+@property (nonatomic, assign) BOOL updateOnlyVisibleAnnotationsWhilePanning;
+
 /** The annotation object representing the user’s current location. (read-only) */
 @property (nonatomic, readonly) RMUserLocation *userLocation;
 
