@@ -536,6 +536,9 @@ typedef enum : NSUInteger {
 /** Decides whether only visible annotations should be updated while moving the map. Can improve performance when there are a lot of annotations. */
 @property (nonatomic, assign) BOOL updateOnlyVisibleAnnotationsWhilePanning;
 
+/** Where the map was last touched regardless of what was touched */
+@property (nonatomic, assign) CGPoint lastTouchPoint;
+
 /** The annotation object representing the user’s current location. (read-only) */
 @property (nonatomic, readonly) RMUserLocation *userLocation;
 

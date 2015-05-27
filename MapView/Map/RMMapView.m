@@ -1714,6 +1714,8 @@ static RMProjectedPoint peggedProjectedPoint;
 
 - (void)handleSingleTap:(UIGestureRecognizer *)recognizer
 {
+    self.lastTouchPoint = [recognizer locationInView:self];
+    
     CALayer *hit = [_overlayView overlayHitTest:[recognizer locationInView:self]];
 
     if (_currentAnnotation && ! [hit isEqual:_currentAnnotation.layer])
