@@ -304,7 +304,9 @@
 
     @synchronized (_annotations)
     {
-        [_annotations removeObject:annotation];
+        if ([_annotations containsObject:annotation]) {
+            [_annotations removeObject:annotation];
+        }
     }
 
     [self removeUpwardsAllCachedClusterAnnotations];
