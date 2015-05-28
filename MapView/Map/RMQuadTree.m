@@ -405,6 +405,11 @@
       andProjectedClusterMarkerSize:(RMProjectedSize)clusterMarkerSize
                   findGravityCenter:(BOOL)findGravityCenter
 {
+    // Avoid nasty crash
+    if (!someArray || !_annotations) {
+        return;
+    }
+    
     if (createClusterAnnotations)
     {
         double halfWidth     = _boundingBox.size.width / 2.0;
@@ -575,7 +580,7 @@
     {
         for (RMAnnotation *annotation in _annotations)
         {
-            if (RMProjectedRectIntersectsProjectedRect(aBoundingBox, annotation.projectedBoundingBox))
+            if ([annotation respondsToSelector:@selector(projectedBoundingBox)] && RMProjectedRectIntersectsProjectedRect(aBoundingBox, annotation.projectedBoundingBox))
                 [someArray addObject:annotation];
         }
     }
