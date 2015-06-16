@@ -87,7 +87,6 @@
 - (void)registerZoomEventByUser:(BOOL)wasUserEvent;
 - (void)completeZoomEventAfterDelay:(NSTimeInterval)delay;
 
-- (void)correctPositionOfAllAnnotations;
 - (void)correctPositionOfAllAnnotationsIncludingInvisibles:(BOOL)correctAllLayers animated:(BOOL)animated;
 - (void)correctOrderingOfAllAnnotations;
 
@@ -130,6 +129,7 @@
 {
     BOOL _delegateHasBeforeMapMove;
     BOOL _delegateHasAfterMapMove;
+    BOOL _delegateHasMapMoves;
     BOOL _delegateHasBeforeMapZoom;
     BOOL _delegateHasAfterMapZoom;
     BOOL _delegateHasMapViewRegionDidChange;
@@ -203,6 +203,7 @@
     CGAffineTransform _mapTransform;
     CATransform3D _annotationTransform;
 
+    NSOperationQueue *_movesDelegateQueue;
     NSOperationQueue *_moveDelegateQueue;
     NSOperationQueue *_zoomDelegateQueue;
 
@@ -286,6 +287,9 @@
     _clusterMarkerSize = CGSizeMake(100.0, 100.0);
     _clusterAreaSize = CGSizeMake(150.0, 150.0);
 
+    _movesDelegateQueue = [NSOperationQueue new];
+    [_movesDelegateQueue setMaxConcurrentOperationCount:1];
+    
     _moveDelegateQueue = [NSOperationQueue new];
     [_moveDelegateQueue setMaxConcurrentOperationCount:1];
 
@@ -483,6 +487,7 @@
 - (void)dealloc
 {
     _currentCallout.delegate = nil;
+    [_movesDelegateQueue cancelAllOperations];
     [_moveDelegateQueue cancelAllOperations];
     [_zoomDelegateQueue cancelAllOperations];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -705,6 +710,7 @@
 
     _delegateHasBeforeMapMove = [_delegate respondsToSelector:@selector(beforeMapMove:byUser:)];
     _delegateHasAfterMapMove  = [_delegate respondsToSelector:@selector(afterMapMove:byUser:)];
+    _delegateHasMapMoves = [_delegate respondsToSelector:@selector(mapMoves:byUser:)];
 
     _delegateHasBeforeMapZoom = [_delegate respondsToSelector:@selector(beforeMapZoom:byUser:)];
     _delegateHasAfterMapZoom  = [_delegate respondsToSelector:@selector(afterMapZoom:byUser:)];
@@ -739,6 +745,21 @@
     _delegateHasDidUpdateUserLocation = [_delegate respondsToSelector:@selector(mapView:didUpdateUserLocation:)];
     _delegateHasDidFailToLocateUserWithError = [_delegate respondsToSelector:@selector(mapView:didFailToLocateUserWithError:)];
     _delegateHasDidChangeUserTrackingMode = [_delegate respondsToSelector:@selector(mapView:didChangeUserTrackingMode:animated:)];
+}
+
+- (void)registerMovesEventByUser:(BOOL)wasUserEvent
+{
+    @synchronized (_movesDelegateQueue)
+    {
+        BOOL flag = wasUserEvent;
+        __weak RMMapView *weakSelf = self;
+        __weak id<RMMapViewDelegate> weakDelegate = _delegate;
+        BOOL hasMapMoves = _delegateHasMapMoves;
+        
+        if (hasMapMoves) {
+            [weakDelegate mapMoves:weakSelf byUser:flag];
+        }
+    }
 }
 
 - (void)registerMoveEventByUser:(BOOL)wasUserEvent
@@ -1528,6 +1549,9 @@ static RMProjectedPoint peggedProjectedPoint;
             [self setCenterProjectedPoint:peggedProjectedPoint animated:NO];
         });
     }
+    
+    
+    [self registerMovesEventByUser:YES];
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView

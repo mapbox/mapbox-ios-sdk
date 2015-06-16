@@ -574,4 +574,7 @@ typedef enum : NSUInteger {
 /** Set new long press duration instead of default value */
 - (void)setLongPressDuration:(float)longPressDuration;
 
+/** To be able to correct the positions of all annotations */
+- (void)correctPositionOfAllAnnotations;
+
 @end

@@ -117,6 +117,11 @@ typedef enum : NSUInteger {
 
 /** @name Responding to Map Position Changes */
 
+/** Tells the delegate when a map is moving.
+ *   @param map The map view that is moving.
+ *   @param wasUserAction A Boolean indicating whether the map move was in response to a user action or not. */
+- (void)mapMoves:(RMMapView *)map byUser:(BOOL)wasUserAction;
+
 /** Tells the delegate when a map is about to move. 
 *   @param map The map view that is about to move.
 *   @param wasUserAction A Boolean indicating whether the map move is in response to a user action or not. */
