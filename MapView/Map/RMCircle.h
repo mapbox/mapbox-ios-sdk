@@ -73,4 +73,7 @@
 *   @param newRadiusInMeters The radius of the circle object in projected meters. Regardless of map zoom, the circle will change visible size to continously represent this radius on the map. */
 - (id)initWithView:(RMMapView *)aMapView radiusInMeters:(CGFloat)newRadiusInMeters;
 
+/** Update a circle with animation during a specific interval. */
+- (void)updateCirclePathWithDuration:(CFTimeInterval)duration;
+
 @end
