@@ -68,6 +68,7 @@
 {
     RMProjectedRect _boundingBox, _northWestBoundingBox, _northEastBoundingBox, _southWestBoundingBox, _southEastBoundingBox;
     NSMutableArray *_annotations;
+    NSLock *_annotationsLock;
     __weak RMQuadTreeNode *_parentNode;
     RMQuadTreeNode *_northWest, *_northEast, *_southWest, *_southEast;
     RMQuadTreeNodeType _nodeType;
@@ -97,6 +98,7 @@
     _parentNode = aParentNode;
     _northWest = _northEast = _southWest = _southEast = nil;
     _annotations = [NSMutableArray new];
+    _annotationsLock = [NSLock new];
     _boundingBox = aBoundingBox;
     _cachedClusterAnnotation = nil;
     _cachedClusterEnclosedAnnotations = nil;
@@ -234,6 +236,7 @@
         [_southEast precreateQuadTreeInBounds:quadTreeBounds withDepth:quadTreeDepth-1];
     }
 
+    [_annotationsLock lock];
     if (_nodeType == nodeTypeLeaf && [_annotations count])
     {
         NSArray *immutableAnnotations = nil;
@@ -243,11 +246,14 @@
             immutableAnnotations = [NSArray arrayWithArray:_annotations];
             [_annotations removeAllObjects];
         }
+        [_annotationsLock unlock];
 
         for (RMAnnotation *annotationToMove in immutableAnnotations)
         {
             [self addAnnotationToChildNodes:annotationToMove];
         }
+    } else {
+        [_annotationsLock unlock];
     }
 
     _nodeType = nodeTypeNode;
@@ -265,11 +271,14 @@
 
         annotation.quadTreeNode = self;
 
+        [_annotationsLock lock];
         if ([_annotations count] <= kMaxAnnotationsPerLeaf || _boundingBox.size.width < (kMinimumQuadTreeElementWidth * 2.0))
         {
             [self removeUpwardsAllCachedClusterAnnotations];
+            [_annotationsLock unlock];
             return;
         }
+        [_annotationsLock unlock];
 
         _nodeType = nodeTypeNode;
 
@@ -280,8 +289,10 @@
 
         @synchronized (_annotations)
         {
+            [_annotationsLock lock];
             immutableAnnotations = [NSArray arrayWithArray:_annotations];
             [_annotations removeAllObjects];
+            [_annotationsLock unlock];
         }
 
         for (RMAnnotation *annotationToMove in immutableAnnotations)
@@ -304,9 +315,11 @@
 
     @synchronized (_annotations)
     {
+        [_annotationsLock lock];
         if ([_annotations containsObject:annotation]) {
             [_annotations removeObject:annotation];
         }
+        [_annotationsLock unlock];
     }
 
     [self removeUpwardsAllCachedClusterAnnotations];
@@ -418,6 +431,7 @@
         NSArray *enclosedAnnotations = nil;
 
         // Leaf clustering
+        [_annotationsLock lock];
         if (forceClustering == NO && _nodeType == nodeTypeLeaf && [_annotations count] > 1)
         {
             NSMutableArray *annotationsToCheck = [NSMutableArray arrayWithArray:[self enclosedWithoutUnclusteredAnnotations]];
@@ -460,6 +474,7 @@
                 enclosedAnnotations = [NSArray arrayWithArray:annotationsToCheck];
             }
         }
+        [_annotationsLock unlock];
 
         if (forceClustering)
         {
@@ -609,6 +624,7 @@
 {
     RMQuadTreeNode *_rootNode;
     __weak RMMapView *_mapView;
+    NSLock *_lock;
 }
 
 - (id)initWithMapView:(RMMapView *)aMapView
@@ -618,6 +634,7 @@
 
     _mapView = aMapView;
     _rootNode = [[RMQuadTreeNode alloc] initWithMapView:_mapView forParent:nil inBoundingBox:[[RMProjection googleProjection] planetBounds]];
+    _lock = [NSLock new];
 
     return self;
 }
