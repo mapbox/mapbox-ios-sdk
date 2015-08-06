@@ -28,7 +28,11 @@ Major differences from [Alpstein fork of Route-Me](https://github.com/Alpstein/r
  * A few added defaults for convenience. 
  * Improved documentation. 
 
-Keep your eye also on [Mapbox GL](https://www.mapbox.com/blog/mapbox-gl/), the future of our rendering technology. We are aiming to have a clear upgrade path between existing toolsets and GL as it matures. Read more in the [Mapbox GL Cocoa FAQ](https://github.com/mapbox/mapbox-gl-cocoa/blob/master/FAQ.md). 
+Mapbox GL
+---------
+
+You should consider using [Mapbox GL](https://www.mapbox.com/mapbox-gl-ios/), the vector-based future of our rendering technology that will replace the Mapbox iOS SDK. We are working to provide a clear upgrade path between existing toolsets and GL as it matures. Read more in the [Mapbox GL iOS FAQ](https://github.com/mapbox/mapbox-gl-native/blob/master/ios/FAQ.md).
+
 
 Route-Me
 --------
@@ -59,12 +63,11 @@ Then, update the submodules:
 Some example apps showing usage of the SDK (with screenshots):
 
  * [Mapbox iOS Example](https://github.com/mapbox/mapbox-ios-example) - online, offline, and interactive tile sources
+ * [Mapbox iOS SDK Offline Example](https://github.com/mapbox/mapbox-ios-sdk-offline) - offline tile source, written in Swift
  * [Mapbox Me](https://github.com/mapbox/mapbox-me) - user location services and terrain toggling
  * [Weekend Picks](https://github.com/mapbox/weekend-picks-template-ios) - markers and data
 
-More documentation is available: 
-
-      http://mapbox.com/mapbox-ios-sdk/
+More documentation and examples are available here: http://mapbox.com/mapbox-ios-sdk/
 
 There are two subdirectories - MapView and Proj4. Proj4 is a support library used to do map projections. The MapView project contains only the Route-Me map library. 
 
