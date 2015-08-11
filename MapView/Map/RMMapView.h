@@ -56,6 +56,9 @@ typedef enum : NSUInteger {
     RMMapDecelerationOff    = 2
 } RMMapDecelerationMode;
 
+// Constant for annotation base layer
+extern NSString *const kAnnotationBaseLayerName;
+
 /** An RMMapView object provides an embeddable map interface, similar to the one provided by Apple's MapKit. You use this class to display map information and to manipulate the map contents from your application. You can center the map on a given coordinate, specify the size of the area you want to display, and annotate the map with custom information.
 *
 *   @warning Please note that you are responsible for getting permission to use the map data, and for ensuring your use adheres to the relevant terms of use. */
@@ -312,27 +315,57 @@ typedef enum : NSUInteger {
 
 /** @name Annotating the Map */
 
+/** This attribute is deprecated. Use allAnnotations to explicitly indicate that you want
+    annotations from all annotation layers. If not, use annotationsInLayer:(NString *)annotationLayer. */
+@property (nonatomic, weak, readonly) NSArray *annotations DEPRECATED_ATTRIBUTE;
+
 /** The annotations currently added to the map. Includes user location annotations, if any. */
-@property (nonatomic, weak, readonly) NSArray *annotations;
+@property (nonatomic, strong, readonly) NSDictionary *layeredAnnotations;
+
+/** All annotations from all layers (flattened). */
+@property (nonatomic, weak, readonly) NSArray *allAnnotations;
 
 /** The annotations currently visible on the map. May include annotations currently shown in clusters. */
 @property (nonatomic, weak, readonly) NSArray *visibleAnnotations;
+
+/** All annotations in a specific layer */
+- (NSArray *)annotationsInLayer:(NSString *)annotationLayer;
 
 /** Add an annotation to the map. 
 *   @param annotation The annotation to add. */
 - (void)addAnnotation:(RMAnnotation *)annotation;
 
+/** Add an annotation to a specific layer.
+ *   @param annotation The annotation to add.
+     @param annotationLayer The layer to add it to. */
+- (void)addAnnotation:(RMAnnotation *)annotation toLayer:(NSString *)annotationLayer;
+
 /** Add one or more annotations to the map. 
 *   @param annotations An array containing the annotations to add to the map. */
 - (void)addAnnotations:(NSArray *)annotations;
+
+/** Add one or more annotations to the map.
+ *   @param annotations An array containing the annotations to add to the map.
+ *   @param annotationLayer The layer to add to. */
+- (void)addAnnotations:(NSArray *)annotations toLayer:(NSString *)annotationLayer;
 
 /** Remove an annotation from the map. 
 *   @param annotation The annotation to remove. */
 - (void)removeAnnotation:(RMAnnotation *)annotation;
 
+/** Remove an annotation from the map.
+ *   @param annotation The annotation to remove.
+ *   @param annotationLayer The layer to remove from. */
+- (void)removeAnnotation:(RMAnnotation *)annotation fromLayer:(NSString *)annotationLayer;
+
 /** Remove one or more annotations from the map. 
 *   @param annotations An array containing the annotations to remove from the map. */
 - (void)removeAnnotations:(NSArray *)annotations;
+
+/** Remove one or more annotations from the map.
+ *   @param annotations An array containing the annotations to remove from the map.
+ *   @param annotationLayer The layer to remove from. */
+- (void)removeAnnotations:(NSArray *)annotations fromLayer:(NSString *)annotationLayer;
 
 /** Remove all annotations from the map. This does not remove user location annotations, if any. */
 - (void)removeAllAnnotations;
