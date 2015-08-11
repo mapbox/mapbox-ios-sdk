@@ -3200,7 +3200,7 @@ NSString *const kAnnotationBaseLayerName = @"Base";
 
 - (NSArray *)annotationsInLayer:(NSString *)annotationLayer
 {
-    return _layeredAnnotations[annotationLayer];
+    return [_layeredAnnotations[annotationLayer] allObjects];
 }
 
 - (NSArray *)annotations
