@@ -41,7 +41,7 @@
     float lineWidth;
 
     // Line dash style
-    __weak NSArray *lineDashLengths;
+    NSArray *lineDashLengths;
     CGFloat lineDashPhase;
 
     BOOL scaleLineWidth;
@@ -69,7 +69,7 @@
 /** The fill pattern image of the shape. If set, the fillColor is set to `nil`. */
 @property (nonatomic, strong) UIImage *fillPatternImage;
 
-@property (nonatomic, weak) NSArray *lineDashLengths;
+@property (nonatomic, strong) NSArray *lineDashLengths;
 @property (nonatomic, assign) CGFloat lineDashPhase;
 @property (nonatomic, assign) BOOL scaleLineDash;
 
