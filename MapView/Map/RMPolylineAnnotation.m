@@ -32,6 +32,17 @@
 
 @implementation RMPolylineAnnotation
 
+- (id)initWithMapView:(RMMapView *)aMapView polylines:(NSArray *)polylines
+{
+    self = [super initWithMapView:aMapView points:[polylines valueForKeyPath: @"@unionOfArrays.self"]];
+    
+    if (self) {
+        self.polylines = polylines;
+    }
+        
+    return self;
+}
+
 - (void)setLayer:(RMMapLayer *)newLayer
 {
     if ( ! newLayer)
@@ -48,10 +59,19 @@
 
         [shape performBatchOperations:^(RMShape *aShape)
         {
-            [aShape moveToCoordinate:self.coordinate];
-
-            for (CLLocation *point in self.points)
-                [aShape addLineToCoordinate:point.coordinate];
+            if (self.polylines.count > 0) {
+                for (NSArray *polyline in self.polylines) {
+                    [aShape moveToCoordinate:[(CLLocation *)polyline.firstObject coordinate]];
+                    
+                    for (CLLocation *point in polyline)
+                        [aShape addLineToCoordinate:point.coordinate];
+                }
+            } else {
+                [aShape moveToCoordinate:self.coordinate];
+                
+                for (CLLocation *point in self.points)
+                    [aShape addLineToCoordinate:point.coordinate];
+            }
         }];
 
         super.layer = shape;
