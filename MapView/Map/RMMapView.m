@@ -213,6 +213,8 @@
     SMCalloutView *_currentCallout;
 
     BOOL _rotateAtMinZoom;
+    
+    UILongPressGestureRecognizer *_longPressRecognizer;
 }
 
 @synthesize decelerationMode = _decelerationMode;
@@ -1382,6 +1384,11 @@
     [self insertSubview:_overlayView aboveSubview:_mapScrollView];
 
     // add gesture recognizers
+    
+    // remove old gesture recognizers before adding new
+    for (UIGestureRecognizer *gestureRecognizer in self.gestureRecognizers) {
+        [self removeGestureRecognizer:gestureRecognizer];
+    }
 
     // one finger taps
     UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
@@ -1394,14 +1401,14 @@
     [singleTapRecognizer requireGestureRecognizerToFail:doubleTapRecognizer];
     singleTapRecognizer.delegate = self;
 
-    UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-    longPressRecognizer.minimumPressDuration = 0.25;
-    longPressRecognizer.allowableMovement = MAXFLOAT;
-    longPressRecognizer.delegate = self;
+    _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+    _longPressRecognizer.minimumPressDuration = 0.25;
+    _longPressRecognizer.allowableMovement = MAXFLOAT;
+    _longPressRecognizer.delegate = self;
 
     [self addGestureRecognizer:singleTapRecognizer];
     [self addGestureRecognizer:doubleTapRecognizer];
-    [self addGestureRecognizer:longPressRecognizer];
+    [self addGestureRecognizer:_longPressRecognizer];
 
     // two finger taps
     UITapGestureRecognizer *twoFingerSingleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTwoFingerSingleTap:)];
@@ -1866,6 +1873,15 @@
         // pass map long-press to delegate
         //
         [_delegate longPressOnMap:self at:[recognizer locationInView:self]];
+    }
+}
+
+- (void)setLongPressDuration:(float)longPressDuration
+{
+    if (_longPressRecognizer) {
+        _longPressRecognizer.minimumPressDuration = longPressDuration;
+        [self removeGestureRecognizer:_longPressRecognizer];
+        [self addGestureRecognizer:_longPressRecognizer];
     }
 }
 
