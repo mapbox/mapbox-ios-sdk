@@ -1,6 +1,6 @@
 Pod::Spec.new do |m|
 
-  m.name    = 'Mapbox-iOS-SDK'
+  m.name    = 'Mapbox-iOS-SDK-Hitta'
   m.version = '1.6.1'
 
   m.summary          = 'An open source toolset for building mapping applications for iOS devices.'
@@ -12,7 +12,7 @@ Pod::Spec.new do |m|
   m.social_media_url = 'https://twitter.com/Mapbox'
 
   m.source = {
-    :git => 'https://github.com/mapbox/mapbox-ios-sdk.git',
+    :git => 'git@github.com:Hitta/mapbox-ios-sdk.git',
     :tag => m.version.to_s
   }
 
