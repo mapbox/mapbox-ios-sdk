@@ -17,7 +17,7 @@ Pod::Spec.new do |m|
   }
 
   m.platform              = :ios
-  m.ios.deployment_target = '5.0'
+  m.ios.deployment_target = '7.0'
   m.requires_arc          = true
 
   m.module_name = 'Mapbox_iOS_SDK'
