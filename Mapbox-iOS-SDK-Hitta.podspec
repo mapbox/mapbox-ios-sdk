@@ -1,7 +1,7 @@
 Pod::Spec.new do |m|
 
   m.name    = 'Mapbox-iOS-SDK-Hitta'
-  m.version = '1.6.1'
+  m.version = '1.6.2'
 
   m.summary          = 'An open source toolset for building mapping applications for iOS devices.'
   m.description      = 'An open source toolset for building mapping applications for iOS devices with great flexibility for visual styling, offline use, and customizability.'
@@ -20,7 +20,7 @@ Pod::Spec.new do |m|
   m.ios.deployment_target = '7.0'
   m.requires_arc          = true
 
-  m.module_name = 'Mapbox_iOS_SDK'
+  m.module_name = 'Mapbox_iOS_SDK_Hitta'
 
   m.source_files = 'Proj4/proj_api.h', 'MapView/Map/*.{h,c,m}'
 
