@@ -38,7 +38,9 @@
         [self.mapScrollViewDelegate scrollView:self correctedContentOffset:&contentOffset];
 
     if ( ! [[NSDecimalNumber notANumber] isEqualToNumber:@(contentOffset.x)] &&
-         ! [[NSDecimalNumber notANumber] isEqualToNumber:@(contentOffset.y)])
+        ! [[NSDecimalNumber notANumber] isEqualToNumber:@(contentOffset.y)] &&
+        ! isnan(contentOffset.x) &&
+        ! isinf(contentOffset.x))
     {
         [super setContentOffset:contentOffset];
     }
