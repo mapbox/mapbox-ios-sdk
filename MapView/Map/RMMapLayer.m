@@ -77,7 +77,6 @@
 {
     if (canShowCallout)
     {
-        NSAssert([self isKindOfClass:[RMMarker class]],  @"Callouts are not supported on non-marker annotation layers");
         NSAssert( ! self.annotation.isClusterAnnotation, @"Callouts are not supported on cluster annotation layers");
     }
 

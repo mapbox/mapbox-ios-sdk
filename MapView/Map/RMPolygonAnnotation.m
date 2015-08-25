@@ -49,6 +49,22 @@
     return self;
 }
 
+- (id)initWithMapView:(RMMapView *)aMapView polygons:(NSArray *)polygons
+{
+    return [self initWithMapView:aMapView polygons:polygons interiorPolygons:nil];
+}
+
+- (id)initWithMapView:(RMMapView *)aMapView polygons:(NSArray *)polygons interiorPolygons:(NSArray *)interiorPolygons
+{
+    if (!(self = [super initWithMapView:aMapView points:[polygons valueForKeyPath: @"@unionOfArrays.self"]]))
+        return nil;
+    
+    _polygons = polygons;
+    _interiorPolygons = interiorPolygons;
+    
+    return self;
+}
+
 - (void)setLayer:(RMMapLayer *)newLayer
 {
     if ( ! newLayer)
@@ -65,12 +81,24 @@
 
         [shape performBatchOperations:^(RMShape *aShape)
         {
-            [aShape moveToCoordinate:self.coordinate];
-
-            for (CLLocation *point in self.points)
-                [aShape addLineToCoordinate:point.coordinate];
-
-            [aShape closePath];
+            if (self.polygons) {
+                for (NSArray *points in self.polygons)
+                {
+                    [aShape moveToCoordinate:[points.firstObject coordinate]];
+                    
+                    for (CLLocation *point in points)
+                        [aShape addLineToCoordinate:point.coordinate];
+                    
+                    [aShape moveToCoordinate:[points.firstObject coordinate]];
+                }
+            } else {
+                [aShape moveToCoordinate:self.coordinate];
+                
+                for (CLLocation *point in self.points)
+                    [aShape addLineToCoordinate:point.coordinate];
+                
+                [aShape closePath];
+            }
 
             if (self.interiorPolygons)
             {

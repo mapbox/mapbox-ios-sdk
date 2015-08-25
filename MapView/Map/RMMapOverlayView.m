@@ -91,18 +91,19 @@
     //
     NSPredicate *annotationPredicate = [NSPredicate predicateWithFormat:@"SELF.enabled = NO AND SELF.layer != %@ AND SELF.layer.isHidden = NO", [NSNull null]];
 
-    NSArray *disabledVisibleAnnotations = [mapView.annotations filteredArrayUsingPredicate:annotationPredicate];
+    NSArray *disabledVisibleAnnotations = [mapView.allAnnotations filteredArrayUsingPredicate:annotationPredicate];
 
     for (RMAnnotation *annotation in disabledVisibleAnnotations)
         annotation.layer.hidden = YES;
 
+    BOOL userLocationWasHidden = mapView.userLocation.layer.hidden;
     if (mapView.userLocation.enabled && mapView.userTrackingMode == RMUserTrackingModeFollowWithHeading)
         mapView.userLocation.layer.hidden = NO;
 
     CALayer *hit = [self.layer hitTest:point];
 
     if (mapView.userLocation.enabled && mapView.userTrackingMode == RMUserTrackingModeFollowWithHeading)
-        mapView.userLocation.layer.hidden = YES;
+        mapView.userLocation.layer.hidden = userLocationWasHidden;
 
     for (RMAnnotation *annotation in disabledVisibleAnnotations)
         annotation.layer.hidden = NO;

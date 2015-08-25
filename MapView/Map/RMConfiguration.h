@@ -66,7 +66,7 @@
 
 #pragma mark -
 
-@interface NSURLConnection (RMUserAgent)
+@interface NSURLConnection (RMUserAgent) <NSURLConnectionDataDelegate>
 
 + (NSData *)sendBrandedSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error;
 

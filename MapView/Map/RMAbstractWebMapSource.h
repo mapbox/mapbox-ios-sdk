@@ -45,13 +45,13 @@
 /** @name Providing Tile Images */
 
 /** Provide the URL for a given tile.
-    @param tile A specific map tile.
-    @return A URL to a tile image to download. */
+ @param tile A specific map tile.
+ @return A URL to a tile image to download. */
 - (NSURL *)URLForTile:(RMTile)tile;
 
 /** Provide multiple URLs for a given tile. Each URL is fetched in turn and composited together before placement on the map. URLs are ordered from the bottom layer to the top layer.
-    @param tile A specific map tile.
-    @return An array of tile URLs to download, listed bottom to top. */
+ @param tile A specific map tile.
+ @return An array of tile URLs to download, listed bottom to top. */
 - (NSArray *)URLsForTile:(RMTile)tile;
 
 @end

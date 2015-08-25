@@ -1,5 +1,5 @@
 //
-//  RMDatabaseCache.h
+//  RMFileCache.h
 //
 // Copyright (c) 2008-2009, Route-Me Contributors
 // All rights reserved.
@@ -28,24 +28,24 @@
 #import <UIKit/UIKit.h>
 #import "RMTileCache.h"
 
-/** An RMDatabaseCache object represents disk-based caching of map tile images. This cache is meant for longer-term storage than RMMemoryCache, potentially for long periods of time, allowing completely offline use of map view.
+/** An RMFileCache object represents disk-based caching of map tile images. This cache is meant for longer-term storage than RMMemoryCache, potentially for long periods of time, allowing completely offline use of map view.
 *
 *   @warning The database cache is currently based on [SQLite](http://www.sqlite.org), a lightweight, cross-platform, file-based relational database system. The schema is independent of and unrelated to the [MBTiles](http://mbtiles.org) file format or the RMMBTilesSource tile source. */
-@interface RMDatabaseCache : NSObject <RMTileCache>
+@interface RMFileCache : NSObject <RMTileCache>
 
 /** @name Getting the Database Path */
 
 /** The path to the SQLite database on disk that backs the cache. */
-@property (nonatomic, strong) NSString *databasePath;
+@property (nonatomic, strong) NSString *tileCachePath;
 
-+ (NSString *)dbPathUsingCacheDir:(BOOL)useCacheDir;
++ (NSString *)tileCachePathUsingCacheDir:(BOOL)useCacheDir;
 
 /** @name Initializing Database Caches */
 
 /** Initializes and returns a newly allocated database cache object at the given disk path.
 *   @param path The path to use for the database backing.
 *   @return An initialized cache object or `nil` if the object couldn't be created. */
-- (id)initWithDatabase:(NSString *)path;
+- (id)initWithTileCachePath:(NSString *)path;
 
 /** Initializes and returns a newly allocated database cache object.
 *   @param useCacheDir If YES, use the temporary cache space for the application, meaning that the cache files can be removed when the system deems it necessary to free up space. If NO, use the application's document storage space, meaning that the cache will not be automatically removed and will be backed up during device backups. The default value is NO.
@@ -79,8 +79,5 @@
 /** Set the expiry period for cache purging.
 *   @param theExpiryPeriod The amount of time to elapse before a tile should be removed from the cache. If set to zero, tile count-based purging will be used instead of time-based. */
 - (void)setExpiryPeriod:(NSTimeInterval)theExpiryPeriod;
-
-/** The current file size of the database cache on disk. */
-- (unsigned long long)fileSize;
 
 @end

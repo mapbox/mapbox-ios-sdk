@@ -70,8 +70,6 @@
 {
     if (self = [super init])
     {
-        NSAssert([[[RMConfiguration sharedInstance] accessToken] length], @"an access token is required to use Mapbox map tiles");
-
         _dataQueue = dispatch_queue_create(nil, DISPATCH_QUEUE_SERIAL);
 
         _infoDictionary = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:[tileJSON dataUsingEncoding:NSUTF8StringEncoding]

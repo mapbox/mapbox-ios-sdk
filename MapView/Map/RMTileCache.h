@@ -69,6 +69,14 @@ typedef enum : short {
 *   @param cacheKey The key representing a certain cache. */
 - (void)addImage:(UIImage *)image forTile:(RMTile)tile withCacheKey:(NSString *)cacheKey;
 
+/** Adds tile image data to specified cache.
+ *   @param data Tile image data to be cached.
+ *   @param tile The RMTile describing the map location of the image.
+ *   @param cacheKey The key representing a certain cache. */
+- (void)addImageWithData:(NSData *)data forTile:(RMTile)tile withCacheKey:(NSString *)cacheKey;
+
+- (void)addImage:(UIImage *)image withData:(NSData *)data forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey;
+
 /** Adds tile image data to the specified cache, bypassing the memory cache and only writing to disk. This is useful for instances where many tiles are downloaded directly to disk for later use offline.
 *   @param data The tile image data to be cached.
 *   @param tile The RMTile describing the map location of the image.

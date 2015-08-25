@@ -56,6 +56,9 @@ typedef enum : NSUInteger {
     RMMapDecelerationOff    = 2
 } RMMapDecelerationMode;
 
+// Constant for annotation base layer
+extern NSString *const kAnnotationBaseLayerName;
+
 /** An RMMapView object provides an embeddable map interface, similar to the one provided by Apple's MapKit. You use this class to display map information and to manipulate the map contents from your application. You can center the map on a given coordinate, specify the size of the area you want to display, and annotate the map with custom information.
 *
 *   @warning Please note that you are responsible for getting permission to use the map data, and for ensuring your use adheres to the relevant terms of use. */
@@ -90,6 +93,15 @@ typedef enum : NSUInteger {
 
 /** A Boolean value that determines whether double-tap zooms of the map always zoom on the center of the map, or whether they zoom on the center of the double-tap gesture. The default value is `NO`, which zooms on the gesture. */
 @property (nonatomic, assign) BOOL zoomingInPivotsAroundCenter;
+
+/** A Boolean value that determines whether zooming disables the scroll feature. Useful if the map is following the users location during turn by turn navigation. */
+@property (nonatomic, assign) BOOL zoomingDisablesScroll;
+
+/** A Boolean value that indicates whether the map is currently zooming. */
+@property (nonatomic, readonly) BOOL isZooming;
+
+/** A Boolean value that indicates whether the user tracking should be disabled. */
+- (BOOL)shouldStopTrackingUserLocation;
 
 /** A custom deceleration mode for the map view for drag operations. Set to `RMMapDecelerationOff` to disable map drag deceleration. The default value is `RMMapDecelerationFast`. */
 @property (nonatomic, assign) RMMapDecelerationMode decelerationMode;
@@ -303,27 +315,57 @@ typedef enum : NSUInteger {
 
 /** @name Annotating the Map */
 
+/** This attribute is deprecated. Use allAnnotations to explicitly indicate that you want
+    annotations from all annotation layers. If not, use annotationsInLayer:(NString *)annotationLayer. */
+@property (nonatomic, weak, readonly) NSArray *annotations DEPRECATED_ATTRIBUTE;
+
 /** The annotations currently added to the map. Includes user location annotations, if any. */
-@property (nonatomic, weak, readonly) NSArray *annotations;
+@property (nonatomic, strong, readonly) NSDictionary *layeredAnnotations;
+
+/** All annotations from all layers (flattened). */
+@property (nonatomic, weak, readonly) NSArray *allAnnotations;
 
 /** The annotations currently visible on the map. May include annotations currently shown in clusters. */
 @property (nonatomic, weak, readonly) NSArray *visibleAnnotations;
+
+/** All annotations in a specific layer */
+- (NSArray *)annotationsInLayer:(NSString *)annotationLayer;
 
 /** Add an annotation to the map. 
 *   @param annotation The annotation to add. */
 - (void)addAnnotation:(RMAnnotation *)annotation;
 
+/** Add an annotation to a specific layer.
+ *   @param annotation The annotation to add.
+     @param annotationLayer The layer to add it to. */
+- (void)addAnnotation:(RMAnnotation *)annotation toLayer:(NSString *)annotationLayer;
+
 /** Add one or more annotations to the map. 
 *   @param annotations An array containing the annotations to add to the map. */
 - (void)addAnnotations:(NSArray *)annotations;
+
+/** Add one or more annotations to the map.
+ *   @param annotations An array containing the annotations to add to the map.
+ *   @param annotationLayer The layer to add to. */
+- (void)addAnnotations:(NSArray *)annotations toLayer:(NSString *)annotationLayer;
 
 /** Remove an annotation from the map. 
 *   @param annotation The annotation to remove. */
 - (void)removeAnnotation:(RMAnnotation *)annotation;
 
+/** Remove an annotation from the map.
+ *   @param annotation The annotation to remove.
+ *   @param annotationLayer The layer to remove from. */
+- (void)removeAnnotation:(RMAnnotation *)annotation fromLayer:(NSString *)annotationLayer;
+
 /** Remove one or more annotations from the map. 
 *   @param annotations An array containing the annotations to remove from the map. */
 - (void)removeAnnotations:(NSArray *)annotations;
+
+/** Remove one or more annotations from the map.
+ *   @param annotations An array containing the annotations to remove from the map.
+ *   @param annotationLayer The layer to remove from. */
+- (void)removeAnnotations:(NSArray *)annotations fromLayer:(NSString *)annotationLayer;
 
 /** Remove all annotations from the map. This does not remove user location annotations, if any. */
 - (void)removeAllAnnotations;
@@ -495,6 +537,12 @@ typedef enum : NSUInteger {
 #pragma mark -
 #pragma mark User Location
 
+typedef enum : NSUInteger {
+    RMMapUserHeadingSourceCompass = 0, //Default
+    RMMapUserHeadingSourceGPS     = 1,
+    RMMapUserHeadingSourceManual  = 2
+} RMMapUserHeadingSource;
+
 /** @name Tracking the User Location */
 
 /** A Boolean value indicating whether the map may display the user location.
@@ -505,6 +553,24 @@ typedef enum : NSUInteger {
 *
 *   On iOS 8 and above, your app must specify a value for `NSLocationWhenInUseUsageDescription` in its `Info.plist` to satisfy the requirements of the underlying Core Location framework when enabling this property. */
 @property (nonatomic, assign) BOOL showsUserLocation;
+
+/** Set an image that will be shown in the center of the map instead of the actual user location. Useful for smooth navigation */
+@property (nonatomic, strong) UIImage *staticCenteredUserLocationImage;
+
+/** Where to get the heading from. RMMapUserHeadingSourceGPS is useful for vehicular navigation */
+@property (nonatomic, assign) RMMapUserHeadingSource headingSource;
+
+/** The current heading of the map. */
+@property (nonatomic, assign) CLLocationDirection headingDirection;
+
+/** Location and heading animation duration. Can be used to smooth out the display for navigation */
+@property (nonatomic, assign) NSTimeInterval positionUpdateAnimationDuration;
+
+/** Decides whether only visible annotations should be updated while moving the map. Can improve performance when there are a lot of annotations. */
+@property (nonatomic, assign) BOOL updateOnlyVisibleAnnotationsWhilePanning;
+
+/** Where the map was last touched regardless of what was touched */
+@property (nonatomic, assign) CGPoint lastTouchPoint;
 
 /** The annotation object representing the user’s current location. (read-only) */
 @property (nonatomic, readonly) RMUserLocation *userLocation;
@@ -522,6 +588,9 @@ typedef enum : NSUInteger {
 /** Whether the map view should display a heading calibration alert when necessary. The default value is `YES`. */
 @property (nonatomic, assign) BOOL displayHeadingCalibration;
 
+/** How much to inset the compass from the top if you have a toolbar or something else in the way. The default value is `0` */
+@property (nonatomic) NSUInteger compassTopInset;
+
 /** Set the mode used to track the user location. 
 *
 *   Setting the tracking mode to `RMUserTrackingModeFollow` or `RMUserTrackingModeFollowWithHeading` causes the map view to center the map on that location and begin tracking the user’s location. If the map is zoomed out, the map view automatically zooms in on the user’s location, effectively changing the current visible region.
@@ -531,5 +600,14 @@ typedef enum : NSUInteger {
 *   @param mode The mode used to track the user location. 
 *   @param animated Whether changes to the map center or rotation should be animated when the mode is changed. */
 - (void)setUserTrackingMode:(RMUserTrackingMode)mode animated:(BOOL)animated;
+
+/** Dismiss the heading calibration display */
+- (void)dismissHeadingCalibrationDisplay;
+
+/** Set new long press duration instead of default value */
+- (void)setLongPressDuration:(float)longPressDuration;
+
+/** To be able to correct the positions of all annotations */
+- (void)correctPositionOfAllAnnotations;
 
 @end

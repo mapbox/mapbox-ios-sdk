@@ -52,6 +52,7 @@
 
     // provided for storage of arbitrary user data
     id userInfo;
+    NSString *annotationLayer;
     NSString *annotationType;
     UIImage  *annotationIcon, *badgeIcon;
     CGPoint   anchorPoint;
@@ -70,6 +71,9 @@
 
 /** Storage for arbitrary data. */
 @property (nonatomic, strong) id userInfo;
+
+/** The logical layer of the annotation. */
+@property (nonatomic, strong) NSString *annotationLayer;
 
 /** An arbitrary string representing the type of annotation. Useful for determining which layer to draw for the annotation when requested in the delegate. Cluster annotations, which are automatically created by a map view, will automatically have an annotationType of `RMClusterAnnotation`. */
 @property (nonatomic, strong) NSString *annotationType;

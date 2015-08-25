@@ -36,7 +36,6 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
     NSMutableURLRequest *newRequest = [NSMutableURLRequest requestWithURL:request.URL
                                                               cachePolicy:request.cachePolicy
                                                           timeoutInterval:request.timeoutInterval];
-
     [newRequest setValue:[[RMConfiguration sharedInstance] userAgent] forHTTPHeaderField:@"User-Agent"];
 
     return [NSURLConnection sendSynchronousRequest:newRequest returningResponse:response error:error];
@@ -70,6 +69,8 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
     [request setValue:[[RMConfiguration sharedInstance] userAgent] forHTTPHeaderField:@"User-Agent"];
 
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:error];
+    
+    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
 
     if ( ! returnData)
         return nil;
@@ -137,9 +138,7 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 
 - (NSString *)accessToken
 {
-    NSAssert(_accessToken, @"An access token is required in order to use the Mapbox API. Obtain a token on your Mapbox account page at https://www.mapbox.com/account/apps/.");
-
-    return _accessToken;
+    return (_accessToken ? _accessToken : @"");
 }
 
 - (NSDictionary *)cacheConfiguration

@@ -97,7 +97,7 @@
     CGRect bounds = self.bounds;
     short zoom    = log2(bounds.size.width / rect.size.width);
 
-//    NSLog(@"drawLayer: {{%f,%f},{%f,%f}}", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+//  NSLog(@"drawLayer: {{%f,%f},{%f,%f}} @%.0f @%d", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height, _mapView.zoom, zoom);
 
     if (self.useSnapshotRenderer)
     {

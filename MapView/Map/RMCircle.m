@@ -81,52 +81,57 @@
 
 #pragma mark -
 
-- (void)updateCirclePathAnimated:(BOOL)animated
+- (void)updateCirclePathWithDuration:(CFTimeInterval)duration
 {
     CGPathRelease(circlePath); circlePath = NULL;
-
+    
     CGMutablePathRef newPath = CGPathCreateMutable();
-
+    
     CGFloat latRadians = [[mapView projection] projectedPointToCoordinate:projectedLocation].latitude * M_PI / 180.0f;
     CGFloat pixelRadius = radiusInMeters / cos(latRadians) / [mapView metersPerPixel];
     //	DLog(@"Pixel Radius: %f", pixelRadius);
-
+    
     CGRect rectangle = CGRectMake(self.position.x - pixelRadius,
                                   self.position.y - pixelRadius,
                                   (pixelRadius * 2),
                                   (pixelRadius * 2));
-
+    
     CGFloat offset = floorf(-lineWidthInPixels / 2.0f) - 2;
     CGRect newBoundsRect = CGRectInset(rectangle, offset, offset);
-
+    
     [self setBounds:newBoundsRect];
-
+    
     //	DLog(@"Circle Rectangle: %f, %f, %f, %f", rectangle.origin.x, rectangle.origin.y, rectangle.size.width, rectangle.size.height);
     //	DLog(@"Bounds Rectangle: %f, %f, %f, %f", self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, self.bounds.size.height);
-
+    
     CGPathAddEllipseInRect(newPath, NULL, rectangle);
     circlePath = newPath;
-
+    
     // animate the path change if we're in an animation block
     //
-    if (animated)
+    if (duration > 0)
     {
         CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
-
-        pathAnimation.duration  = [CATransaction animationDuration];
+        
+        pathAnimation.duration  = duration;
         pathAnimation.fromValue = [NSValue valueWithPointer:self.shapeLayer.path];
         pathAnimation.toValue   = [NSValue valueWithPointer:newPath];
-
+        
         [self.shapeLayer addAnimation:pathAnimation forKey:@"animatePath"];
     }
-
+    
     [self.shapeLayer setPath:newPath];
     [self.shapeLayer setFillColor:[fillColor CGColor]];
     [self.shapeLayer setStrokeColor:[lineColor CGColor]];
     [self.shapeLayer setLineWidth:lineWidthInPixels];
-
+    
     if (self.fillPatternImage)
         self.shapeLayer.fillColor = [[UIColor colorWithPatternImage:self.fillPatternImage] CGColor];
+}
+
+- (void)updateCirclePathAnimated:(BOOL)animated
+{
+    [self updateCirclePathWithDuration:(animated ? [CATransaction animationDuration] : 0)];
 }
 
 #pragma mark - Accessors

@@ -44,15 +44,21 @@
     }
 }
 
-- (void)setContentOffset:(CGPoint)contentOffset animated:(BOOL)animated
+- (void)setContentOffset:(CGPoint)contentOffset duration:(NSTimeInterval)duration
 {
     if (self.mapScrollViewDelegate)
         [self.mapScrollViewDelegate scrollView:self correctedContentOffset:&contentOffset];
 
     if ( ! [[NSDecimalNumber notANumber] isEqualToNumber:@(contentOffset.x)] &&
          ! [[NSDecimalNumber notANumber] isEqualToNumber:@(contentOffset.y)])
-    {
-        [super setContentOffset:contentOffset animated:animated];
+    {       
+        if (duration != 0.3f) {
+            [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction animations:^{
+                [super setContentOffset:contentOffset animated:NO];
+            } completion:nil];
+        } else {
+            [super setContentOffset:contentOffset animated:YES];
+        }
     }
 }
 
