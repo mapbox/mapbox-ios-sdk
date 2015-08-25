@@ -56,7 +56,7 @@
 
 - (id)initWithMapView:(RMMapView *)aMapView polygons:(NSArray *)polygons interiorPolygons:(NSArray *)interiorPolygons
 {
-    if (!(self = [super initWithMapView:aMapView points:polygons.firstObject]))
+    if (!(self = [super initWithMapView:aMapView points:[polygons valueForKeyPath: @"@unionOfArrays.self"]]))
         return nil;
     
     _polygons = polygons;
