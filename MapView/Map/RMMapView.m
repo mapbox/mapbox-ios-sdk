@@ -3190,18 +3190,9 @@ UIViewControllerAnimatedTransitioning>
             [_delegate mapViewWillStartLocatingUser:self];
         
         self.userLocation = [RMUserLocation annotationWithMapView:self coordinate:CLLocationCoordinate2DMake(MAXFLOAT, MAXFLOAT) andTitle:nil];
-        
-        _locationManager = [CLLocationManager new];
-        _locationManager.headingFilter = 5.0;
-        _locationManager.delegate = self;
-        [_locationManager startUpdatingLocation];
     }
     else
     {
-        [_locationManager stopUpdatingLocation];
-        [_locationManager stopUpdatingHeading];
-        _locationManager.delegate = nil;
-        _locationManager = nil;
         
         if (_delegateHasDidStopLocatingUser)
             [_delegate mapViewDidStopLocatingUser:self];
@@ -3378,7 +3369,7 @@ UIViewControllerAnimatedTransitioning>
         [_delegate mapView:self didChangeUserTrackingMode:_userTrackingMode animated:animated];
 }
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
+- (void)UpdateUserLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
     if ( ! _showsUserLocation || _mapScrollView.isDragging || ! newLocation || ! CLLocationCoordinate2DIsValid(newLocation.coordinate))
         return;
