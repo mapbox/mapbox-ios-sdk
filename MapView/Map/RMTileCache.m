@@ -104,12 +104,11 @@
 
             if (newCache)
                 [_tileCaches addObject:newCache];
-            else
-                RMLog(@"failed to create cache of type %@", type);
+            
 
         }
         @catch (NSException * e) {
-            RMLog(@"*** configuration error: %@", [e reason]);
+           
         }
     }
 
@@ -591,10 +590,7 @@ static NSMutableDictionary *predicateValues = nil;
             capacity =  value;
             minimalPurge = MAX(1,capacity / 10);
         }
-        else
-        {
-            RMLog(@"illegal value for capacity: %ld", (long)value);
-        }
+    
     }
 
     if (strategyStr != nil)
@@ -616,8 +612,6 @@ static NSMutableDictionary *predicateValues = nil;
 
         if (value > 0 && value<=capacity)
             minimalPurge = value;
-        else
-            RMLog(@"minimalPurge must be at least one and at most the cache capacity");
     }
 
     if (expiryPeriodNumber != nil)

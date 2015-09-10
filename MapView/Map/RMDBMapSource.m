@@ -131,7 +131,6 @@
 
     if ( ! _queue)
     {
-        RMLog(@"Error opening db map source %@", path);
         return nil;
     }
 
@@ -141,8 +140,6 @@
         // Debug mode
         // [db setTraceExecution:YES];
     }];
-
-    RMLog(@"Opening db map source %@", path);
 
     // get the tile side length
     _tileSideLength = [self getPreferenceAsInt:kTileSideLengthKey];
@@ -158,17 +155,6 @@
     _bottomRight.longitude = [self getPreferenceAsFloat:kCoverageBottomRightLongitudeKey];
     _center.latitude = [self getPreferenceAsFloat:kCoverageCenterLatitudeKey];
     _center.longitude = [self getPreferenceAsFloat:kCoverageCenterLongitudeKey];
-
-    RMLog(@"Tile size: %lu pixel", (unsigned long)self.tileSideLength);
-    RMLog(@"Supported zoom range: %.0f - %.0f", self.minZoom, self.maxZoom);
-    RMLog(@"Coverage area: (%2.6f,%2.6f) x (%2.6f,%2.6f)",
-          _topLeft.latitude,
-          _topLeft.longitude,
-          _bottomRight.latitude,
-          _bottomRight.longitude);
-    RMLog(@"Center: (%2.6f,%2.6f)",
-          _center.latitude,
-          _center.longitude);
 
 	return self;
 }

@@ -82,9 +82,6 @@
 
         _tileJSON = tileJSON;
 
-        if ([_infoDictionary[@"id"] hasPrefix:@"examples."])
-            RMLog(@"Using watermarked example map ID %@. Please go to https://mapbox.com and create your own map style.", _infoDictionary[@"id"]);
-
         _uniqueTilecacheKey = [NSString stringWithFormat:@"Mapbox-%@%@%@", _infoDictionary[@"id"], (_infoDictionary[@"version"] ? [@"-" stringByAppendingString:_infoDictionary[@"version"]] : @""),
             ([RMMapboxSource isUsingLargeTiles] ? @"-512" : @"")];
 

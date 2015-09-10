@@ -189,8 +189,6 @@
 
     CGPoint newPosition = self.annotation.position;
 
-//    RMLog(@"x:%f y:%f screen bounds: %f %f %f %f", newPosition.x, newPosition.y,  screenBounds.origin.x, screenBounds.origin.y, screenBounds.size.width, screenBounds.size.height);
-
     // Clip top
     offset = newPosition.y + clippedBounds.origin.y - screenBounds.origin.y + outset;
     if (offset < 0.0f)

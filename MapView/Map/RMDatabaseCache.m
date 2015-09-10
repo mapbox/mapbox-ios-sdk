@@ -115,8 +115,6 @@
 
 	if (!_queue)
 	{
-		RMLog(@"Could not connect to database");
-
         [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
 
         return nil;
@@ -182,7 +180,6 @@
 
 - (UIImage *)cachedImage:(RMTile)tile withCacheKey:(NSString *)aCacheKey
 {
-//	RMLog(@"DB cache check for tile %d %d %d", tile.x, tile.y, tile.zoom);
 
     __block UIImage *cachedImage = nil;
 
@@ -194,7 +191,6 @@
 
          if ([db hadError])
          {
-             RMLog(@"DB error while fetching tile data: %@", [db lastErrorMessage]);
              return;
          }
 
@@ -226,9 +222,6 @@
 
                  if (result)
                      result = [db executeUpdate:@"VACUUM"];
-
-                 if ( ! result)
-                     RMLog(@"Error expiring cache");
              }];
 
             [_writeQueueLock unlock];
@@ -236,8 +229,6 @@
             _tileCount = [self countTiles];
         }
     }
-
-//    RMLog(@"DB cache     hit    tile %d %d %d (%@)", tile.x, tile.y, tile.zoom, [RMTileCache tileHash:tile]);
 
 	return cachedImage;
 }
@@ -255,9 +246,7 @@
 
         if (_capacity <= tilesInDb && _expiryPeriod == 0)
             [self purgeTiles:MAX(_minimalPurge, 1+tilesInDb-_capacity)];
-
-//        RMLog(@"DB cache     insert tile %d %d %d (%@)", tile.x, tile.y, tile.zoom, [RMTileCache tileHash:tile]);
-
+        
         // Don't add new images to the database while there are still more than kWriteQueueLimit
         // insert operations pending. This prevents some memory issues.
 
@@ -285,9 +274,7 @@
 
             [_writeQueueLock unlock];
 
-            if (result == NO)
-                RMLog(@"Error occured adding data");
-            else
+            if (result == YES)
                 _tileCount++;
         }];
 	}
@@ -312,8 +299,6 @@
 
          if ([results next])
              count = [results intForColumnIndex:0];
-         else
-             RMLog(@"Unable to count columns");
 
          [results close];
      }];
@@ -325,7 +310,6 @@
 
 - (void)purgeTiles:(NSUInteger)count
 {
-    RMLog(@"purging %lu old tiles from the db cache", (unsigned long)count);
 
     [_writeQueueLock lock];
 
@@ -335,9 +319,6 @@
 
          if (result)
              result = [db executeUpdate:@"VACUUM"];
-
-         if ( ! result)
-             RMLog(@"Error purging cache");
      }];
 
     [_writeQueueLock unlock];
@@ -347,7 +328,7 @@
 
 - (void)removeAllCachedImages 
 {
-    RMLog(@"removing all tiles from the db cache");
+
 
     [_writeQueue addOperationWithBlock:^{
         [_writeQueueLock lock];
@@ -359,8 +340,6 @@
              if (result)
                  result = [db executeUpdate:@"VACUUM"];
 
-             if ( ! result)
-                 RMLog(@"Error purging cache");
          }];
 
         [_writeQueueLock unlock];
@@ -371,7 +350,6 @@
 
 - (void)removeAllCachedImagesForCacheKey:(NSString *)cacheKey
 {
-    RMLog(@"removing tiles for key '%@' from the db cache", cacheKey);
 
     [_writeQueue addOperationWithBlock:^{
         [_writeQueueLock lock];
@@ -383,8 +361,6 @@
              if (result)
                  result = [db executeUpdate:@"VACUUM"];
 
-             if ( ! result)
-                 RMLog(@"Error purging cache");
          }];
 
         [_writeQueueLock unlock];
@@ -400,10 +376,8 @@
 
         [_queue inDatabase:^(FMDatabase *db)
          {
-             BOOL result = [db executeUpdate:@"UPDATE ZCACHE SET last_used = ? WHERE tile_hash = ? AND cache_key = ?", [NSDate date], [RMTileCache tileHash:tile], cacheKey];
+            [db executeUpdate:@"UPDATE ZCACHE SET last_used = ? WHERE tile_hash = ? AND cache_key = ?", [NSDate date], [RMTileCache tileHash:tile], cacheKey];
 
-             if (result == NO)
-                 RMLog(@"Error touching tile");
          }];
 
         [_writeQueueLock unlock];
@@ -412,8 +386,6 @@
 
 - (void)didReceiveMemoryWarning
 {
-    RMLog(@"Low memory in the database tilecache");
-
     [_writeQueueLock lock];
     [_writeQueue cancelAllOperations];
     [_writeQueueLock unlock];

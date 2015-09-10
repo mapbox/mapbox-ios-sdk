@@ -53,8 +53,7 @@
 {
     if ( ! newLayer)
         [super setLayer:nil];
-    else
-        RMLog(@"Setting a custom layer on an %@ is a no-op", [self class]);
+
 }
 
 - (RMMapLayer *)layer

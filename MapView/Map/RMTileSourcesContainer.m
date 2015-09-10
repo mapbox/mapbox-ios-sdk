@@ -255,8 +255,6 @@
 
     [_tileSourcesLock unlock];
 
-    RMLog(@"Added the tilesource '%@' to the container", [tileSource shortName]);
-
     return YES;
 }
 
@@ -267,8 +265,6 @@
     [_tileSourcesLock lock];
 
     [_tileSources removeObject:tileSource];
-
-    RMLog(@"Removed the tilesource '%@' from the container", [tileSource shortName]);
 
     if ([_tileSources count] == 0)
         [self removeAllTileSources]; // cleanup
@@ -291,8 +287,6 @@
     id <RMTileSource> tileSource = [_tileSources objectAtIndex:index];
     [tileSource cancelAllDownloads];
     [_tileSources removeObject:tileSource];
-
-    RMLog(@"Removed the tilesource '%@' from the container", [tileSource shortName]);
 
     if ([_tileSources count] == 0)
         [self removeAllTileSources]; // cleanup
