@@ -84,7 +84,7 @@ UIViewControllerAnimatedTransitioning>
 @property (nonatomic, retain) RMUserLocation *userLocation;
 
 - (void)createMapView;
-
+- (void)showAttribution:(id)sender;
 - (void)registerMoveEventByUser:(BOOL)wasUserEvent;
 - (void)completeMoveEventAfterDelay:(NSTimeInterval)delay;
 - (void)registerZoomEventByUser:(BOOL)wasUserEvent;
@@ -3190,9 +3190,19 @@ UIViewControllerAnimatedTransitioning>
             [_delegate mapViewWillStartLocatingUser:self];
         
         self.userLocation = [RMUserLocation annotationWithMapView:self coordinate:CLLocationCoordinate2DMake(MAXFLOAT, MAXFLOAT) andTitle:nil];
+        
+        _locationManager = [CLLocationManager new];
+        _locationManager.headingFilter = 5.0;
+        _locationManager.delegate = self;
+        [_locationManager startUpdatingLocation];
     }
     else
     {
+        
+        [_locationManager stopUpdatingLocation];
+        [_locationManager stopUpdatingHeading];
+        _locationManager.delegate = nil;
+        _locationManager = nil;
         
         if (_delegateHasDidStopLocatingUser)
             [_delegate mapViewDidStopLocatingUser:self];
@@ -3207,6 +3217,7 @@ UIViewControllerAnimatedTransitioning>
         
         self.userLocation = nil;
     }
+
 }
 
 - (void)setUserLocation:(RMUserLocation *)newUserLocation
@@ -3369,7 +3380,7 @@ UIViewControllerAnimatedTransitioning>
         [_delegate mapView:self didChangeUserTrackingMode:_userTrackingMode animated:animated];
 }
 
-- (void)UpdateUserLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
     if ( ! _showsUserLocation || _mapScrollView.isDragging || ! newLocation || ! CLLocationCoordinate2DIsValid(newLocation.coordinate))
         return;
@@ -3731,6 +3742,7 @@ UIViewControllerAnimatedTransitioning>
         _attributionButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
         _attributionButton.translatesAutoresizingMaskIntoConstraints = NO;
         [_attributionButton addTarget:self action:@selector(showAttribution:) forControlEvents:UIControlEventTouchUpInside];
+        
         _attributionButton.frame = CGRectMake(self.bounds.size.width  - 30,
                                               self.bounds.size.height - 30,
                                               _attributionButton.bounds.size.width,
@@ -3743,8 +3755,7 @@ UIViewControllerAnimatedTransitioning>
     }
 }
 
-- (void)showAttribution:(id)sender
-{
+- (void)showAttribution:(id)sender {
     if (_viewControllerPresentingAttribution)
     {
         RMAttributionViewController *attributionViewController = [[RMAttributionViewController alloc] initWithMapView:self];
@@ -3897,5 +3908,6 @@ UIViewControllerAnimatedTransitioning>
          [transitionContext completeTransition:YES];
      }];
 }
+
 
 @end
