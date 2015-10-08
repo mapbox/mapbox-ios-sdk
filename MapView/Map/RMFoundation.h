@@ -32,6 +32,7 @@
 
 #if __OBJC__
 #import <CoreLocation/CoreLocation.h>
+#import <UIKit/UIKit.h>
 #endif
 
 /*! \struct RMProjectedPoint 

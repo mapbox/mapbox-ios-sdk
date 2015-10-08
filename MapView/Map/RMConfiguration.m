@@ -116,9 +116,7 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
         _propertyList = nil;
         return self;
     }
-
-    RMLog(@"reading route-me configuration from %@", path);
-
+    
     NSError *error = nil;
     NSData *plistData = [NSData dataWithContentsOfFile:path];
 
@@ -126,11 +124,6 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
                                                               options:NSPropertyListImmutable
                                                                format:NULL
                                                                 error:&error];
-
-    if ( ! _propertyList)
-    {
-        RMLog(@"problem reading route-me configuration from %@: %@", path, error);
-    }
 
     return self;
 }

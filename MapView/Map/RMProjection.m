@@ -93,7 +93,6 @@ static RMProjection *_latitudeLongitudeProjection = nil;
 
     if (_internalProjection == NULL)
     {
-        RMLog(@"Unhandled error creating projection. String is %@", proj4String);
         return nil;
     }
 

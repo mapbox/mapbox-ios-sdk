@@ -91,8 +91,6 @@
     if (!(self = [super init]))
         return nil;
 
-//    RMLog(@"New quadtree node at {(%.0f,%.0f),(%.0f,%.0f)}", aBoundingBox.origin.easting, aBoundingBox.origin.northing, aBoundingBox.size.width, aBoundingBox.size.height);
-
     _mapView = aMapView;
     _parentNode = aParentNode;
     _northWest = _northEast = _southWest = _southEast = nil;
@@ -192,8 +190,6 @@
 {
     if (quadTreeDepth == 0 || _boundingBox.size.width < (kMinimumQuadTreeElementWidth * 2.0))
         return;
-
-//    RMLog(@"node in {%.0f,%.0f},{%.0f,%.0f} depth %d", boundingBox.origin.x, boundingBox.origin.y, boundingBox.size.width, boundingBox.size.height, quadTreeDepth);
 
     @synchronized (_cachedClusterAnnotation)
     {
@@ -622,9 +618,6 @@
 
 - (void)addAnnotations:(NSArray *)annotations
 {
-//    RMLog(@"Prepare tree");
-//    [rootNode precreateQuadTreeInBounds:[[RMProjection googleProjection] planetBounds] withDepth:5];
-
     @synchronized (self)
     {
         for (RMAnnotation *annotation in annotations)
