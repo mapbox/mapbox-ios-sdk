@@ -91,7 +91,7 @@
     //
     NSPredicate *annotationPredicate = [NSPredicate predicateWithFormat:@"SELF.enabled = NO AND SELF.layer != %@ AND SELF.layer.isHidden = NO", [NSNull null]];
 
-    NSArray *disabledVisibleAnnotations = [mapView.annotations filteredArrayUsingPredicate:annotationPredicate];
+    NSArray *disabledVisibleAnnotations = [mapView.allAnnotations filteredArrayUsingPredicate:annotationPredicate];
 
     for (RMAnnotation *annotation in disabledVisibleAnnotations)
         annotation.layer.hidden = YES;

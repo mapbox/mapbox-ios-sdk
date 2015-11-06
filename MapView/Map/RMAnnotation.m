@@ -48,6 +48,7 @@
 @synthesize title;
 @synthesize subtitle;
 @synthesize userInfo;
+@synthesize annotationLayer;
 @synthesize annotationType;
 @synthesize annotationIcon, badgeIcon;
 @synthesize anchorPoint;
@@ -80,6 +81,7 @@
     self.userInfo     = nil;
     self.quadTreeNode = nil;
 
+    self.annotationLayer   = kAnnotationBaseLayerName;
     self.annotationType    = nil;
     self.annotationIcon    = nil;
     self.badgeIcon         = nil;

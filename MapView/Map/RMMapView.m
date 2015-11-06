@@ -66,6 +66,8 @@
 #define kDefaultMaximumZoomLevel 25.0
 #define kDefaultInitialZoomLevel 11.0
 
+NSString *const kAnnotationBaseLayerName = @"Base";
+
 #pragma mark --- end constants ----
 
 @interface RMMapView (PrivateMethods) <UIScrollViewDelegate,
@@ -169,7 +171,7 @@
 
     NSMutableArray *_earlyTileSources;
 
-    NSMutableSet *_annotations;
+    NSMutableDictionary *_layeredAnnotations;
     NSMutableSet *_visibleAnnotations;
 
     BOOL _constrainMovement, _constrainMovementByUser;
@@ -273,7 +275,7 @@
     _orderMarkersByYPosition = YES;
     _orderClusterMarkersAboveOthers = YES;
 
-    _annotations = [NSMutableSet new];
+    _layeredAnnotations = [NSMutableDictionary new];
     _visibleAnnotations = [NSMutableSet new];
     [self setQuadTree:[[RMQuadTree alloc] initWithMapView:self]];
     _clusteringEnabled = NO;
@@ -2720,7 +2722,7 @@
     //
     BOOL updatePoints = NO;
 
-    for (RMAnnotation *annotation in self.annotations)
+    for (RMAnnotation *annotation in self.allAnnotations)
     {
         if ([annotation isKindOfClass:[RMPointAnnotation class]] && annotation.isAnnotationVisibleOnScreen)
         {
@@ -3034,53 +3036,56 @@
     {
         CALayer *lastLayer = nil;
 
-        @synchronized (_annotations)
+        @synchronized (_layeredAnnotations)
         {
             if (correctAllAnnotations)
             {
-                for (RMAnnotation *annotation in _annotations)
+                for (NSSet *layerAnnotations in _layeredAnnotations.allValues)
                 {
-                    [self correctScreenPosition:annotation animated:animated];
-
-                    if ([annotation isAnnotationWithinBounds:[self bounds]])
+                    for (RMAnnotation *annotation in layerAnnotations)
                     {
-                        if (annotation.layer == nil && _delegateHasLayerForAnnotation)
-                            annotation.layer = [_delegate mapView:self layerForAnnotation:annotation];
-
-                        if (annotation.layer == nil)
-                            continue;
-
-                        if ([annotation.layer isKindOfClass:[RMMarker class]])
-                            annotation.layer.transform = _annotationTransform;
-
-                        if (![_visibleAnnotations containsObject:annotation])
+                        [self correctScreenPosition:annotation animated:animated];
+                        
+                        if ([annotation isAnnotationWithinBounds:[self bounds]])
                         {
-                            if (!lastLayer)
-                                [_overlayView insertSublayer:annotation.layer atIndex:0];
-                            else
-                                [_overlayView insertSublayer:annotation.layer above:lastLayer];
-
-                            [_visibleAnnotations addObject:annotation];
+                            if (annotation.layer == nil && _delegateHasLayerForAnnotation)
+                                annotation.layer = [_delegate mapView:self layerForAnnotation:annotation];
+                            
+                            if (annotation.layer == nil)
+                                continue;
+                            
+                            if ([annotation.layer isKindOfClass:[RMMarker class]])
+                                annotation.layer.transform = _annotationTransform;
+                            
+                            if (![_visibleAnnotations containsObject:annotation])
+                            {
+                                if (!lastLayer)
+                                    [_overlayView insertSublayer:annotation.layer atIndex:0];
+                                else
+                                    [_overlayView insertSublayer:annotation.layer above:lastLayer];
+                                
+                                [_visibleAnnotations addObject:annotation];
+                            }
+                            
+                            lastLayer = annotation.layer;
                         }
-
-                        lastLayer = annotation.layer;
-                    }
-                    else
-                    {
-                        if ( ! annotation.isUserLocationAnnotation)
+                        else
                         {
-                            if (_delegateHasWillHideLayerForAnnotation)
-                                [_delegate mapView:self willHideLayerForAnnotation:annotation];
-
-                            annotation.layer = nil;
-                            [_visibleAnnotations removeObject:annotation];
-
-                            if (_delegateHasDidHideLayerForAnnotation)
-                                [_delegate mapView:self didHideLayerForAnnotation:annotation];
+                            if ( ! annotation.isUserLocationAnnotation)
+                            {
+                                if (_delegateHasWillHideLayerForAnnotation)
+                                    [_delegate mapView:self willHideLayerForAnnotation:annotation];
+                                
+                                annotation.layer = nil;
+                                [_visibleAnnotations removeObject:annotation];
+                                
+                                if (_delegateHasDidHideLayerForAnnotation)
+                                    [_delegate mapView:self didHideLayerForAnnotation:annotation];
+                            }
                         }
                     }
+                    //                RMLog(@"%d annotations on screen, %d total", [overlayView sublayersCount], [annotations count]);
                 }
-//                RMLog(@"%d annotations on screen, %d total", [overlayView sublayersCount], [annotations count]);
             }
             else
             {
@@ -3193,9 +3198,25 @@
         _currentAnnotation.layer.zPosition = _currentCallout.layer.zPosition = MAXFLOAT;
 }
 
+- (NSArray *)annotationsInLayer:(NSString *)annotationLayer
+{
+    return [_layeredAnnotations[annotationLayer] allObjects];
+}
+
 - (NSArray *)annotations
 {
-    return [_annotations allObjects];
+    return self.allAnnotations;
+}
+
+- (NSArray *)allAnnotations
+{
+    NSMutableArray *allAnnotations = NSMutableArray.new;
+    
+    for (NSSet *layerAnnotations in _layeredAnnotations.allValues) {
+        [allAnnotations addObjectsFromArray:layerAnnotations.allObjects];
+    }
+    
+    return allAnnotations;
 }
 
 - (NSArray *)visibleAnnotations
@@ -3203,18 +3224,44 @@
     return [_visibleAnnotations allObjects];
 }
 
+- (NSString *)prepareAnnotationLayer:(NSString *)annotationLayer
+{
+    // Assign to base layer if nil
+    if (!annotationLayer) {
+        annotationLayer = kAnnotationBaseLayerName;
+    }
+    
+    // Create set if it doesnt exist
+    if (!_layeredAnnotations[annotationLayer]) {
+        _layeredAnnotations[annotationLayer] = NSMutableSet.new;
+    }
+    
+    return annotationLayer;
+}
+
 - (void)addAnnotation:(RMAnnotation *)annotation
+{
+    [self addAnnotation:annotation toLayer:kAnnotationBaseLayerName];
+}
+
+- (void)addAnnotation:(RMAnnotation *)annotation toLayer:(NSString *)annotationLayer
 {
     if ( ! annotation)
         return;
+    
+    annotationLayer = [self prepareAnnotationLayer:annotationLayer];
+    
+    annotation.annotationLayer = annotationLayer;
 
-    @synchronized (_annotations)
+    @synchronized (_layeredAnnotations)
     {
-        if ([_annotations containsObject:annotation])
+        if ([_layeredAnnotations[annotationLayer] containsObject:annotation])
             return;
 
-        [_annotations addObject:annotation];
-        [self.quadTree addAnnotation:annotation];
+        if (annotation) {
+            [_layeredAnnotations[annotationLayer] addObject:annotation];
+            [self.quadTree addAnnotation:annotation];
+        }
     }
 
     if (_clusteringEnabled)
@@ -3238,14 +3285,27 @@
     }
 }
 
-- (void)addAnnotations:(NSArray *)newAnnotations
+- (void)addAnnotations:(NSArray *)annotations
+{
+    [self addAnnotations:annotations toLayer:kAnnotationBaseLayerName];
+}
+
+- (void)addAnnotations:(NSArray *)newAnnotations toLayer:(NSString *)annotationLayer
 {
     if ( ! newAnnotations || ! [newAnnotations count])
         return;
+    
+    annotationLayer = [self prepareAnnotationLayer:annotationLayer];
 
-    @synchronized (_annotations)
+    for (RMAnnotation *annotation in newAnnotations) {
+        if ([annotation respondsToSelector:@selector(setAnnotationLayer:)]) {
+            annotation.annotationLayer = annotationLayer;
+        }
+    }
+    
+    @synchronized (_layeredAnnotations)
     {
-        [_annotations addObjectsFromArray:newAnnotations];
+        [_layeredAnnotations[annotationLayer] addObjectsFromArray:newAnnotations];
         [self.quadTree addAnnotations:newAnnotations];
     }
 
@@ -3254,9 +3314,23 @@
 
 - (void)removeAnnotation:(RMAnnotation *)annotation
 {
-    @synchronized (_annotations)
+    [self removeAnnotation:annotation fromLayer:nil];
+}
+
+- (void)removeAnnotation:(RMAnnotation *)annotation fromLayer:(NSString *)annotationLayer
+{
+    @synchronized (_layeredAnnotations)
     {
-        [_annotations removeObject:annotation];
+        if (annotationLayer) {
+            [_layeredAnnotations[annotationLayer] removeObject:annotation];
+        } else {
+            for (NSMutableSet *layerAnnotations in _layeredAnnotations.allValues) {
+                if ([layerAnnotations containsObject:annotation]) {
+                    [layerAnnotations removeObject:annotation];
+                }
+            }
+        }
+                
         [_visibleAnnotations removeObject:annotation];
         [self.quadTree removeAnnotation:annotation];
         annotation.layer = nil;
@@ -3265,15 +3339,29 @@
     [self correctPositionOfAllAnnotations];
 }
 
-- (void)removeAnnotations:(NSArray *)annotationsToRemove
+- (void)removeAnnotations:(NSArray *)annotations
 {
-    @synchronized (_annotations)
+    [self removeAnnotations:annotations fromLayer:nil];
+}
+
+- (void)removeAnnotations:(NSArray *)annotationsToRemove fromLayer:(NSString *)annotationLayer
+{
+    @synchronized (_layeredAnnotations)
     {
         for (RMAnnotation *annotation in annotationsToRemove)
         {
             if ( ! annotation.isUserLocationAnnotation)
             {
-                [_annotations removeObject:annotation];
+                if (annotationLayer) {
+                    [_layeredAnnotations[annotationLayer] removeObject:annotation];
+                } else {
+                    for (NSMutableSet *layerAnnotations in _layeredAnnotations.allValues) {
+                        if ([layerAnnotations containsObject:annotation]) {
+                            [layerAnnotations removeObject:annotation];
+                        }
+                    }
+                }
+                
                 [_visibleAnnotations removeObject:annotation];
                 [self.quadTree removeAnnotation:annotation];
                 annotation.layer = nil;
@@ -3286,7 +3374,7 @@
 
 - (void)removeAllAnnotations
 {
-    [self removeAnnotations:[_annotations allObjects]];
+    [self removeAnnotations:self.allAnnotations];
 }
 
 - (CGPoint)mapPositionForAnnotation:(RMAnnotation *)annotation
@@ -3414,7 +3502,7 @@
 
                                  _compassButton.alpha = 0;
 
-                                 for (RMAnnotation *annotation in _annotations)
+                                 for (RMAnnotation *annotation in self.allAnnotations)
                                      if ([annotation.layer isKindOfClass:[RMMarker class]])
                                          annotation.layer.transform = _annotationTransform;
                              }
@@ -3459,7 +3547,7 @@
 
                                  _compassButton.alpha = 0;
 
-                                 for (RMAnnotation *annotation in _annotations)
+                                 for (RMAnnotation *annotation in self.allAnnotations)
                                      if ([annotation.layer isKindOfClass:[RMMarker class]])
                                          annotation.layer.transform = _annotationTransform;
                              }
@@ -3679,7 +3767,7 @@
 
     _trackingHaloAnnotation.layer.hidden = ( ! CLLocationCoordinate2DIsValid(self.userLocation.coordinate) || newLocation.horizontalAccuracy > 10 || self.userLocation.hasCustomLayer);
 
-    if ( ! [_annotations containsObject:self.userLocation])
+    if ( ! [self.allAnnotations containsObject:self.userLocation])
         [self addAnnotation:self.userLocation];
 }
 
@@ -3735,7 +3823,7 @@
 
                              _compassButton.alpha = 1.0;
 
-                             for (RMAnnotation *annotation in _annotations)
+                             for (RMAnnotation *annotation in self.allAnnotations)
                                  if ([annotation.layer isKindOfClass:[RMMarker class]])
                                      annotation.layer.transform = _annotationTransform;
 
