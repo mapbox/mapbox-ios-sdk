@@ -251,6 +251,12 @@ typedef enum : NSUInteger {
 *   @param animated Whether to animate the zoom. */
 - (void)zoomOutToNextNativeZoomAt:(CGPoint)pivot animated:(BOOL)animated;
 
+/** Zoom the map to fit a number or coordinates with optional padding
+ *   @param coordinates An array of CLLocations to fit in the maps view.
+ *   @param paddingPercentage The percentage relative to the max distance of furthest away coordinates.
+ *   @param animated Whether to animate the zoom. */
+- (void)zoomToFitCoordinates:(NSArray *)coordinates withPaddingPercentage:(float)paddingPercentage animated:(BOOL)animated;
+
 /** Zoom the map to a given latitude and longitude bounds. 
 *   @param southWest The southwest point to zoom to. 
 *   @param northEast The northeast point to zoom to. 

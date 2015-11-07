@@ -1231,6 +1231,32 @@
 #pragma mark -
 #pragma mark Zoom With Bounds
 
+- (void)zoomToFitCoordinates:(NSArray *)coordinates withPaddingPercentage:(float)paddingPercentage animated:(BOOL)animated
+{
+    double minLat = 90, minLon = 180, maxLat = -90, maxLon = -180;
+    
+    for (CLLocation *coord in coordinates) {
+        minLat = MIN(minLat, coord.coordinate.latitude);
+        minLon = MIN(minLon, coord.coordinate.longitude);
+        
+        maxLat = MAX(maxLat, coord.coordinate.latitude);
+        maxLon = MAX(maxLon, coord.coordinate.longitude);
+    }
+    
+    RMProjectedPoint southWestPoint = [self coordinateToProjectedPoint:CLLocationCoordinate2DMake(minLat, minLon)];
+    RMProjectedPoint northEastPoint = [self coordinateToProjectedPoint:CLLocationCoordinate2DMake(maxLat, maxLon)];
+    
+    double xAxisPadding = (northEastPoint.x - southWestPoint.x) * (paddingPercentage/100);
+    double yAxisPadding = (northEastPoint.y - southWestPoint.y) * (paddingPercentage/100);
+    
+    southWestPoint = RMProjectedPointMake(southWestPoint.x - xAxisPadding, southWestPoint.y - yAxisPadding);
+    northEastPoint = RMProjectedPointMake(northEastPoint.x + xAxisPadding, northEastPoint.y + yAxisPadding);
+    
+    [self zoomWithLatitudeLongitudeBoundsSouthWest:[self projectedPointToCoordinate:southWestPoint]
+                                         northEast:[self projectedPointToCoordinate:northEastPoint]
+                                          animated:animated];
+}
+
 - (void)zoomWithLatitudeLongitudeBoundsSouthWest:(CLLocationCoordinate2D)southWest northEast:(CLLocationCoordinate2D)northEast animated:(BOOL)animated
 {
     if (northEast.latitude == southWest.latitude && northEast.longitude == southWest.longitude) // There are no bounds, probably only one marker.
