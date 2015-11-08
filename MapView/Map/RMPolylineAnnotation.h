@@ -33,4 +33,19 @@
 *   If you wish to customize the layer appearance in more detail, you should instead create an RMAnnotation and configure its layer directly. Providing a layer manually for instances of RMPolylineAnnotation will not have any effect. */
 @interface RMPolylineAnnotation : RMShapeAnnotation
 
+/**
+ *  Create a polyline annotation with multiple polylines.
+ *
+ *  @param aMapView  The map view.
+ *  @param polylines An array of arrays of CLLocations. Each outer array represents on polyline.
+ *
+ *  @return The polyline annotation.
+ */
+- (id)initWithMapView:(RMMapView *)aMapView polylines:(NSArray *)polylines;
+
+/**
+ *  An array of CLLocation arrays for defining multiple polylines in one annotation.
+ */
+@property (nonatomic, strong) NSArray *polylines;
+
 @end

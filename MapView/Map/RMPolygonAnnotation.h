@@ -42,6 +42,26 @@
 *   @return An initialized polygon annotation object, or `nil` if an annotation was unable to be initialized. */
 - (id)initWithMapView:(RMMapView *)aMapView points:(NSArray *)points interiorPolygons:(NSArray *)interiorPolygons;
 
+/**
+ *  Initialize a multipolygon annotation with multiple unconnected polygons.
+ *  @param aMapView The map view on which to place the annotation.
+ *  @param points An array of arrays of CLLocation points defining the polygons.
+ *
+ *  @return An initialized polygon annotation object, or `nil` if an annotation was unable to be initialized. */
+- (id)initWithMapView:(RMMapView *)aMapView polygons:(NSArray *)polygons;
+
+/**
+ *  Initialize a multipolygon annotation with multiple unconnected polygons.
+ *  @param aMapView The map view on which to place the annotation.
+ *  @param points An array of arrays of CLLocation points defining the polygons.
+ *  @param interiorPolygons An array of RMPolygonAnnotation objects that define one or more cutout regions for the receiver’s polygon.
+ *
+ *  @return An initialized polygon annotation object, or `nil` if an annotation was unable to be initialized. */
+- (id)initWithMapView:(RMMapView *)aMapView polygons:(NSArray *)polygons interiorPolygons:(NSArray *)interiorPolygons;
+
+/** The array of polygons (NSArrays inside an NSArray) if this is a multipolygon annotation. */
+@property (nonatomic, strong) NSArray *polygons;
+
 /** The array of polygons nested inside the receiver. (read-only)
 *
 *   When a polygon is rendered on screen, the area occupied by any interior polygons is masked out and not considered part of the polygon. */
