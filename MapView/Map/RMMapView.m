@@ -3091,6 +3091,8 @@
             }
         }
     }
+    
+    self.userLocation.layer.hidden = !self.userLocationVisible;
 
     [self correctOrderingOfAllAnnotations];
 
