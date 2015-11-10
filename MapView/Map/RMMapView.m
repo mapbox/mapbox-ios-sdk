@@ -420,32 +420,6 @@
     return self;
 }
 
-- (void)setFrame:(CGRect)frame
-{
-    CGRect r = self.frame;
-    [super setFrame:frame];
-
-    // only change if the frame changes and not during initialization
-    if ( ! CGRectEqualToRect(r, frame))
-    {
-        RMProjectedPoint centerPoint = self.centerProjectedPoint;
-
-        CGRect bounds = CGRectMake(0, 0, frame.size.width, frame.size.height);
-        _backgroundView.frame = bounds;
-        _mapScrollView.frame = bounds;
-        _overlayView.frame = bounds;
-
-        [self setCenterProjectedPoint:centerPoint animated:NO];
-
-        [self correctPositionOfAllAnnotations];
-
-        self.minZoom = 0; // force new minZoom calculation
-
-        if (_loadingTileView)
-            _loadingTileView.mapZooming = NO;
-    }
-}
-
 + (UIImage *)resourceImageNamed:(NSString *)imageName
 {
     if ( ! [[imageName pathExtension] length])
@@ -655,6 +629,22 @@
     {
         self.viewControllerPresentingAttribution = nil;
     }
+    
+    RMProjectedPoint centerPoint = self.centerProjectedPoint;
+    
+    CGRect bounds = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+    _backgroundView.frame = bounds;
+    _mapScrollView.frame = bounds;
+    _overlayView.frame = bounds;
+    
+    [self setCenterProjectedPoint:centerPoint animated:NO];
+    
+    [self correctPositionOfAllAnnotations];
+    
+    self.minZoom = 0; // force new minZoom calculation
+    
+    if (_loadingTileView)
+        _loadingTileView.mapZooming = NO;
 
     [super layoutSubviews];
 }
