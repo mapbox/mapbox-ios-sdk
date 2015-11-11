@@ -106,6 +106,9 @@
 /** Whether the annotation should be clustered when map view clustering is enabled. Defaults to `YES`. */
 @property (nonatomic, assign) BOOL clusteringEnabled;
 
+/** Only annotations with the same clusteringIdentifier may be clustered together. */
+@property (nonatomic, strong) id clusteringIdentifier;
+
 /** Whether an annotation is an automatically-managed cluster annotation. */
 @property (nonatomic, readonly, assign) BOOL isClusterAnnotation;
 

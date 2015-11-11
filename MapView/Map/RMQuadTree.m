@@ -73,8 +73,8 @@
     RMQuadTreeNodeType _nodeType;
     __weak RMMapView *_mapView;
 
-    RMAnnotation *_cachedClusterAnnotation;
-    NSArray *_cachedClusterEnclosedAnnotations;
+    NSMutableDictionary *_cachedClusterAnnotations;
+    NSMutableDictionary *_cachedClusteredEnclosedAnnotations;
     NSMutableArray *_cachedEnclosedAnnotations, *_cachedUnclusteredAnnotations;
 }
 
@@ -98,8 +98,8 @@
     _northWest = _northEast = _southWest = _southEast = nil;
     _annotations = [NSMutableArray new];
     _boundingBox = aBoundingBox;
-    _cachedClusterAnnotation = nil;
-    _cachedClusterEnclosedAnnotations = nil;
+    _cachedClusterAnnotations = [NSMutableDictionary dictionary];
+    _cachedClusteredEnclosedAnnotations = [NSMutableDictionary dictionary];
     _cachedEnclosedAnnotations = _cachedUnclusteredAnnotations = nil;
 
     double halfWidth = _boundingBox.size.width / 2.0, halfHeight = _boundingBox.size.height / 2.0;
@@ -117,10 +117,10 @@
 {
     _mapView = nil;
 
-    @synchronized (_cachedClusterAnnotation)
+    @synchronized (_cachedClusterAnnotations)
     {
-         _cachedClusterEnclosedAnnotations = nil;
-         _cachedClusterAnnotation = nil;
+         _cachedClusteredEnclosedAnnotations = nil;
+         _cachedClusterAnnotations = nil;
     }
 
     @synchronized (_annotations)
@@ -195,10 +195,10 @@
 
 //    RMLog(@"node in {%.0f,%.0f},{%.0f,%.0f} depth %d", boundingBox.origin.x, boundingBox.origin.y, boundingBox.size.width, boundingBox.size.height, quadTreeDepth);
 
-    @synchronized (_cachedClusterAnnotation)
+    @synchronized (_cachedClusterAnnotations)
     {
-         _cachedClusterEnclosedAnnotations = nil;
-         _cachedClusterAnnotation = nil;
+         _cachedClusteredEnclosedAnnotations = [NSMutableDictionary dictionary];
+         _cachedClusterAnnotations = [NSMutableDictionary dictionary];
     }
 
     if (RMProjectedRectIntersectsProjectedRect(quadTreeBounds, _northWestBoundingBox))
@@ -377,20 +377,33 @@
     return enclosedAnnotations;
 }
 
-- (RMAnnotation *)clusterAnnotation
+-(NSDictionary *)seperateAnnotationsByClusterIdentifier:(NSArray *)annotations
 {
-    return _cachedClusterAnnotation;
+    NSMutableDictionary *annotationClusters = [NSMutableDictionary dictionary];
+    for(RMAnnotation *annotation in annotations) {
+        id clusterIdentifier = annotation.clusteringIdentifier ?: [NSNull null];
+        NSMutableArray *annotations = [annotationClusters objectForKey:clusterIdentifier] ?: [NSMutableArray array];
+        [annotations addObject:annotation];
+        
+        [annotationClusters setObject:annotations forKey:clusterIdentifier];
+    }
+    return annotationClusters;
 }
 
-- (NSArray *)clusteredAnnotations
+-(RMAnnotation *)clusterAnnotationForClusterIdentifier:(id)clusterIdentifier
+{
+    return _cachedClusterAnnotations[clusterIdentifier ?: [NSNull null]];
+}
+
+-(NSArray *)clusteredAnnotationsForClusterIdentifier:(id)clusterIdentifier
 {
     NSArray *clusteredAnnotations = nil;
-
-    @synchronized (_cachedClusterAnnotation)
+    
+    @synchronized (_cachedClusterAnnotations)
     {
-        clusteredAnnotations = [NSArray arrayWithArray:_cachedClusterEnclosedAnnotations];
+        clusteredAnnotations = [NSArray arrayWithArray:_cachedClusteredEnclosedAnnotations[clusterIdentifier ?: [NSNull null]]];
     }
-
+    
     return clusteredAnnotations;
 }
 
@@ -405,141 +418,156 @@
     {
         double halfWidth     = _boundingBox.size.width / 2.0;
         BOOL forceClustering = (_boundingBox.size.width >= clusterSize.width && halfWidth < clusterSize.width);
-
-        NSArray *enclosedAnnotations = nil;
-
+        
+        NSDictionary *enclosedAnnotationsDict = nil;
+        
         // Leaf clustering
         if (forceClustering == NO && _nodeType == nodeTypeLeaf && [_annotations count] > 1)
         {
-            NSMutableArray *annotationsToCheck = [NSMutableArray arrayWithArray:[self enclosedWithoutUnclusteredAnnotations]];
-
-            for (NSInteger i=[annotationsToCheck count]-1; i>0; --i)
-            {
-                BOOL mustBeClustered = NO;
-                RMAnnotation *currentAnnotation = [annotationsToCheck objectAtIndex:i];
-
-                for (NSInteger j=i-1; j>=0; --j)
+            NSMutableDictionary *allAnnotationsToCheck = [NSMutableDictionary dictionaryWithDictionary:[self seperateAnnotationsByClusterIdentifier:[self enclosedWithoutUnclusteredAnnotations]]];
+            
+            for(id clusterIdentifier in allAnnotationsToCheck.allKeys) {
+                NSMutableArray *annotationsToCheck = allAnnotationsToCheck[clusterIdentifier];
+                for (NSInteger i=[annotationsToCheck count]-1; i>0; --i)
                 {
-                    RMAnnotation *secondAnnotation = [annotationsToCheck objectAtIndex:j];
-
-                    // This is of course not very accurate but is good enough for this use case
-                    double distance = RMEuclideanDistanceBetweenProjectedPoints(currentAnnotation.projectedLocation, secondAnnotation.projectedLocation) / _mapView.metersPerPixel;
-                    if (distance < kMinPixelDistanceForLeafClustering)
+                    BOOL mustBeClustered = NO;
+                    RMAnnotation *currentAnnotation = [annotationsToCheck objectAtIndex:i];
+                    
+                    for (NSInteger j=i-1; j>=0; --j)
                     {
-                        mustBeClustered = YES;
-                        break;
+                        RMAnnotation *secondAnnotation = [annotationsToCheck objectAtIndex:j];
+                        
+                        // This is of course not very accurate but is good enough for this use case
+                        double distance = RMEuclideanDistanceBetweenProjectedPoints(currentAnnotation.projectedLocation, secondAnnotation.projectedLocation) / _mapView.metersPerPixel;
+                        if (distance < kMinPixelDistanceForLeafClustering)
+                        {
+                            mustBeClustered = YES;
+                            break;
+                        }
+                    }
+                    
+                    if (!mustBeClustered)
+                    {
+                        [someArray addObject:currentAnnotation];
+                        [annotationsToCheck removeObjectAtIndex:i];
                     }
                 }
-
-                if (!mustBeClustered)
+                
+                forceClustering = forceClustering || ([annotationsToCheck count] > 0);
+                
+                if (forceClustering)
                 {
-                    [someArray addObject:currentAnnotation];
-                    [annotationsToCheck removeObjectAtIndex:i];
+                    @synchronized (_cachedClusterAnnotations)
+                    {
+                        [_cachedClusteredEnclosedAnnotations removeObjectForKey:clusterIdentifier];
+                        [_cachedClusterAnnotations removeObjectForKey:clusterIdentifier];
+                    }
                 }
+                [allAnnotationsToCheck setObject:annotationsToCheck forKey:clusterIdentifier];
             }
+            enclosedAnnotationsDict = [NSDictionary dictionaryWithDictionary:allAnnotationsToCheck];
 
-            forceClustering = ([annotationsToCheck count] > 0);
-
-            if (forceClustering)
-            {
-                @synchronized (_cachedClusterAnnotation)
-                {
-                     _cachedClusterEnclosedAnnotations = nil;
-                     _cachedClusterAnnotation = nil;
-                }
-
-                enclosedAnnotations = [NSArray arrayWithArray:annotationsToCheck];
-            }
         }
-
+        
         if (forceClustering)
         {
-            if (!enclosedAnnotations)
-                enclosedAnnotations = [self enclosedWithoutUnclusteredAnnotations];
-
-            @synchronized (_cachedClusterAnnotation)
-            {
-                if (_cachedClusterAnnotation && [enclosedAnnotations count] != [_cachedClusterEnclosedAnnotations count])
-                {
-                     _cachedClusterEnclosedAnnotations = nil;
-                     _cachedClusterAnnotation = nil;
-                }
+            if(!enclosedAnnotationsDict) {
+                enclosedAnnotationsDict = [self seperateAnnotationsByClusterIdentifier:[self enclosedWithoutUnclusteredAnnotations]];
             }
-
-            if (!_cachedClusterAnnotation)
-            {
-                NSUInteger enclosedAnnotationsCount = [enclosedAnnotations count];
-
-                if (enclosedAnnotationsCount < 2)
-                {
-                    @synchronized (_annotations)
+            
+            for(id clusterIdentifier in enclosedAnnotationsDict.allKeys) {
+                NSArray *enclosedAnnotations = enclosedAnnotationsDict[clusterIdentifier];
+                
+                
+                @synchronized (_cachedClusterAnnotations)
+                {                    
+                    if (_cachedClusterAnnotations[clusterIdentifier] && [enclosedAnnotations count] != [_cachedClusteredEnclosedAnnotations[clusterIdentifier] count])
                     {
-                        [someArray addObjectsFromArray:enclosedAnnotations];
-                        [someArray addObjectsFromArray:[self unclusteredAnnotations]];
+                        [_cachedClusteredEnclosedAnnotations removeObjectForKey:clusterIdentifier];
+                        [_cachedClusterAnnotations removeObjectForKey:clusterIdentifier];
                     }
-
-                    return;
                 }
-
-                RMProjectedPoint clusterMarkerPosition;
-
-                if (findGravityCenter)
+                
+                if (!_cachedClusterAnnotations[clusterIdentifier])
                 {
-                    double averageX = 0.0, averageY = 0.0;
-
-                    for (RMAnnotation *annotation in enclosedAnnotations)
+                    NSUInteger enclosedAnnotationsCount = [enclosedAnnotations count];
+                    
+                    
+                    // If there is only 1 annotation in the cluster, then its not necessary to cluster it at all
+                    if (enclosedAnnotationsCount < 2)
                     {
-                        averageX += annotation.projectedLocation.x;
-                        averageY += annotation.projectedLocation.y;
+                        @synchronized (_annotations)
+                        {
+                            [someArray addObjectsFromArray:enclosedAnnotations];
+                            [someArray addObjectsFromArray:[self unclusteredAnnotations]];
+                        }
+                        
+                        continue;
                     }
-
-                    averageX /= (double)enclosedAnnotationsCount;
-                    averageY /= (double)enclosedAnnotationsCount;
-
-                    double halfClusterMarkerWidth = clusterMarkerSize.width / 2.0,
-                           halfClusterMarkerHeight = clusterMarkerSize.height / 2.0;
-
-                    if (averageX - halfClusterMarkerWidth < _boundingBox.origin.x)
-                        averageX = _boundingBox.origin.x + halfClusterMarkerWidth;
-                    if (averageX + halfClusterMarkerWidth > _boundingBox.origin.x + _boundingBox.size.width)
-                        averageX = _boundingBox.origin.x + _boundingBox.size.width - halfClusterMarkerWidth;
-                    if (averageY - halfClusterMarkerHeight < _boundingBox.origin.y)
-                        averageY = _boundingBox.origin.y + halfClusterMarkerHeight;
-                    if (averageY + halfClusterMarkerHeight > _boundingBox.origin.y + _boundingBox.size.height)
-                        averageY = _boundingBox.origin.y + _boundingBox.size.height - halfClusterMarkerHeight;
-
-                    // TODO: anchorPoint
-                    clusterMarkerPosition = RMProjectedPointMake(averageX, averageY);
+                    
+                    RMProjectedPoint clusterMarkerPosition;
+                    
+                    if (findGravityCenter)
+                    {
+                        double averageX = 0.0, averageY = 0.0;
+                        
+                        for (RMAnnotation *annotation in enclosedAnnotations)
+                        {
+                            averageX += annotation.projectedLocation.x;
+                            averageY += annotation.projectedLocation.y;
+                        }
+                        
+                        averageX /= (double)enclosedAnnotationsCount;
+                        averageY /= (double)enclosedAnnotationsCount;
+                        
+                        double halfClusterMarkerWidth = clusterMarkerSize.width / 2.0,
+                        halfClusterMarkerHeight = clusterMarkerSize.height / 2.0;
+                        
+                        if (averageX - halfClusterMarkerWidth < _boundingBox.origin.x)
+                            averageX = _boundingBox.origin.x + halfClusterMarkerWidth;
+                        if (averageX + halfClusterMarkerWidth > _boundingBox.origin.x + _boundingBox.size.width)
+                            averageX = _boundingBox.origin.x + _boundingBox.size.width - halfClusterMarkerWidth;
+                        if (averageY - halfClusterMarkerHeight < _boundingBox.origin.y)
+                            averageY = _boundingBox.origin.y + halfClusterMarkerHeight;
+                        if (averageY + halfClusterMarkerHeight > _boundingBox.origin.y + _boundingBox.size.height)
+                            averageY = _boundingBox.origin.y + _boundingBox.size.height - halfClusterMarkerHeight;
+                        
+                        // TODO: anchorPoint
+                        clusterMarkerPosition = RMProjectedPointMake(averageX, averageY);
+                    }
+                    else
+                    {
+                        clusterMarkerPosition = RMProjectedPointMake(_boundingBox.origin.x + halfWidth, _boundingBox.origin.y + (_boundingBox.size.height / 2.0));
+                    }
+                    
+                    CLLocationCoordinate2D clusterMarkerCoordinate = [[_mapView projection] projectedPointToCoordinate:clusterMarkerPosition];
+                    
+                    
+                    RMAnnotation *clusterAnnotation = [[RMAnnotation alloc] initWithMapView:_mapView
+                                                                                 coordinate:clusterMarkerCoordinate
+                                                                                   andTitle:[NSString stringWithFormat:@"%lu %@", (unsigned long)enclosedAnnotationsCount, clusterIdentifier]];
+                    clusterAnnotation.isClusterAnnotation = YES;
+                    clusterAnnotation.clusteringIdentifier = clusterIdentifier;
+                    clusterAnnotation.userInfo = self;
+                    
+                    [_cachedClusteredEnclosedAnnotations setObject:[[NSArray alloc] initWithArray:enclosedAnnotations] forKey:clusterIdentifier];
+                    [_cachedClusterAnnotations setObject:clusterAnnotation forKey:clusterIdentifier];
                 }
-                else
-                {
-                    clusterMarkerPosition = RMProjectedPointMake(_boundingBox.origin.x + halfWidth, _boundingBox.origin.y + (_boundingBox.size.height / 2.0));
-                }
-
-                CLLocationCoordinate2D clusterMarkerCoordinate = [[_mapView projection] projectedPointToCoordinate:clusterMarkerPosition];
-
-                _cachedClusterAnnotation = [[RMAnnotation alloc] initWithMapView:_mapView
-                                                                     coordinate:clusterMarkerCoordinate
-                                                                       andTitle:[NSString stringWithFormat:@"%lu", (unsigned long)enclosedAnnotationsCount]];
-                _cachedClusterAnnotation.isClusterAnnotation = YES;
-                _cachedClusterAnnotation.userInfo = self;
-
-                _cachedClusterEnclosedAnnotations = [[NSArray alloc] initWithArray:enclosedAnnotations];
+                
+                [someArray addObject:_cachedClusterAnnotations[clusterIdentifier]];
+                [someArray addObjectsFromArray:[self unclusteredAnnotations]];
+                
             }
-
-            [someArray addObject:_cachedClusterAnnotation];
-            [someArray addObjectsFromArray:[self unclusteredAnnotations]];
-
             return;
         }
-
+        
         if (_nodeType == nodeTypeLeaf)
         {
             @synchronized (_annotations)
             {
                 [someArray addObjectsFromArray:_annotations];
             }
-
+            
             return;
         }
     }
@@ -551,11 +579,11 @@
             {
                 [someArray addObjectsFromArray:_annotations];
             }
-
+            
             return;
         }
     }
-
+    
     if (RMProjectedRectIntersectsProjectedRect(aBoundingBox, _northWestBoundingBox))
         [_northWest addAnnotationsInBoundingBox:aBoundingBox toMutableArray:someArray createClusterAnnotations:createClusterAnnotations withProjectedClusterSize:clusterSize andProjectedClusterMarkerSize:clusterMarkerSize findGravityCenter:findGravityCenter];
     if (RMProjectedRectIntersectsProjectedRect(aBoundingBox, _northEastBoundingBox))
@@ -564,7 +592,7 @@
         [_southWest addAnnotationsInBoundingBox:aBoundingBox toMutableArray:someArray createClusterAnnotations:createClusterAnnotations withProjectedClusterSize:clusterSize andProjectedClusterMarkerSize:clusterMarkerSize findGravityCenter:findGravityCenter];
     if (RMProjectedRectIntersectsProjectedRect(aBoundingBox, _southEastBoundingBox))
         [_southEast addAnnotationsInBoundingBox:aBoundingBox toMutableArray:someArray createClusterAnnotations:createClusterAnnotations withProjectedClusterSize:clusterSize andProjectedClusterMarkerSize:clusterMarkerSize findGravityCenter:findGravityCenter];
-
+    
     @synchronized (_annotations)
     {
         for (RMAnnotation *annotation in _annotations)
@@ -580,10 +608,10 @@
     if (_parentNode)
         [_parentNode removeUpwardsAllCachedClusterAnnotations];
 
-    @synchronized (_cachedClusterAnnotation)
+    @synchronized (_cachedClusterAnnotations)
     {
-         _cachedClusterEnclosedAnnotations = nil;
-         _cachedClusterAnnotation = nil;
+         _cachedClusteredEnclosedAnnotations = [NSMutableDictionary dictionary];
+         _cachedClusterAnnotations = [NSMutableDictionary dictionary];
     }
 
      _cachedEnclosedAnnotations = nil;

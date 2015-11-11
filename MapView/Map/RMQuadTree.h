@@ -54,8 +54,8 @@ typedef enum : short {
 @property (nonatomic, readonly) RMQuadTreeNode *southWest;
 @property (nonatomic, readonly) RMQuadTreeNode *southEast;
 
-@property (nonatomic, weak, readonly) RMAnnotation *clusterAnnotation;
-@property (nonatomic, weak, readonly) NSArray *clusteredAnnotations;
+-(RMAnnotation *)clusterAnnotationForClusterIdentifier:(id)clusterIdentifier;
+-(NSArray *)clusteredAnnotationsForClusterIdentifier:(id)clusterIdentifier;
 
 // Operations on this node and all subnodes
 @property (nonatomic, weak, readonly) NSArray *enclosedAnnotations;
