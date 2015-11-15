@@ -81,6 +81,10 @@ typedef enum : NSUInteger {
 *   The default value of this property is `YES`. */
 @property (nonatomic, assign) BOOL draggingEnabled;
 
+/** @name Custom "content" view */
+/** Custom "content" view that can be any width/height. If this is set, title/subtitle/titleView/subtitleView are all ignored. */
+@property (nonatomic, strong) UIView *customCalloutView;
+
 /** A Boolean value that determines whether the map view bounces past the edge of content and back again and whether it animates the content scaling when the scaling exceeds the maximum or minimum limits.
 *
 *   If the value of this property is `YES`, the map view bounces when it encounters a boundary of the content or when zooming exceeds either the maximum or minimum limits for scaling. Bouncing visually indicates that scrolling or zooming has reached an edge of the content. If the value is `NO`, scrolling and zooming stop immediately at the content boundary without bouncing.

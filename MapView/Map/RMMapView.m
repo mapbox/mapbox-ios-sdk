@@ -236,6 +236,7 @@
 @synthesize debugTiles = _debugTiles;
 @synthesize hideAttribution = _hideAttribution;
 @synthesize showLogoBug = _showLogoBug;
+@synthesize customCalloutView = _customCalloutView;
 
 #pragma mark -
 #pragma mark Initialization
@@ -281,6 +282,8 @@
     _clusterMarkerSize = CGSizeMake(100.0, 100.0);
     _clusterAreaSize = CGSizeMake(150.0, 150.0);
 
+    _customCalloutView = nil;
+    
     _moveDelegateQueue = [NSOperationQueue new];
     [_moveDelegateQueue setMaxConcurrentOperationCount:1];
 
@@ -1933,6 +1936,10 @@
             _currentCallout.subtitle = anAnnotation.subtitle;
 
             _currentCallout.calloutOffset = anAnnotation.layer.calloutOffset;
+
+            if (_customCalloutView) {
+                _currentCallout.contentView = _customCalloutView;
+            }
 
             if (anAnnotation.layer.leftCalloutAccessoryView)
             {
