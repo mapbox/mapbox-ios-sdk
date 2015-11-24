@@ -198,6 +198,11 @@ typedef enum : NSUInteger {
 *   @param delta A `CGSize` by which to move the map center. */
 - (void)moveBy:(CGSize)delta;
 
+/** Set the map heading direction
+ *  @param headingDirection the angle of the heading in degrees.
+ *  @param animated Wether to animate the change of heading. */
+- (void)setLocationDirection:(CLLocationDirection) headingDirection animated:(BOOL) animated;
+
 #pragma mark - Zoom
 
 /** @name Zooming the Map */
@@ -531,5 +536,10 @@ typedef enum : NSUInteger {
 *   @param mode The mode used to track the user location. 
 *   @param animated Whether changes to the map center or rotation should be animated when the mode is changed. */
 - (void)setUserTrackingMode:(RMUserTrackingMode)mode animated:(BOOL)animated;
+
+/** Toggle the user heading tracking view
+ * @param shouldShow whether to show or hide the tracking view
+ * @param animated wether or not animate the transition */
+- (void) showUserHeadingTrackingView:(BOOL) shouldShow animated:(BOOL) animated;
 
 @end
