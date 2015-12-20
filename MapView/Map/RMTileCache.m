@@ -534,11 +534,13 @@ static NSMutableDictionary *predicateValues = nil;
     RMCachePurgeStrategy strategy = RMCachePurgeStrategyFIFO;
 
     NSUInteger capacity = 1000;
+    NSUInteger bytes = 32 * 1024 * 1042;
     NSUInteger minimalPurge = capacity / 10;
 
     // Defaults
 
     NSNumber *capacityNumber = [cfg objectForKey:@"capacity"];
+    NSNumber *capacityMb = [cfg objectForKey:@"capacityMb"];
 
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad && [cfg objectForKey:@"capacity-ipad"])
     {
@@ -596,6 +598,19 @@ static NSMutableDictionary *predicateValues = nil;
             RMLog(@"illegal value for capacity: %ld", (long)value);
         }
     }
+    
+    if (capacityMb != nil) {
+        NSInteger value = [capacityMb integerValue];
+        
+        if (value >= 0)
+        {
+            bytes = value * 1024 * 1024;
+        }
+        else
+        {
+            RMLog(@"illegal value for bytes: %ld", (long)value);
+        }
+    }
 
     if (strategyStr != nil)
     {
@@ -625,6 +640,7 @@ static NSMutableDictionary *predicateValues = nil;
 
     RMDatabaseCache *dbCache = [[RMDatabaseCache alloc] initUsingCacheDir:useCacheDir];
     [dbCache setCapacity:capacity];
+    [dbCache setCapacityBytes:bytes];
     [dbCache setPurgeStrategy:strategy];
     [dbCache setMinimalPurge:minimalPurge];
     [dbCache setExpiryPeriod:_expiryPeriod];
