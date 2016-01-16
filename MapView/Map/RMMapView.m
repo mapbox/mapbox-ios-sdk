@@ -1954,10 +1954,33 @@
 
             _currentCallout.permittedArrowDirection = SMCalloutArrowDirectionDown;
 
+            CALayer *constrainLayer = self.layer;
+            if (RMPostVersion7)
+            {
+                constrainLayer = [CALayer layer];
+                constrainLayer.frame = self.layer.frame;
+                
+                CGFloat topLayoutGuide = [[self.viewController.parentViewController topLayoutGuide] length] + 44;
+                CGFloat bottomLayoutGuide = [[self.viewController.parentViewController bottomLayoutGuide] length];
+                
+                CGRect newFrame = CGRectMake(self.layer.frame.origin.x,
+                                             self.layer.frame.origin.y + topLayoutGuide,
+                                             self.layer.frame.size.width,
+                                             self.layer.frame.size.height - (bottomLayoutGuide + topLayoutGuide));
+                constrainLayer.frame = newFrame;
+                
+                [self.layer addSublayer:constrainLayer];
+            }
+            
             [_currentCallout presentCalloutFromRect:anAnnotation.layer.bounds
                                             inLayer:anAnnotation.layer
-                                 constrainedToLayer:self.layer
+                                 constrainedToLayer:constrainLayer
                                            animated:animated];
+            
+            if (RMPostVersion7)
+            {
+                [constrainLayer removeFromSuperlayer];
+            }
         }
 
         [self correctPositionOfAllAnnotations];
@@ -2006,9 +2029,6 @@
 
     contentOffset.x -= offset.width;
     contentOffset.y -= offset.height;
-
-    if (RMPostVersion7)
-        contentOffset.y -= [[[self viewController] topLayoutGuide] length];
 
     [_mapScrollView setContentOffset:contentOffset animated:YES];
 
