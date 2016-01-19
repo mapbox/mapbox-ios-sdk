@@ -53,6 +53,19 @@ typedef struct {
 	RMProjectedSize size;
 } RMProjectedRect;
 
+typedef struct {
+    int x, y;
+} RMIntegralPoint;
+
+typedef struct {
+    int width, height;
+} RMIntegralSize;
+
+typedef struct {
+    RMIntegralPoint origin;
+    RMIntegralSize size;
+} RMIntegralRect;
+
 #if __OBJC__
 /*! \struct RMSphericalTrapezium
  \brief a rectangle, specified by two corner coordinates */
@@ -78,6 +91,11 @@ bool RMProjectedRectContainsProjectedRect(RMProjectedRect rect1, RMProjectedRect
 bool RMProjectedRectContainsProjectedPoint(RMProjectedRect rect, RMProjectedPoint point);
 
 bool RMProjectedSizeContainsProjectedSize(RMProjectedSize size1, RMProjectedSize size2);
+
+#pragma mark -
+
+bool RMIntegralRectContainsPoint(RMIntegralRect rect, RMIntegralPoint point);
+RMIntegralPoint RMIntegralPointMake(int x, int y);
 
 #pragma mark -
 

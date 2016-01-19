@@ -54,4 +54,6 @@
     @return An array of tile URLs to download, listed bottom to top. */
 - (NSArray *)URLsForTile:(RMTile)tile;
 
+- (void)downloadImageForTile:(RMTile)tile cache:(RMTileCache *)cache visibleMapRect:(RMIntegralRect)mapRect completion:(void(^)(void))completion;
+
 @end

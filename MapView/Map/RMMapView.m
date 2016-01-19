@@ -1414,6 +1414,11 @@
     [self correctPositionOfAllAnnotations];
 }
 
+- (CGRect)visibleRect
+{
+    return [_mapScrollView convertRect:_mapScrollView.bounds toView:_tiledLayersSuperview];
+}
+
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return _tiledLayersSuperview;

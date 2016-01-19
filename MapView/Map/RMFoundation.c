@@ -83,6 +83,27 @@ bool RMProjectedSizeContainsProjectedSize(RMProjectedSize size1, RMProjectedSize
     return (size1.width >= size2.width && size1.height >= size2.height);
 }
 
+bool RMIntegralRectContainsPoint(RMIntegralRect rect, RMIntegralPoint point)
+{
+    int minX = rect.origin.x;
+    int maxX = rect.origin.x + rect.size.width;
+    int minY = rect.origin.y;
+    int maxY = rect.origin.y + rect.size.height;
+    
+    int x = point.x;
+    int y = point.y;
+    
+    return (x >= minX && x <= maxX && y >= minY && y <= maxY);
+}
+
+RMIntegralPoint RMIntegralPointMake(int x, int y)
+{
+    RMIntegralPoint point;
+    point.x = x;
+    point.y = y;
+    return point;
+}
+
 RMProjectedPoint RMScaleProjectedPointAboutPoint(RMProjectedPoint point, float factor, RMProjectedPoint pivot)
 {
 	point.x = (point.x - pivot.x) * factor + pivot.x;
