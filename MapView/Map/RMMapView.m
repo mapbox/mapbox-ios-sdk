@@ -213,6 +213,7 @@
     SMCalloutView *_currentCallout;
 
     BOOL _rotateAtMinZoom;
+    BOOL _isInitilized;
 }
 
 @synthesize decelerationMode = _decelerationMode;
@@ -247,6 +248,7 @@
                                minZoomLevel:(float)initialTileSourceMinZoomLevel
                             backgroundImage:(UIImage *)backgroundImage
 {
+    _isInitilized = NO;
     _constrainMovement = _constrainMovementByUser = _bouncingEnabled = _zoomingInPivotsAroundCenter = NO;
     _draggingEnabled = YES;
 
@@ -365,6 +367,8 @@
                                              selector:@selector(handleDidChangeOrientationNotification:)
                                                  name:UIApplicationDidChangeStatusBarOrientationNotification
                                                object:nil];
+    
+    _isInitilized = YES;
 
     RMLog(@"Map initialised. tileSource:%@, minZoom:%f, maxZoom:%f, zoom:%f at {%f,%f}", newTilesource, self.minZoom, self.maxZoom, self.zoom, initialCenterCoordinate.longitude, initialCenterCoordinate.latitude);
 
@@ -632,7 +636,7 @@
 
 - (void)layoutSubviews
 {
-    if ( ! _mapScrollView)
+    if ( _isInitilized == NO)
     {
         // This will happen after initWithCoder: This needs to happen here because during
         // unarchiving, the view won't have a frame yet and performInitialization...
