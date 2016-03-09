@@ -151,6 +151,13 @@ bool RMProjectedRectIsZero(RMProjectedRect rect)
     return (rect.origin.x == 0.0) && (rect.origin.y == 0.0) && (rect.size.width == 0.0) && (rect.size.height == 0.0);
 }
 
+bool RMProjectedRectEqualToProjectedRect(RMProjectedRect rect1, RMProjectedRect rect2)
+{
+	return RMProjectedPointEqualToProjectedPoint(rect1.origin, rect2.origin) &&
+        rect1.size.width == rect2.size.width &&
+        rect1.size.height == rect2.size.height;
+}
+
 #if !defined (RMMIN)
 #define RMMIN(a,b)  ((a) < (b) ? (a) : (b))
 #endif
