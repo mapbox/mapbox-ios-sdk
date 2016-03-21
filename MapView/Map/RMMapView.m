@@ -179,7 +179,6 @@
     float _zoom, _lastZoom;
     CGPoint _lastContentOffset, _accumulatedDelta;
     CGSize _lastContentSize;
-    BOOL _mapScrollViewIsZooming;
 
     BOOL _draggingEnabled, _bouncingEnabled;
 
@@ -218,6 +217,7 @@
 @synthesize decelerationMode = _decelerationMode;
 
 @synthesize zoomingInPivotsAroundCenter = _zoomingInPivotsAroundCenter;
+@synthesize mapScrollViewIsZooming = _mapScrollViewIsZooming;
 @synthesize minZoom = _minZoom, maxZoom = _maxZoom;
 @synthesize screenScale = _screenScale;
 @synthesize tileCache = _tileCache;
@@ -2382,6 +2382,16 @@
 }
 
 #pragma mark - Properties
+
+- (RMMapScrollView *)mapScrollView
+{
+    return _mapScrollView;
+}
+
+- (RMMapOverlayView *)overlayView
+{
+    return _overlayView;
+}
 
 - (UIView *)backgroundView
 {

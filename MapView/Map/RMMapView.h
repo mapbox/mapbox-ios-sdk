@@ -122,6 +122,12 @@ typedef enum : NSUInteger {
 /** Take missing tiles from lower-numbered zoom levels, up to a given number of zoom levels. This can be used in order to increase perceived tile load performance or to allow zooming in beyond levels supported natively by a given tile source. Defaults to 1. */
 @property (nonatomic, assign) NSUInteger missingTilesDepth;
 
+/** The scroll view containing the map tiles */
+@property (nonatomic, assign, readonly) RMMapScrollView *mapScrollView;
+
+/** The view used for map overlays like annotations */
+@property (nonatomic, assign, readonly) RMMapOverlayView *overlayView;
+
 /** A custom, static view to use behind the map tiles. The default behavior is to use grid imagery that moves with map panning like MapKit. */
 @property (nonatomic, strong) UIView *backgroundView;
 
@@ -206,6 +212,9 @@ typedef enum : NSUInteger {
 
 /** The current zoom level of the map. */
 @property (nonatomic, assign) float zoom;
+
+/** A Boolean value denoting if the map is zooming (either programmatically ob by double tap / two finger tap) */
+@property (nonatomic, readonly) BOOL mapScrollViewIsZooming;
 
 /** The minimum zoom level of the map, clamped to the range supported by the tile source(s). */
 @property (nonatomic, assign) float minZoom;
