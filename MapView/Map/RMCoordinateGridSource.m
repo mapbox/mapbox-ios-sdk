@@ -168,6 +168,10 @@ static double coordinateGridSpacingDecimal[19] = {
            top = floor(northEast.latitude / gridSpacing) * gridSpacing;
     double left = ceil(southWest.longitude / gridSpacing) * gridSpacing,
            right = ceil(northEast.longitude / gridSpacing) * gridSpacing;
+    
+    RMProjectedPoint projectedSouthwest = [[self projection] coordinateToProjectedPoint:southWest];
+    RMProjectedPoint projectedNortheast = [[self projection] coordinateToProjectedPoint:northEast];
+    double projectedYSpan = projectedNortheast.y - projectedSouthwest.y;
 
     // Draw the tile
 
@@ -181,7 +185,10 @@ static double coordinateGridSpacingDecimal[19] = {
 
     for (double row = top; row >= bottom; row -= gridSpacing)
     {
-        CGFloat yCoordinate = paddedTileSideLength - (((row - southWest.latitude) / coordinatesLatitudeSpan) * paddedTileSideLength);
+        CLLocationCoordinate2D latlong = {row, left};
+        RMProjectedPoint aPoint = [[self projection] coordinateToProjectedPoint:latlong];
+        double yDiff = (aPoint.y - projectedSouthwest.y) / projectedYSpan;
+        double yCoordinate = paddedTileSideLength - (yDiff * paddedTileSideLength);
         CGContextMoveToPoint(context, 0.0, yCoordinate);
         CGContextAddLineToPoint(context, paddedTileSideLength, yCoordinate);
     }
