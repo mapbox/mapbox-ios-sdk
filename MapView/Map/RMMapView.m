@@ -213,6 +213,8 @@
     SMCalloutView *_currentCallout;
 
     BOOL _rotateAtMinZoom;
+    
+    float _animationZoomFactor;
 }
 
 @synthesize decelerationMode = _decelerationMode;
@@ -1069,6 +1071,8 @@
                                  ((planetBounds.size.height - normalizedProjectedPoint.y - boundsRect.size.height) / _metersPerPixel) / zoomScale,
                                  (boundsRect.size.width / _metersPerPixel) / zoomScale,
                                  (boundsRect.size.height / _metersPerPixel) / zoomScale);
+    float newZoom = log2f(zoomScale);
+    _animationZoomFactor = exp2f(newZoom - [self zoom]);
     [_mapScrollView zoomToRect:zoomRect animated:animated];
 }
 
@@ -1156,6 +1160,7 @@
                                      ((_mapScrollView.contentOffset.y + pivot.y) - (newZoomSize.height * factorY)) / zoomScale,
                                      newZoomSize.width / zoomScale,
                                      newZoomSize.height / zoomScale);
+        _animationZoomFactor = zoomFactor;
         [_mapScrollView zoomToRect:zoomRect animated:animated];
     }
     else
@@ -2948,7 +2953,7 @@
     if (animated && !_mapScrollView.isZooming)
     {
         [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-        [CATransaction setAnimationDuration:0.30];
+        [CATransaction setAnimationDuration:((_animationZoomFactor > 1)?_animationZoomFactor:1/_animationZoomFactor) * 0.15];
     }
     else
     {
