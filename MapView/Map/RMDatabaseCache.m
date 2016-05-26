@@ -251,6 +251,8 @@
 {
     if (_capacity != 0)
     {
+        [_writeQueueLock lock];
+
         NSUInteger tilesInDb = [self count];
 
         if (_capacity <= tilesInDb && _expiryPeriod == 0)
@@ -262,8 +264,6 @@
         // insert operations pending. This prevents some memory issues.
 
         BOOL skipThisTile = NO;
-
-        [_writeQueueLock lock];
 
         if ([_writeQueue operationCount] > kWriteQueueLimit)
             skipThisTile = YES;
