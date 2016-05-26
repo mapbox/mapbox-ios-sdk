@@ -3317,11 +3317,12 @@
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
         // enable iOS 8+ location authorization API
         //
-        if ([CLLocationManager instancesRespondToSelector:@selector(requestWhenInUseAuthorization)])
-        {
-            BOOL hasLocationDescription = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"] ||
-                [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"];
-            NSAssert(hasLocationDescription, @"For iOS 8 and above, your app must have a value for NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription in its Info.plist");
+        NSString *alwaysDescription = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"];
+        if (alwaysDescription && [CLLocationManager instancesRespondToSelector:@selector(requestAlwaysAuthorization)]) {
+            [_locationManager requestAlwaysAuthorization];
+        } else if ([CLLocationManager instancesRespondToSelector:@selector(requestWhenInUseAuthorization)]) {
+            NSString *whenInUseDescription = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"];
+            NSAssert(whenInUseDescription, @"For iOS 8 and above, your app must have a value for NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription in its Info.plist");
             [_locationManager requestWhenInUseAuthorization];
         }
 #endif
